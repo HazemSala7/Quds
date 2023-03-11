@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Server/server.dart';
 import '../../add_product/add_product.dart';
+import '../../edit_product_data/edit_product_data.dart';
 
 class ProductCard extends StatefulWidget {
   final image, name, desc, price_code, id;
@@ -50,49 +51,72 @@ class _ProductCardState extends State<ProductCard> {
           child: Container(
             child: Wrap(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 7,
-                        blurRadius: 5,
+                Stack(
+                  alignment: Alignment.topLeft,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 7,
+                            blurRadius: 5,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  // decoration:
-                  // BoxDecoration(borderRadius: BorderRadius.circular(40)),
-                  height: 140,
-                  width: double.infinity,
-                  child: Center(
-                    child: SizedBox(
-                      height: 200,
-                      width: 250,
-                      // decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(40)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4),
-                            topRight: Radius.circular(4)),
-                        child: Image.network(widget.image,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
+                      // decoration:
+                      // BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                      height: 140,
+                      width: double.infinity,
+                      child: Center(
+                        child: SizedBox(
+                          height: 200,
+                          width: 250,
+                          // decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(40)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                topRight: Radius.circular(4)),
+                            child: Image.network(widget.image,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
 
-                              return Center(
-                                  child: CircularProgressIndicator(
-                                backgroundColor: Main_Color,
-                              ));
-                              // You can use LinearProgressIndicator or CircularProgressIndicator instead
-                            },
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                                  "assets/quds_logo.jpeg",
-                                  fit: BoxFit.cover,
-                                )),
+                                  return Center(
+                                      child: CircularProgressIndicator(
+                                    backgroundColor: Main_Color,
+                                  ));
+                                  // You can use LinearProgressIndicator or CircularProgressIndicator instead
+                                },
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                      "assets/quds_logo.jpeg",
+                                      fit: BoxFit.cover,
+                                    )),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProductData(
+                                        id: widget.id,
+                                        name: widget.name,
+                                        price: widget.price,
+                                        qty: widget.qty,
+                                      )));
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 30,
+                        ))
+                  ],
                 ),
                 Container(
                   decoration: BoxDecoration(

@@ -42,6 +42,7 @@ class _ProductCardState extends State<ProductCard> {
                       customer_id: widget.customer_id.toString(),
                       price: widget.price,
                       qty: widget.qty,
+                      desc: widget.desc,
                     )));
       },
       child: Padding(

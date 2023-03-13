@@ -8,11 +8,12 @@ import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
 
 class AddProduct extends StatefulWidget {
-  final id, name, qty, customer_id;
+  final id, name, qty, customer_id, desc;
   var price;
   AddProduct(
       {Key? key,
       this.id,
+      this.desc,
       this.name,
       this.customer_id,
       this.qty,
@@ -149,6 +150,32 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                     ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 15, left: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "وصف المنتج",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xffD6D3D3))),
+                        // height: 50,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(widget.desc.toString()),
+                        )),
                   ),
                   Padding(
                     padding:

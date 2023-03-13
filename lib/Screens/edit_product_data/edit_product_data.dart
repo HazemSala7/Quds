@@ -358,6 +358,8 @@ class _EditProductDataState extends State<EditProductData> {
   }
 
   addProduct() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
     var headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Charset': 'utf-8'
@@ -367,6 +369,7 @@ class _EditProductDataState extends State<EditProductData> {
         Uri.parse(
             "https://yaghco.website/quds_laravel/api/edit_product_image"));
     request.fields['id'] = widget.id.toString();
+    request.fields['company_id'] = company_id.toString();
     request.headers.addAll(headers);
 
     if (imageFile != null) {

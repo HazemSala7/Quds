@@ -110,28 +110,13 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   searchProducts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    String? code_price = prefs.getString('price_code');
     var url =
-        'http://yaghco.website/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}';
+        'http://yaghco.website/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
+
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body)["products"][0];
-    var price = "0";
-    var prices = res['product'];
-    pr = await setPrice(idController.text);
-    if (pr.toString() == "0") {
-      if (prices.length == 0) {
-        // return static price
-        price = "0";
-      } else if (prices.length == 1) {
-        price = prices[0]["price"];
-      } else {
-        var _price = prices.firstWhere((e) => e["price_code"] == Price_Code,
-            orElse: () => "5");
-
-        price = _price == "5" ? "0" : _price["price"];
-      }
-    } else {
-      price = pr;
-    }
 
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.push(
@@ -141,7 +126,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                   id: res["id"],
                   name: res["p_name"],
                   customer_id: widget.name.toString(),
-                  price: price,
+                  price: res["price"],
                   qty: res["quantity"],
                 )));
   }

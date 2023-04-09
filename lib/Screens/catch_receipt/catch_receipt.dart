@@ -1,12 +1,16 @@
 import 'package:date_format/date_format.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Server/server.dart';
+import 'package:pdf/widgets.dart' as pw;
 import '../../Services/Drawer/drawer.dart';
 
 class CatchReceipt extends StatefulWidget {
@@ -975,6 +979,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
           Fluttertoast.showToast(
             msg: "تم اضافه سند القبض بنجاح",
           );
+          pdfFatora();
           Navigator.pop(context);
         } else {
           Navigator.of(context, rootNavigator: true).pop();
@@ -982,5 +987,217 @@ class _CatchReceiptState extends State<CatchReceipt> {
         }
       });
     }
+  }
+
+  pdfFatora() async {
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    var imagelogo = pw.MemoryImage(
+      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    );
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Container(
+            height: 200,
+            width: double.infinity,
+            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
+        pw.SizedBox(height: 20),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.center,
+          children: [
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Center(
+                child: pw.Text("سند قبض", style: pw.TextStyle(fontSize: 24)),
+              ),
+            )
+          ],
+        ),
+        pw.SizedBox(height: 20),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child:
+                        pw.Text(widget.name.toString(), style: pw.TextStyle()),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child:
+                      pw.Text(" السيد: ", style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(CashController.text,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("المجموع النقدي : ",
+                      style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(TOTAL.text,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("مجموع الشيكات : ",
+                      style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(DiscountController.text,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child:
+                      pw.Text("الخصم : ", style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(MAINTOTAL.text,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("المجوع الكلي : ",
+                      style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  // width: 80,
+                  height: 30,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(NotesController.text,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text(" الملاحظات : ",
+                      style: pw.TextStyle(fontSize: 20))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat.a4,
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
   }
 }

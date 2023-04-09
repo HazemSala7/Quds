@@ -225,6 +225,7 @@ class _ShowOrderState extends State<ShowOrder> {
                                 total: total.toString(),
                                 id: widget.id,
                                 fatora_id: fatora_id,
+                                customer_name: widget.name,
                               )));
                 },
                 child: Container(
@@ -258,8 +259,6 @@ class _ShowOrderState extends State<ShowOrder> {
     int? salesman_id = prefs.getInt('salesman_id');
     var url =
         'https://yaghco.website/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
-    print("url");
-    print(url);
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body);
     return res;

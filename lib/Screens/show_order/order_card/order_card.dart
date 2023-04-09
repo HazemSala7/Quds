@@ -67,16 +67,36 @@ class _OrderCardState extends State<OrderCard> {
                           const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                       child: Container(
                         height: 200,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4),
+                              topRight: Radius.circular(4)),
+                          child: Image.network(widget.image,
+                              fit: BoxFit.cover,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  backgroundColor: Main_Color,
+                                ));
+                                // You can use LinearProgressIndicator or CircularProgressIndicator instead
+                              },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.asset(
+                                    "assets/quds_logo.jpeg",
+                                    fit: BoxFit.cover,
+                                  )),
+                        ),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: NetworkImage(widget.image),
-                                fit: BoxFit.cover)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    width: 50,
+                    width: 30,
                   ),
                   Expanded(
                     flex: 3,

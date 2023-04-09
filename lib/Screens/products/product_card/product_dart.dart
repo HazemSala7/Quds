@@ -133,21 +133,28 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                     ],
                   ),
-                  // height: 30,
+                  height: 40,
                   width: double.infinity,
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(
-                              widget.name,
+                              widget.name.length > 27
+                                  ? widget.name.substring(0, 27) + '...'
+                                  : widget.name,
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(
@@ -160,7 +167,7 @@ class _ProductCardState extends State<ProductCard> {
                             ),
                           ),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),

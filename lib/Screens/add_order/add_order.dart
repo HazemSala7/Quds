@@ -1,18 +1,23 @@
 import 'package:date_format/date_format.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
 import '../products/products.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class AddOrder extends StatefulWidget {
-  final id, total, fatora_id;
-  const AddOrder({Key? key, this.id, this.total, this.fatora_id})
+  final id, total, fatora_id, customer_name;
+  const AddOrder(
+      {Key? key, this.id, this.total, this.fatora_id, this.customer_name})
       : super(key: key);
 
   @override
@@ -26,11 +31,32 @@ class _AddOrderState extends State<AddOrder> {
     valueController.text = widget.total;
   }
 
+  var listPDF = [];
+  getInvoices() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    var url =
+        'https://qadrs.com/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
+
+    var response = await http.get(Uri.parse(url));
+    print("response");
+    print(jsonDecode(response.body));
+    if (response.body.isNotEmpty) {
+      var res = jsonDecode(response.body);
+      setState(() {
+        listPDF = res["invoiceproducts"];
+      });
+    }
+    print("listPDF");
+    print(listPDF);
+  }
+
   @override
   void initState() {
     super.initState();
-
     setContrllers();
+    getInvoices();
   }
 
   Widget build(BuildContext context) {
@@ -192,15 +218,165 @@ class _AddOrderState extends State<AddOrder> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              content: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              actions: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(pdfFatora5CM());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "طباعه 5سم",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(pdfFatora8CM());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "طباعه 8سم",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      // pdfFatoraA4();
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(pdfFatoraA4());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "طباعه A4",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(nothing());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "لا أريد",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             );
                           },
                         );
-                        send();
                       },
                     ),
                   ),
@@ -272,7 +448,7 @@ class _AddOrderState extends State<AddOrder> {
   TextEditingController DiscountController = TextEditingController();
   TextEditingController valueController = TextEditingController();
   TextEditingController NotesController = TextEditingController();
-  send() async {
+  send(pdf) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var now = DateTime.now();
     var formatterDate = DateFormat('yy-MM-dd');
@@ -326,6 +502,7 @@ class _AddOrderState extends State<AddOrder> {
       if (data['status'] == 'true') {
         Navigator.of(context, rootNavigator: true).pop();
         Fluttertoast.showToast(msg: "تم اضافه الفاتوره بنجاح");
+        pdf;
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
@@ -333,5 +510,808 @@ class _AddOrderState extends State<AddOrder> {
         print('fsdsdfs');
       }
     }
+  }
+
+  nothing() {}
+
+  pdfFatoraA4() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? shop_no = prefs.getString('shop_no');
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    var formatterTime = DateFormat('kk:mm:ss');
+    String actualDate = formatterDate.format(now);
+    String actualTime = formatterTime.format(now);
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    var imagelogo = pw.MemoryImage(
+      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    );
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("شركه يغمور للتجاره",
+                style: pw.TextStyle(fontSize: 20))),
+        pw.SizedBox(
+          height: 5,
+        ),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("الخليل  - دوار المناره",
+                style: pw.TextStyle(fontSize: 20))),
+        pw.SizedBox(
+          height: 5,
+        ),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("0595324689", style: pw.TextStyle(fontSize: 20))),
+        pw.SizedBox(
+          height: 5,
+        ),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Row(children: [
+            pw.Text(actualDate.toString(),
+                style:
+                    pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 17)),
+            pw.SizedBox(width: 5),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child:
+                    pw.Text("التاريخ : ", style: pw.TextStyle(fontSize: 17))),
+          ]),
+        ]),
+        pw.SizedBox(height: 5),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(widget.customer_name.toString(),
+                style: pw.TextStyle(fontSize: 17)),
+          ),
+          pw.SizedBox(width: 5),
+          pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child:
+                  pw.Text("أسم الزبون : ", style: pw.TextStyle(fontSize: 17))),
+        ]),
+        pw.SizedBox(
+          height: 5,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Container(
+      height: 40,
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(color: PdfColors.grey400),
+      ),
+      child: pw.Padding(
+        padding: const pw.EdgeInsets.only(right: 5, left: 5),
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Expanded(
+                flex: 1,
+                child: pw.Container(
+                  // decoration: pw.BoxDecoration(
+                  //   border: pw.Border.all(color: PdfColors.grey400),
+                  // ),
+                  child: pw.Center(
+                    child: pw.Text(
+                      "المبلغ",
+                      style: pw.TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Expanded(
+                flex: 1,
+                child: pw.Container(
+                  child: pw.Center(
+                    child: pw.Text(
+                      "السعر",
+                      style: pw.TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Expanded(
+                flex: 1,
+                child: pw.Container(
+                  child: pw.Center(
+                    child: pw.Text(
+                      "الكمية",
+                      style: pw.TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Expanded(
+                flex: 2,
+                child: pw.Container(
+                  child: pw.Center(
+                    child: pw.Text(
+                      "الصنف",
+                      style: pw.TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    widgets.add(firstrow);
+    final listview = pw.ListView.builder(
+      itemCount: listPDF.length,
+      itemBuilder: (context, index) {
+        return pw.Container(
+          height: 40,
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: PdfColors.grey400),
+          ),
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.only(right: 5, left: 5),
+            child: pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['total'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_price'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 17,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['product_name'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    widgets.add(listview);
+    final total =
+        pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
+      pw.SizedBox(height: 10),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(widget.total.toString(),
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 17)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجوع قبل الخصم : ",
+                style: pw.TextStyle(fontSize: 17))),
+      ]),
+      pw.SizedBox(height: 10),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(DiscountController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 17)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(" الخصم : ", style: pw.TextStyle(fontSize: 17))),
+      ]),
+      pw.SizedBox(height: 10),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(valueController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 17)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجموع النهائي : ",
+                style: pw.TextStyle(fontSize: 17))),
+      ]),
+    ]);
+    widgets.add(total);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat.a4,
+
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
+  pdfFatora8CM() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? shop_no = prefs.getString('shop_no');
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    var formatterTime = DateFormat('kk:mm:ss');
+    String actualDate = formatterDate.format(now);
+    String actualTime = formatterTime.format(now);
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    var imagelogo = pw.MemoryImage(
+      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    );
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Container(
+            height: 70,
+            width: double.infinity,
+            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
+        pw.SizedBox(
+          height: 5,
+        ),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Row(children: [
+            pw.Text(actualDate.toString(),
+                style:
+                    pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+            pw.SizedBox(width: 5),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("التاريخ : ", style: pw.TextStyle(fontSize: 9))),
+          ]),
+        ]),
+        pw.SizedBox(height: 2),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(widget.customer_name.toString(),
+                style: pw.TextStyle(fontSize: 8)),
+          ),
+          pw.SizedBox(width: 5),
+          pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child:
+                  pw.Text("أسم الزبون : ", style: pw.TextStyle(fontSize: 9))),
+        ]),
+        pw.SizedBox(
+          height: 5,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Container(
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(color: PdfColors.grey400),
+      ),
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                // decoration: pw.BoxDecoration(
+                //   border: pw.Border.all(color: PdfColors.grey400),
+                // ),
+                child: pw.Center(
+                  child: pw.Text(
+                    "المبلغ",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "السعر",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "الكمية",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 2,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "الصنف",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    widgets.add(firstrow);
+    final listview = pw.ListView.builder(
+      itemCount: listPDF.length,
+      itemBuilder: (context, index) {
+        return pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 5),
+          child: pw.Container(
+            height: 15,
+            decoration: pw.BoxDecoration(
+              border: pw.Border.all(color: PdfColors.grey400),
+            ),
+            child: pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['total'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_price'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['product_name'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    widgets.add(listview);
+    final total =
+        pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(widget.total.toString(),
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجوع قبل الخصم : ",
+                style: pw.TextStyle(fontSize: 9))),
+      ]),
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(DiscountController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(" الخصم : ", style: pw.TextStyle(fontSize: 9))),
+      ]),
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(valueController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+        pw.SizedBox(width: 5),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجموع النهائي : ",
+                style: pw.TextStyle(fontSize: 9))),
+      ]),
+    ]);
+    widgets.add(total);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat(
+          4 * PdfPageFormat.cm,
+          20 * PdfPageFormat.cm,
+        ),
+
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
+  pdfFatora5CM() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? shop_no = prefs.getString('shop_no');
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    var formatterTime = DateFormat('kk:mm:ss');
+    String actualDate = formatterDate.format(now);
+    String actualTime = formatterTime.format(now);
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    var imagelogo = pw.MemoryImage(
+      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    );
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Container(
+            height: 70,
+            width: double.infinity,
+            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
+        pw.SizedBox(
+          height: 5,
+        ),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Row(children: [
+            pw.Text(actualDate.toString(),
+                style:
+                    pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 6)),
+            pw.SizedBox(width: 2),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("التاريخ : ", style: pw.TextStyle(fontSize: 6))),
+          ]),
+        ]),
+        pw.SizedBox(height: 2),
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(widget.customer_name.toString(),
+                style: pw.TextStyle(fontSize: 6)),
+          ),
+          pw.SizedBox(width: 5),
+          pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child:
+                  pw.Text("أسم الزبون : ", style: pw.TextStyle(fontSize: 6))),
+        ]),
+        pw.SizedBox(
+          height: 5,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Container(
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(color: PdfColors.grey400),
+      ),
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                // decoration: pw.BoxDecoration(
+                //   border: pw.Border.all(color: PdfColors.grey400),
+                // ),
+                child: pw.Center(
+                  child: pw.Text(
+                    "المبلغ",
+                    style: pw.TextStyle(fontSize: 6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "السعر",
+                    style: pw.TextStyle(fontSize: 6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "الكمية",
+                    style: pw.TextStyle(fontSize: 6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 2,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "الصنف",
+                    style: pw.TextStyle(fontSize: 6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    widgets.add(firstrow);
+    final listview = pw.ListView.builder(
+      itemCount: listPDF.length,
+      itemBuilder: (context, index) {
+        return pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 5),
+          child: pw.Container(
+            height: 15,
+            decoration: pw.BoxDecoration(
+              border: pw.Border.all(color: PdfColors.grey400),
+            ),
+            child: pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['total'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 6,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_price'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 6,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 6,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${listPDF[index]['product_name'] ?? ""}",
+                          style: pw.TextStyle(
+                            fontSize: 6,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    widgets.add(listview);
+    final total =
+        pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(widget.total.toString(),
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 6)),
+        pw.SizedBox(width: 2),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجوع قبل الخصم : ",
+                style: pw.TextStyle(fontSize: 6))),
+      ]),
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(DiscountController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 6)),
+        pw.SizedBox(width: 2),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(" الخصم : ", style: pw.TextStyle(fontSize: 6))),
+      ]),
+      pw.SizedBox(height: 5),
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+        pw.Text(valueController.text,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 6)),
+        pw.SizedBox(width: 2),
+        pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text("المجموع النهائي : ",
+                style: pw.TextStyle(fontSize: 6))),
+      ]),
+    ]);
+    widgets.add(total);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat(
+          4 * PdfPageFormat.cm,
+          20 * PdfPageFormat.cm,
+        ),
+
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
   }
 }

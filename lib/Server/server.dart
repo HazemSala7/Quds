@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 var Main_Color = Color(0xff34568B);
+
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
 bool ponus1 = false;
 bool ponus2 = false;

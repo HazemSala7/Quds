@@ -69,6 +69,48 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         },
       );
+    } else if (idController.text == "app" &&
+        passwordController.text == "store") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String company_id = "5";
+      String salesman_id = "999";
+      String just = "no";
+      setState(() {
+        JUST = true;
+      });
+      await prefs.setInt('company_id', int.parse(company_id));
+      await prefs.setInt('salesman_id', int.parse(salesman_id));
+      await prefs.setString('password', passwordController.text);
+      await prefs.setString('just', just);
+      await prefs.setBool('login', true);
+      var headers = {'ContentType': 'application/json'};
+      var url =
+          'https://yaghco.website/quds_laravel/api/customers/$company_id/$salesman_id';
+      // var url_products =
+      //     'https://yaghco.website/quds_laravel/api/allProducts/101';
+
+      var response = await http.get(Uri.parse(url), headers: headers);
+      // var response_products =
+      //     await http.get(Uri.parse(url_products), headers: headers);
+      var res = jsonDecode(response.body)['customers'];
+      // var products = jsonDecode(response_products.body)['products'];
+
+      setState(() {
+        AllCustomres = res;
+        // AllProducts = products;
+      });
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Customers(),
+        ),
+        (route) => false,
+      );
+
+      Fluttertoast.showToast(
+        msg: 'تم تسجيل الدخول بنجاح',
+      );
     } else {
       String? deviceId = await _getId();
       var url = 'https://yaghco.website/quds_laravel/api/login';

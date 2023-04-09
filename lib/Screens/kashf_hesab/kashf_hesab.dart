@@ -199,7 +199,8 @@ class _KashfHesabState extends State<KashfHesab> {
                             itemBuilder: (context, index) {
                               customersBalances.clear();
                               for (var customer in listPDF) {
-                                customersBalances.add(customer['money_amount']);
+                                customersBalances
+                                    .add(customer['money_amount'].toString());
                               }
                               return listPDF[index]["action_type"] != "مبيعات"
                                   ? firstrowPDF(index)
@@ -565,7 +566,8 @@ class _KashfHesabState extends State<KashfHesab> {
                       var Customers = snapshot.data["statments"];
                       customersBalances.clear();
                       for (var customer in Customers) {
-                        customersBalances.add(customer['money_amount']);
+                        customersBalances
+                            .add(customer['money_amount'].toString());
                       }
 
                       return ListView.builder(
@@ -577,18 +579,18 @@ class _KashfHesabState extends State<KashfHesab> {
                             action_id: Customers[index]['action_id'] ?? "-",
                             balance: getCustomerBalance(index),
                             bayan: Customers[index]['action_type'] ?? "",
-                            mnh:
-                                double.parse(Customers[index]['money_amount']) >
-                                        0
-                                    ? Customers[index]['money_amount']
-                                    : "0",
-                            lah:
-                                double.parse(Customers[index]['money_amount']) <
-                                        0
-                                    ? double.parse(
-                                            Customers[index]['money_amount']) *
-                                        -1
-                                    : "0",
+                            mnh: double.parse(Customers[index]['money_amount']
+                                        .toString()) >
+                                    0
+                                ? Customers[index]['money_amount'].toString()
+                                : "0",
+                            lah: double.parse(Customers[index]['money_amount']
+                                        .toString()) <
+                                    0
+                                ? double.parse(Customers[index]['money_amount']
+                                        .toString()) *
+                                    -1
+                                : "0",
                             date: Customers[index]['action_date'] ?? "",
                           );
                         },
@@ -666,7 +668,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${double.parse(listPDF[index]['money_amount']) < 0 ? double.parse(listPDF[index]['money_amount']) * -1 : "0"}",
+                        "${double.parse(listPDF[index]['money_amount'].toString()) < 0 ? double.parse(listPDF[index]['money_amount'].toString()) * -1 : "0"}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -679,7 +681,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${double.parse(listPDF[index]['money_amount']) > 0 ? listPDF[index]['money_amount'] : "0"}",
+                        "${double.parse(listPDF[index]['money_amount'].toString()) > 0 ? listPDF[index]['money_amount'].toString() : "0"}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -727,9 +729,6 @@ class _KashfHesabState extends State<KashfHesab> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
-    print("url");
-    print(url);
-
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -763,13 +762,13 @@ class _KashfHesabState extends State<KashfHesab> {
     });
 
     for (int i = 0; i < listPDF.length; i++) {
-      if (double.parse(listPDF[i]['money_amount']) > 0) {
-        var money = listPDF[i]['money_amount'];
+      if (double.parse(listPDF[i]['money_amount'].toString()) > 0) {
+        var money = listPDF[i]['money_amount'].toString();
         setState(() {
           array_mnh.add(money);
         });
       } else {
-        var money = double.parse(listPDF[i]['money_amount']) * -1;
+        var money = double.parse(listPDF[i]['money_amount'].toString()) * -1;
         setState(() {
           array_lah.add(money);
         });

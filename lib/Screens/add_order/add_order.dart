@@ -37,19 +37,12 @@ class _AddOrderState extends State<AddOrder> {
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
     var url =
-        'https://qadrs.com/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
-
+        'https://yaghco.website/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url));
-    print("response");
-    print(jsonDecode(response.body));
-    if (response.body.isNotEmpty) {
-      var res = jsonDecode(response.body);
-      setState(() {
-        listPDF = res["invoiceproducts"];
-      });
-    }
-    print("listPDF");
-    print(listPDF);
+    var res = jsonDecode(response.body);
+    setState(() {
+      listPDF = res["invoiceproducts"];
+    });
   }
 
   @override

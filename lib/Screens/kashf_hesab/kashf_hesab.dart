@@ -729,6 +729,8 @@ class _KashfHesabState extends State<KashfHesab> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

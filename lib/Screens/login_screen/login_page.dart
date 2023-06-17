@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../Services/Drawer/drawer.dart';
 import '../admin_screen/admin_screen.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -376,6 +377,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                   ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(right: 15, left: 15, top: 35),
+                  //   child: MaterialButton(
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10))),
+                  //     height: 50,
+                  //     minWidth: double.infinity,
+                  //     color: Color(0xff34568B),
+                  //     textColor: Colors.white,
+                  //     child: Text(
+                  //       "Saver",
+                  //       style: TextStyle(
+                  //           fontSize: 22, fontWeight: FontWeight.bold),
+                  //     ),
+                  //     onPressed: () async {
+                  //       await GallerySaver.saveImage(
+                  //           "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg");
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

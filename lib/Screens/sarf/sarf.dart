@@ -183,6 +183,23 @@ class _SarfState extends State<Sarf> {
                             ),
                           ),
                         ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Main_Color,
+                                border: Border.all(color: Color(0xffD6D3D3))),
+                            child: Center(
+                              child: Text(
+                                "ملاحظات",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -215,6 +232,7 @@ class _SarfState extends State<Sarf> {
                                 double.parse(Customers[index]['discount']),
                             name: Customers[index]['customer']["c_name"] ?? "",
                             phone: Customers[index]['q_date'] ?? "",
+                            notes: Customers[index]['notes'] ?? "",
                           );
                         },
                       );

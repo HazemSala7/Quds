@@ -183,6 +183,23 @@ class _CatchesState extends State<Catches> {
                             ),
                           ),
                         ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Main_Color,
+                                border: Border.all(color: Colors.white)),
+                            child: Center(
+                              child: Text(
+                                "ملاحظات",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -215,6 +232,7 @@ class _CatchesState extends State<Catches> {
                                 double.parse(Customers[index]['discount']),
                             name: Customers[index]['customer']["c_name"] ?? "",
                             phone: Customers[index]['q_date'] ?? "",
+                            notes: Customers[index]['notes'] ?? "",
                           );
                         },
                       );
@@ -332,6 +350,8 @@ class _CatchesState extends State<Catches> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
 

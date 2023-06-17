@@ -4,12 +4,13 @@ import 'package:flutter_application_1/Server/server.dart';
 import '../../customer_details/customer_details.dart';
 
 class CatchCard extends StatefulWidget {
-  final name, phone, balance, id;
+  final name, phone, balance, id, notes;
 
   CatchCard(
       {Key? key,
       required this.id,
       this.name,
+      this.notes,
       this.phone,
       required this.balance})
       : super(key: key);
@@ -90,6 +91,20 @@ class _CatchCardState extends State<CatchCard> {
                           fontSize: 15,
                           color: Main_Color),
                     ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Color(0xffD6D3D3))),
+                child: Center(
+                  child: Text(
+                    widget.notes,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ),
               ),

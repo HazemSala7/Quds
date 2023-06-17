@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/Screens/kashf_hesab/kashf_card/kashf_card.dart';
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -38,6 +39,316 @@ class _KashfHesabState extends State<KashfHesab> {
     return sum;
   }
 
+  pdfPrinter(bool withproduct) async {
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Center(
+          child: pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(
+              "كشف حساب",
+              style: pw.TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(widget.name.toString())),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("السيد : ")),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+      children: [
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "رقم السند",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 2,
+            child: pw.Center(
+              child: pw.Text(
+                "التاريخ",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 3,
+            child: pw.Center(
+              child: pw.Text(
+                "البيان",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "له",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "منه",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "الرصيد",
+                style: pw.TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+    widgets.add(firstrow);
+    final firstpadding = pw.Padding(
+      padding: pw.EdgeInsets.only(top: 10),
+      child: pw.Container(
+        width: double.infinity,
+        height: 2,
+        color: PdfColors.grey,
+      ),
+    );
+    widgets.add(firstpadding);
+    final listview = pw.ListView.builder(
+      itemCount: listPDF.length,
+      itemBuilder: (context, index) {
+        customersBalances.clear();
+        for (var customer in listPDF) {
+          customersBalances.add(customer['money_amount'].toString());
+        }
+        return listPDF[index]["action_type"] != "مبيعات"
+            ? firstrowPDF(index)
+            : pw.Column(children: [
+                firstrowPDF(index),
+                withproduct
+                    ? pw.Column(
+                        children: [
+                          pw.Padding(
+                            padding: const pw.EdgeInsets.only(top: 15),
+                            child: pw.Container(
+                              height: 40,
+                              width: double.infinity,
+                              child: pw.Padding(
+                                padding: const pw.EdgeInsets.only(
+                                  right: 10,
+                                  left: 10,
+                                ),
+                                child: pw.Row(
+                                  mainAxisAlignment:
+                                      pw.MainAxisAlignment.spaceAround,
+                                  children: [
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text(
+                                              "المجموع الكلي",
+                                            )),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text(
+                                              "السعر",
+                                            )),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text(
+                                              "الكمية",
+                                            )),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 2,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text(
+                                              "أسم الصنف",
+                                            )),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text(
+                                              "رقم الصنف",
+                                            )),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          listPDF[index]["action"].length == 0
+                              ? pw.Text(
+                                  "لا يوجد منتجات",
+                                )
+                              : pw.Padding(
+                                  padding: const pw.EdgeInsets.only(bottom: 15),
+                                  child: pw.ListView.builder(
+                                    itemCount:
+                                        listPDF[index]["action"].length > 15
+                                            ? 15
+                                            : listPDF[index]["action"].length,
+                                    itemBuilder: (context, i) {
+                                      return order_card(
+                                        product_name: listPDF[index]["action"]
+                                                [i]['product_name'] ??
+                                            "-",
+                                        product_id: listPDF[index]["action"][i]
+                                                ['product_id'] ??
+                                            "-",
+                                        qty: listPDF[index]["action"][i]
+                                                ['p_quantity'] ??
+                                            "-",
+                                        price: listPDF[index]["action"][i]
+                                                ['p_price'] ??
+                                            "-",
+                                        total: listPDF[index]["action"][i]
+                                                ['total'] ??
+                                            "-",
+                                      );
+                                    },
+                                  ),
+                                )
+                        ],
+                      )
+                    : pw.Container()
+              ]);
+      },
+    );
+    widgets.add(listview);
+    final totals = pw.Column(
+      children: [
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(total_mnh.toString(),
+                    style: pw.TextStyle(fontSize: 18))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("الرصيد المدين : ",
+                    style: pw.TextStyle(fontSize: 18))),
+          ],
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(total_lah.toString(),
+                    style: pw.TextStyle(fontSize: 18))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("الرصيد الدائن : ",
+                    style: pw.TextStyle(fontSize: 18))),
+          ],
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("${total_mnh - total_lah}",
+                    style: pw.TextStyle(fontSize: 18))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("المجموع النهائي : ",
+                    style: pw.TextStyle(fontSize: 18))),
+          ],
+        ),
+      ],
+    );
+    widgets.add(totals);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        maxPages: 20,
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat.a4,
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
   Widget build(BuildContext context) {
     return Container(
       color: Main_Color,
@@ -57,366 +368,47 @@ class _KashfHesabState extends State<KashfHesab> {
                   children: [
                     InkWell(
                         onTap: () async {
-                          // SharedPreferences prefs =
-                          //     await SharedPreferences.getInstance();
-                          // int? company_id = prefs.getInt('company_id');
-                          // var headers = {
-                          //   "contentType":
-                          //       "application/x-www-form-urlencoded; charset=UTF-8",
-                          // };
-                          // var url =
-                          //     'https://jerusalemaccounting.yaghco.website/kashf/test.php';
-                          // var response = await http.post(Uri.parse(url),
-                          //     body: {
-                          //       "cust": widget.customer_id.toString(),
-                          //       "comp": "5",
-                          //     },
-                          //     headers: headers);
-                          // var data = response.body;
-                          // return data.outerHtml;
-                          // launch(
-                          //     "https://jerusalemaccounting.yaghco.website/kashf/test.php?cust=${widget.customer_id.toString()}&comp=${company_id.toString()}");
-                          var arabicFont = pw.Font.ttf(await rootBundle
-                              .load("assets/fonts/Hacen_Tunisia.ttf"));
-                          List<pw.Widget> widgets = [];
-                          final title = pw.Column(
-                            children: [
-                              pw.Center(
-                                child: pw.Directionality(
-                                  textDirection: pw.TextDirection.rtl,
-                                  child: pw.Text(
-                                    "كشف حساب",
-                                    style: pw.TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                              ),
-                              pw.Row(
-                                mainAxisAlignment: pw.MainAxisAlignment.end,
-                                children: [
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text(widget.name.toString())),
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text("السيد : ")),
-                                ],
-                              ),
-                              pw.SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          );
-                          widgets.add(title);
-                          final firstrow = pw.Row(
-                            mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                            children: [
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "رقم السند",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 2,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "التاريخ",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 3,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "البيان",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "له",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "منه",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Directionality(
-                                textDirection: pw.TextDirection.rtl,
-                                child: pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Center(
-                                    child: pw.Text(
-                                      "الرصيد",
-                                      style: pw.TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                          widgets.add(firstrow);
-                          final firstpadding = pw.Padding(
-                            padding: pw.EdgeInsets.only(top: 10),
-                            child: pw.Container(
-                              width: double.infinity,
-                              height: 2,
-                              color: PdfColors.grey,
-                            ),
-                          );
-                          widgets.add(firstpadding);
-                          final listview = pw.ListView.builder(
-                            itemCount: listPDF.length,
-                            itemBuilder: (context, index) {
-                              customersBalances.clear();
-                              for (var customer in listPDF) {
-                                customersBalances
-                                    .add(customer['money_amount'].toString());
-                              }
-                              return listPDF[index]["action_type"] != "مبيعات"
-                                  ? firstrowPDF(index)
-                                  : pw.Column(children: [
-                                      firstrowPDF(index),
-                                      pw.Padding(
-                                        padding:
-                                            const pw.EdgeInsets.only(top: 15),
-                                        child: pw.Container(
-                                          height: 40,
-                                          width: double.infinity,
-                                          child: pw.Padding(
-                                            padding: const pw.EdgeInsets.only(
-                                              right: 10,
-                                              left: 10,
-                                            ),
-                                            child: pw.Row(
-                                              mainAxisAlignment: pw
-                                                  .MainAxisAlignment
-                                                  .spaceAround,
-                                              children: [
-                                                pw.Directionality(
-                                                  textDirection:
-                                                      pw.TextDirection.rtl,
-                                                  child: pw.Expanded(
-                                                      flex: 1,
-                                                      child: pw.Container(
-                                                        child: pw.Center(
-                                                            child: pw.Text(
-                                                          "المجموع الكلي",
-                                                        )),
-                                                      )),
-                                                ),
-                                                pw.Directionality(
-                                                  textDirection:
-                                                      pw.TextDirection.rtl,
-                                                  child: pw.Expanded(
-                                                      flex: 1,
-                                                      child: pw.Container(
-                                                        child: pw.Center(
-                                                            child: pw.Text(
-                                                          "السعر",
-                                                        )),
-                                                      )),
-                                                ),
-                                                pw.Directionality(
-                                                  textDirection:
-                                                      pw.TextDirection.rtl,
-                                                  child: pw.Expanded(
-                                                      flex: 1,
-                                                      child: pw.Container(
-                                                        child: pw.Center(
-                                                            child: pw.Text(
-                                                          "الكمية",
-                                                        )),
-                                                      )),
-                                                ),
-                                                pw.Directionality(
-                                                  textDirection:
-                                                      pw.TextDirection.rtl,
-                                                  child: pw.Expanded(
-                                                      flex: 2,
-                                                      child: pw.Container(
-                                                        child: pw.Center(
-                                                            child: pw.Text(
-                                                          "أسم الصنف",
-                                                        )),
-                                                      )),
-                                                ),
-                                                pw.Directionality(
-                                                  textDirection:
-                                                      pw.TextDirection.rtl,
-                                                  child: pw.Expanded(
-                                                      flex: 1,
-                                                      child: pw.Container(
-                                                        child: pw.Center(
-                                                            child: pw.Text(
-                                                          "رقم الصنف",
-                                                        )),
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.only(
-                                            bottom: 15),
-                                        child: pw.ListView.builder(
-                                          itemCount:
-                                              listPDF[index]["action"].length,
-                                          itemBuilder: (context, i) {
-                                            if (listPDF[index]["action"] ==
-                                                "[]") {
-                                              print("hre");
-                                              return order_card(
-                                                // product_id: Customers[index]['product_id'] ?? "-",
-                                                product_name: "-",
-                                                // Customers[index]['product']["p_name"] ?? "-",
-                                                product_id: listPDF[index]
-                                                            ["action"][i]
-                                                        ['product_id'] ??
-                                                    "-",
-                                                qty: listPDF[index]["action"][i]
-                                                        ['p_quantity'] ??
-                                                    "-",
-                                                price: listPDF[index]["action"]
-                                                        [i]['p_price'] ??
-                                                    "-",
-                                                total: listPDF[index]["action"]
-                                                        [i]['total'] ??
-                                                    "-",
-                                              );
-                                            } else {
-                                              print("object");
-                                              return order_card(
-                                                // product_id: Customers[index]['product_id'] ?? "-",
-                                                product_name: listPDF[index]
-                                                        ["action"][i]
-                                                    ['product_name'],
-                                                // Customers[index]['product']["p_name"] ?? "-",
-                                                product_id: listPDF[index]
-                                                            ["action"][i]
-                                                        ['product_id'] ??
-                                                    "-",
-                                                qty: listPDF[index]["action"][i]
-                                                        ['p_quantity'] ??
-                                                    "-",
-                                                price: listPDF[index]["action"]
-                                                        [i]['p_price'] ??
-                                                    "-",
-                                                total: listPDF[index]["action"]
-                                                        [i]['total'] ??
-                                                    "-",
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ]);
-                            },
-                          );
-                          widgets.add(listview);
-                          final totals = pw.Column(
-                            children: [
-                              pw.SizedBox(
-                                height: 20,
-                              ),
-                              pw.Row(
-                                mainAxisAlignment: pw.MainAxisAlignment.end,
-                                children: [
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text(total_mnh.toString(),
-                                          style: pw.TextStyle(fontSize: 18))),
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text("الرصيد المدين : ",
-                                          style: pw.TextStyle(fontSize: 18))),
-                                ],
-                              ),
-                              pw.Row(
-                                mainAxisAlignment: pw.MainAxisAlignment.end,
-                                children: [
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text(total_lah.toString(),
-                                          style: pw.TextStyle(fontSize: 18))),
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text("الرصيد الدائن : ",
-                                          style: pw.TextStyle(fontSize: 18))),
-                                ],
-                              ),
-                              pw.Row(
-                                mainAxisAlignment: pw.MainAxisAlignment.end,
-                                children: [
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text("${total_mnh - total_lah}",
-                                          style: pw.TextStyle(fontSize: 18))),
-                                  pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Text("المجموع النهائي : ",
-                                          style: pw.TextStyle(fontSize: 18))),
-                                ],
-                              ),
-                            ],
-                          );
-                          widgets.add(totals);
-                          final pdf = pw.Document();
-                          pdf.addPage(
-                            pw.MultiPage(
-                              theme: pw.ThemeData.withFont(
-                                base: arabicFont,
-                              ),
-                              pageFormat: PdfPageFormat.a4,
-                              build: (context) =>
-                                  widgets, //here goes the widgets list
-                            ),
-                          );
-                          Printing.layoutPdf(
-                            onLayout: (PdfPageFormat format) async =>
-                                pdf.save(),
-                          );
+                          try {
+                            pdfPrinter(true);
+                          } catch (e) {
+                            Fluttertoast.showToast(
+                                msg: "عدد المنتجات كبير جدا");
+                          }
                         },
                         child: Container(
                             height: 40,
-                            width: 70,
+                            width: 130,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Main_Color),
                             child: Center(
                                 child: Text(
-                              "PDF",
+                              "طباعه مع منتجات",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )))),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          try {
+                            pdfPrinter(false);
+                          } catch (e) {
+                            Fluttertoast.showToast(
+                                msg: "حدث خطأ ما , الرجاء المحاوله فيما بعد");
+                          }
+                        },
+                        child: Container(
+                            height: 40,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Main_Color),
+                            child: Center(
+                                child: Text(
+                              "طباعه بدون منتجات",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -607,7 +599,7 @@ class _KashfHesabState extends State<KashfHesab> {
               ),
               SizedBox(
                 height: 30,
-              )
+              ),
             ],
           ),
         ),
@@ -729,8 +721,6 @@ class _KashfHesabState extends State<KashfHesab> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
-    print("url");
-    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -756,7 +746,6 @@ class _KashfHesabState extends State<KashfHesab> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
-
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body)["statments"];
     setState(() {
@@ -787,22 +776,6 @@ class _KashfHesabState extends State<KashfHesab> {
       });
     }
   }
-
-  // getProductsDetails(i) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   int? company_id = prefs.getInt('company_id');
-  //   int? salesman_id = prefs.getInt('salesman_id');
-  //   var url =
-  //       'https://yaghco.website/quds_laravel/api/getkashfs/${listPDF[i]['action_id'].toString()}/$company_id/$salesman_id/2';
-  //   print("url");
-  //   print(url);
-  //   var headers = {'ContentType': 'application/json'};
-  //   var response = await http.get(Uri.parse(url), headers: headers);
-  //   var res = jsonDecode(response.body);
-  //   print("res");
-  //   print(res);
-  //   return res;
-  // }
 
   @override
   void initState() {

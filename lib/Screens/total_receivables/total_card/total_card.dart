@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/kashf_hesab/kashf_hesab.dart';
 import 'package:flutter_application_1/Server/server.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../customer_details/customer_details.dart';
 
@@ -107,6 +110,42 @@ class _TotalCardState extends State<TotalCard> {
                               color: Main_Color),
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: InkWell(
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? store_name = prefs.getString('store_name') ?? "";
+                      String message =
+                          " السيد ${widget.name.toString()}        نعلمكم بان رصيدكم الحالي لدينا    ${widget.balance.toString()} مع تحيات شركة ${store_name}";
+                      if (widget.phone.toString().length > 10) {
+                        launchUrl(
+                            Uri.parse(
+                                'https://wa.me/${widget.phone}?text=$message'),
+                            mode: LaunchMode.externalApplication);
+                      } else if (widget.phone == "") {
+                        Fluttertoast.showToast(msg: "لا يوجد هاتف لهذا الزبون");
+                      } else {
+                        launchUrl(
+                            Uri.parse(
+                                'https://wa.me/972${widget.phone}?text=$message'),
+                            mode: LaunchMode.externalApplication);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Color(0xffD6D3D3))),
+                      child: Center(
+                          child: Icon(
+                        Icons.whatsapp,
+                      )),
                     ),
                   ),
                 ),

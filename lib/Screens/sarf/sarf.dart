@@ -230,7 +230,9 @@ class _SarfState extends State<Sarf> {
                             balance: double.parse(Customers[index]['chks']) +
                                 double.parse(Customers[index]['cash']) +
                                 double.parse(Customers[index]['discount']),
-                            name: Customers[index]['customer']["c_name"] ?? "",
+                            name: Customers[index]['customer'] == "-"
+                                ? "-"
+                                : Customers[index]['customer']["c_name"],
                             phone: Customers[index]['q_date'] ?? "",
                             notes: Customers[index]['notes'] ?? "",
                           );

@@ -230,7 +230,9 @@ class _CatchesState extends State<Catches> {
                             balance: double.parse(Customers[index]['chks']) +
                                 double.parse(Customers[index]['cash']) +
                                 double.parse(Customers[index]['discount']),
-                            name: Customers[index]['customer']["c_name"] ?? "",
+                            name: Customers[index]['customer'] == "-"
+                                ? "-"
+                                : Customers[index]['customer']["c_name"],
                             phone: Customers[index]['q_date'] ?? "",
                             notes: Customers[index]['notes'] ?? "",
                           );
@@ -350,8 +352,7 @@ class _CatchesState extends State<Catches> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
-    print("url");
-    print(url);
+
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
 

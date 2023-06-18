@@ -194,6 +194,23 @@ class _TotalReceivablesState extends State<TotalReceivables> {
                           ),
                         ),
                       ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Main_Color,
+                              border: Border.all(color: Colors.white)),
+                          child: Center(
+                            child: Text(
+                              "واتس اب",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

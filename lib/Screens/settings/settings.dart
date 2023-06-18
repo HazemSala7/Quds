@@ -16,6 +16,7 @@ class _SettingsState extends State<Settings> {
   @override
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   TextEditingController idController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -25,12 +26,21 @@ class _SettingsState extends State<Settings> {
   setSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? store_id_order = prefs.getString('store_id');
+    String? store_name = prefs.getString('store_name');
     if (store_id_order.toString() == "null") {
       idController.text = "1";
       await prefs.setString('store_id', idController.text);
     } else {
       setState(() {
         idController.text = store_id_order.toString();
+      });
+    }
+    if (store_name.toString() == "null") {
+      nameController.text = "";
+      await prefs.setString('store_name', nameController.text);
+    } else {
+      setState(() {
+        nameController.text = store_name.toString();
       });
     }
   }
@@ -85,6 +95,48 @@ class _SettingsState extends State<Settings> {
                             BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
                       ),
                       hintText: "رقم المخزن",
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 25, right: 15, left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "أسم الشركه",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+                child: Container(
+                  height: 50,
+                  width: double.infinity,
+                  child: TextField(
+                    controller: nameController,
+                    obscureText: false,
+                    onChanged: (_) async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('store_name', nameController.text);
+                    },
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            BorderSide(color: Color(0xff34568B), width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                      ),
+                      hintText: "أسم الشركه",
                     ),
                   ),
                 ),

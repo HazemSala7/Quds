@@ -41,7 +41,6 @@ class _QudsState extends State<Quds> {
         locale: locale,
         theme: ThemeData(
             primaryColor: Color(0xff34568B),
-            accentColor: Color(0xff34568B),
             textTheme:
                 GoogleFonts.tajawalTextTheme(Theme.of(context).textTheme)),
         debugShowCheckedModeBanner: false,

@@ -144,7 +144,7 @@ class _TotalCardState extends State<TotalCard> {
                           border: Border.all(color: Color(0xffD6D3D3))),
                       child: Center(
                           child: Icon(
-                        Icons.whatsapp,
+                        Icons.facebook,
                       )),
                     ),
                   ),

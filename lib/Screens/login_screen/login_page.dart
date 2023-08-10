@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../Services/Drawer/drawer.dart';
 import '../admin_screen/admin_screen.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({

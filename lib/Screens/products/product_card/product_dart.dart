@@ -143,8 +143,8 @@ class _ProductCardState extends State<ProductCard> {
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(
-                              widget.name.length > 27
-                                  ? widget.name.substring(0, 27) + '...'
+                              widget.name.length > 20
+                                  ? widget.name.substring(0, 20) + '...'
                                   : widget.name,
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.bold),

@@ -568,6 +568,7 @@ class _KashfHesabState extends State<KashfHesab> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return KashfCard(
+                            actions: Customers[index]['action'] ?? [],
                             action_id: Customers[index]['action_id'] ?? "-",
                             balance: getCustomerBalance(index),
                             bayan: Customers[index]['action_type'] ?? "",
@@ -721,6 +722,8 @@ class _KashfHesabState extends State<KashfHesab> {
 
     var url =
         'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

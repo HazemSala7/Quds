@@ -189,6 +189,8 @@ class _OrdersDetailsState extends State<OrdersDetails> {
     };
     var url =
         'https://yaghco.website/quds_laravel/api/getkashfs/${widget.id.toString()}/$company_id/$salesman_id/2';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
 
     var res = jsonDecode(response.body);

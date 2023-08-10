@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 class KashfCard extends StatefulWidget {
   final mnh, lah, balance, bayan, date, action_id;
+  var actions;
 
   KashfCard({
     Key? key,
@@ -16,6 +17,7 @@ class KashfCard extends StatefulWidget {
     required this.date,
     required this.bayan,
     required this.balance,
+    required this.actions,
   }) : super(key: key);
 
   @override
@@ -230,63 +232,21 @@ class _KashfCardState extends State<KashfCard> {
           visible: widget.bayan == "مبيعات" ? true : false,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 15),
-            child: FutureBuilder(
-              future: getKashf(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return order_card(
-                    product_name: "-",
-                    product_id: "-",
-                    qty: "-",
-                    price: "-",
-                    total: "-",
-                  );
-                } else {
-                  if (snapshot.data != null) {
-                    var Customers = snapshot.data["orders_details"];
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: Customers.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (Customers[index]['product'] == null) {
-                          return order_card(
-                            // product_id: Customers[index]['product_id'] ?? "-",
-                            product_name:
-                                Customers[index]['product_name'] ?? "-",
-                            // Customers[index]['product']["p_name"] ?? "-",
-                            product_id: Customers[index]['product_id'] ?? "-",
-                            qty: Customers[index]['p_quantity'] ?? "-",
-                            price: Customers[index]['p_price'] ?? "-",
-                            total: Customers[index]['total'] ?? "-",
-                          );
-                        } else {
-                          return order_card(
-                            // product_id: Customers[index]['product_id'] ?? "-",
-                            product_name:
-                                Customers[index]['product']["p_name"] ?? "-",
-                            // Customers[index]['product']["p_name"] ?? "-",
-                            product_id: Customers[index]['product_id'] ?? "-",
-                            qty: Customers[index]['p_quantity'] ?? "-",
-                            price: Customers[index]['p_price'] ?? "-",
-                            total: Customers[index]['total'] ?? "-",
-                          );
-                        }
-                      },
-                    );
-                  } else {
-                    return order_card(
-                      // product_id: Customers[index]['product_id'] ?? "-",
-                      product_name: "-",
-                      // Customers[index]['product']["p_name"] ?? "-",
-                      product_id: "-",
-                      qty: "-",
-                      price: "-",
-                      total: "-",
-                    );
-                  }
-                }
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: widget.actions.length,
+              itemBuilder: (BuildContext context, int index) {
+                return order_card(
+                  // product_id: Customers[index]['product_id'] ?? "-",
+                  product_name: widget.actions[index]['product_name'] ?? "-",
+                  // Customers[index]['product']["p_name"] ?? "-",
+                  product_id: widget.actions[index]['product_id'] ?? "-",
+                  qty: widget.actions[index]['p_quantity'] ?? "-",
+                  price: widget.actions[index]['p_price'] ?? "-",
+                  total: widget.actions[index]['total'] ?? "-",
+                );
               },
             ),
           ),
@@ -306,6 +266,8 @@ class _KashfCardState extends State<KashfCard> {
     };
     var url =
         'https://yaghco.website/quds_laravel/api/getkashfs/${widget.action_id.toString()}/$company_id/$salesman_id/2';
+    print("|");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

@@ -11,13 +11,14 @@ import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
 
 class AddProduct extends StatefulWidget {
-  final id, name, qty, customer_id, desc;
+  final id, name, qty, customer_id, desc, image;
   var price;
   AddProduct(
       {Key? key,
       this.id,
       this.desc,
       this.name,
+      this.image,
       this.customer_id,
       this.qty,
       required this.price})
@@ -595,7 +596,9 @@ class _AddProductState extends State<AddProduct> {
                         final newItem = CartItem(
                           productId: int.parse(widget.id.toString()),
                           name: widget.name,
+                          image: widget.image,
                           price: double.parse(priceController.text),
+                          discount: double.parse(discountContrller.text),
                           quantity: int.parse(qty.text),
                           ponus1: int.parse(bonus1Controller.text == ""
                               ? "0"

@@ -44,6 +44,7 @@ class _ProductCardState extends State<ProductCard> {
                 builder: (context) => AddProduct(
                       id: widget.id,
                       name: widget.name,
+                      image: widget.image,
                       customer_id: widget.customer_id.toString(),
                       price: widget.price,
                       qty: widget.qty,
@@ -181,7 +182,9 @@ class _ProductCardState extends State<ProductCard> {
                     final newItem = CartItem(
                       productId: int.parse(widget.id.toString()),
                       name: widget.name,
+                      image: widget.image,
                       price: double.parse(widget.price.toString()),
+                      discount: 0.0,
                       quantity: 1,
                       ponus1: 0,
                       ponus2: 0,

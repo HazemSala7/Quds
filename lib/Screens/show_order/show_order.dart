@@ -91,8 +91,8 @@ class _ShowOrderState extends State<ShowOrder> {
                             id: 2,
                             ItemCart: item,
                             invoice_id: 0,
-                            ponus_two: " - ",
-                            discount: 0,
+                            ponus_two: item.ponus2,
+                            discount: item.discount,
                             total: total,
                             price: item.price,
                             name: item.name,
@@ -101,7 +101,7 @@ class _ShowOrderState extends State<ShowOrder> {
                               cartProvider.removeFromCart(item);
                               setState(() {});
                             },
-                            image: " - ",
+                            image: item.image,
                           );
                         },
                       );
@@ -172,6 +172,10 @@ class _ShowOrderState extends State<ShowOrder> {
         TextEditingController(text: item.price.toString());
     final TextEditingController ponus1Controller =
         TextEditingController(text: item.ponus1.toString());
+    final TextEditingController ponus2Controller =
+        TextEditingController(text: item.ponus2.toString());
+    final TextEditingController discontController =
+        TextEditingController(text: item.discount.toString());
     final TextEditingController qtyController =
         TextEditingController(text: item.quantity.toString());
 
@@ -188,7 +192,6 @@ class _ShowOrderState extends State<ShowOrder> {
                 decoration: InputDecoration(labelText: 'أسم المنتج'),
               ),
               TextField(
-                readOnly: true,
                 controller: priceController,
                 decoration: InputDecoration(labelText: 'سعر المنتج'),
                 keyboardType: TextInputType.number,
@@ -197,7 +200,23 @@ class _ShowOrderState extends State<ShowOrder> {
                 visible: ponus1,
                 child: TextField(
                   controller: ponus1Controller,
-                  decoration: InputDecoration(labelText: 'بونص1'),
+                  decoration: InputDecoration(labelText: 'بونص 1'),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              Visibility(
+                visible: ponus2,
+                child: TextField(
+                  controller: ponus2Controller,
+                  decoration: InputDecoration(labelText: 'بونص 2'),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              Visibility(
+                visible: discount,
+                child: TextField(
+                  controller: discontController,
+                  decoration: InputDecoration(labelText: 'الخصم'),
                   keyboardType: TextInputType.number,
                 ),
               ),

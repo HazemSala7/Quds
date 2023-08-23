@@ -53,9 +53,12 @@ class CartDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         productId INTEGER NOT NULL,
         name TEXT NOT NULL,
+        image TEXT NOT NULL,
         price REAL NOT NULL,
         quantity INTEGER NOT NULL,
-        ponus1 INTEGER NOT NULL
+        ponus1 INTEGER NOT NULL,
+        ponus2 INTEGER NOT NULL,
+        discount REAL NOT NULL
       )
     ''');
   }

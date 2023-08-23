@@ -12,8 +12,10 @@ import '../../edit_product/edit_product.dart';
 class OrderCard extends StatefulWidget {
   final image, name, total, notes, product_id;
   Function removeProduct;
+  Function editProduct;
   int id;
   var qty, discount, ponus_one, ponus_two, price, invoice_id;
+  var ItemCart;
   OrderCard(
       {Key? key,
       this.image,
@@ -26,8 +28,10 @@ class OrderCard extends StatefulWidget {
       this.name,
       required this.ponus_one,
       required this.removeProduct,
+      required this.editProduct,
       required this.ponus_two,
       required this.discount,
+      required this.ItemCart,
       this.total})
       : super(key: key);
 
@@ -236,21 +240,7 @@ class _OrderCardState extends State<OrderCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditProduct(
-                                    product_id: widget.product_id,
-                                    name: widget.name,
-                                    price: widget.price,
-                                    qty: widget.qty,
-                                    invoiceID: widget.invoice_id,
-                                    bonus1: widget.ponus_one,
-                                    bonus2: widget.ponus_two,
-                                    discount: widget.discount,
-                                    notes: widget.notes,
-                                    ID: widget.id,
-                                  )));
+                      widget.editProduct();
                     },
                     child: Container(
                       height: 40,
@@ -286,6 +276,8 @@ class _OrderCardState extends State<OrderCard> {
                                     onTap: () {
                                       Navigator.pop(context);
                                       widget.removeProduct();
+                                      Fluttertoast.showToast(
+                                          msg: "تم حذف المنتج بنجاح");
                                     },
                                     child: Container(
                                       height: 50,

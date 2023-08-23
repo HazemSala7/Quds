@@ -3,7 +3,10 @@ import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../LocalDB/Models/CartModel.dart';
+import '../../LocalDB/Provider/CartProvider.dart';
 import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
 
@@ -58,6 +61,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Container(
       color: Main_Color,
       child: SafeArea(
@@ -588,19 +592,22 @@ class _AddProductState extends State<AddProduct> {
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
-                            );
-                          },
+                        final newItem = CartItem(
+                          productId: int.parse(widget.id.toString()),
+                          name: widget.name,
+                          price: double.parse(priceController.text),
+                          quantity: int.parse(qty.text),
+                          ponus1: int.parse(bonus1Controller.text == ""
+                              ? "0"
+                              : bonus1Controller.text),
+                          ponus2: int.parse(bonus2Controller.text == ""
+                              ? "0"
+                              : bonus2Controller.text),
                         );
-                        send();
+                        cartProvider.addToCart(newItem);
+                        Fluttertoast.showToast(
+                            msg: "تم اضافه هذا المنتج الى الفاتوره بنجاح");
+                        Navigator.pop(context);
                       },
                     ),
                   ),

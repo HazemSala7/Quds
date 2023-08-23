@@ -7,7 +7,10 @@ import 'package:flutter_application_1/Screens/show_order/order_card/order_card.d
 import 'package:flutter_application_1/Server/server.dart';
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../LocalDB/Models/CartModel.dart';
+import '../../LocalDB/Provider/CartProvider.dart';
 import '../../Services/Drawer/drawer.dart';
 import '../add_order/add_order.dart';
 
@@ -61,84 +64,47 @@ class _ShowOrderState extends State<ShowOrder> {
                       ],
                     ),
                   ),
-                  FutureBuilder(
-                    future: getInvoices(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          child: SpinKitPulse(
-                            color: Main_Color,
-                            size: 60,
-                          ),
-                        );
-                      } else {
-                        if (snapshot.data != null) {
-                          var Incoices = snapshot.data["invoiceproducts"];
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: Incoices.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (Incoices[index]["product"] != null) {
-                                return OrderCard(
-                                  ponus_one: Incoices[index]['bonus1'] ?? " - ",
-                                  notes: Incoices[index]['notes'] ?? " - ",
-                                  product_id:
-                                      Incoices[index]['product_id'] ?? " - ",
-                                  id: Incoices[index]['id'] ?? 0,
-                                  invoice_id: Incoices[index]['fatora_id'] ?? 0,
-                                  ponus_two: Incoices[index]['bonus2'] ?? " - ",
-                                  discount:
-                                      Incoices[index]['discount'] ?? " - ",
-                                  total: Incoices[index]['total'] ?? " - ",
-                                  price: Incoices[index]['p_price'] ?? " - ",
-                                  name: Incoices[index]['product']['p_name'] ??
-                                      " - ",
-                                  qty: Incoices[index]['p_quantity'] ?? " - ",
-                                  removeProduct: () {
-                                    removeProduct(Incoices[index]['id']);
+                  Consumer<CartProvider>(
+                    builder: (context, cartProvider, _) {
+                      List<CartItem> cartItems = cartProvider.cartItems;
 
-                                    setState(() {});
-                                  },
-                                  image: Incoices[index]['product']['images'] ??
-                                      " - ",
-                                );
-                              } else {
-                                return OrderCard(
-                                  notes: Incoices[index]['notes'] ?? " - ",
-                                  product_id:
-                                      Incoices[index]['product_id'] ?? " - ",
-                                  invoice_id: Incoices[index]['fatora_id'] ?? 0,
-                                  id: Incoices[index]['id'] ?? 0,
-                                  ponus_one: Incoices[index]['bonus1'] ?? " - ",
-                                  ponus_two: Incoices[index]['bonus2'] ?? " - ",
-                                  removeProduct: () {
-                                    removeProduct(Incoices[index]['id']);
-
-                                    setState(() {});
-                                  },
-                                  discount:
-                                      Incoices[index]['discount'] ?? " - ",
-                                  total: Incoices[index]['total'] ?? " - ",
-                                  price: Incoices[index]['p_price'] ?? " - ",
-                                  name: "-",
-                                  qty: Incoices[index]['p_quantity'] ?? " - ",
-                                  image: "",
-                                );
-                              }
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: cartItems.length,
+                        itemBuilder: (context, index) {
+                          CartItem item = cartItems[index];
+                          double total = item.price * item.quantity;
+                          // var total = item.price *
+                          //     double.parse(item.quantity.toString());
+                          // double Alltotal = 0;
+                          // for (CartItem item in cartItems) {
+                          //   total += total;
+                          // }
+                          return OrderCard(
+                            ponus_one: item.ponus1,
+                            editProduct: () {
+                              _editCartItem(cartProvider, item);
                             },
+                            notes: " - ",
+                            product_id: item.productId,
+                            id: 2,
+                            ItemCart: item,
+                            invoice_id: 0,
+                            ponus_two: " - ",
+                            discount: 0,
+                            total: total,
+                            price: item.price,
+                            name: item.name,
+                            qty: item.quantity,
+                            removeProduct: () {
+                              cartProvider.removeFromCart(item);
+                              setState(() {});
+                            },
+                            image: " - ",
                           );
-                        } else {
-                          return Center(
-                              child: SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: CircularProgressIndicator()));
-                        }
-                      }
+                        },
+                      );
                     },
                   ),
                   SizedBox(
@@ -151,26 +117,168 @@ class _ShowOrderState extends State<ShowOrder> {
           FutureBuilder(
             future: getInvoices(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
+              final cartProvider = Provider.of<CartProvider>(context);
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return BottomContainer(total: 0, fatora_id: "0");
               } else {
                 if (snapshot.data != null) {
                   if (snapshot.data["invoiceproducts"].length == 0) {
-                    return BottomContainer(total: 0, fatora_id: "0");
+                    return BottomContainer(
+                      total: calculateTotal(cartProvider.cartItems),
+                      fatora_id: "0",
+                    );
                   } else {
-                    var tot = snapshot.data["total"];
+                    // var tot = snapshot.data["total"];
+                    var total_qty = snapshot.data["total_qty"];
                     var fatora_id =
                         snapshot.data["invoiceproducts"][0]["fatora_id"] ?? "0";
-                    return BottomContainer(total: tot, fatora_id: fatora_id);
+                    return BottomContainer(
+                      total: calculateTotal(cartProvider.cartItems),
+                      fatora_id: fatora_id,
+                    );
                   }
                 } else {
-                  return BottomContainer(total: 0);
+                  return BottomContainer(
+                    total: calculateTotal(cartProvider.cartItems),
+                  );
                 }
               }
             },
           ),
         ],
       )),
+    );
+  }
+
+  double calculateTotal(List<CartItem> cartItems) {
+    double total = 0;
+    for (CartItem item in cartItems) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
+
+  _editCartItem(
+    CartProvider cartProvider,
+    CartItem item,
+  ) {
+    // Check if there is an ongoing navigation or dialog operation
+    // if (Navigator.of(context).canPop()) {
+    //   return;
+    // }
+    final TextEditingController nameController =
+        TextEditingController(text: item.name);
+    final TextEditingController priceController =
+        TextEditingController(text: item.price.toString());
+    final TextEditingController ponus1Controller =
+        TextEditingController(text: item.ponus1.toString());
+    final TextEditingController qtyController =
+        TextEditingController(text: item.quantity.toString());
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('تعديل بيانات المنتج'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: 'أسم المنتج'),
+              ),
+              TextField(
+                readOnly: true,
+                controller: priceController,
+                decoration: InputDecoration(labelText: 'سعر المنتج'),
+                keyboardType: TextInputType.number,
+              ),
+              Visibility(
+                visible: ponus1,
+                child: TextField(
+                  controller: ponus1Controller,
+                  decoration: InputDecoration(labelText: 'بونص1'),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              TextField(
+                controller: qtyController,
+                decoration: InputDecoration(labelText: 'الكميه'),
+                keyboardType: TextInputType.number,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('خروج'),
+            ),
+            TextButton(
+              onPressed: () {
+                // print("priceController.text");
+                // print(priceController.text);
+                if (int.parse(qtyController.text) > 0 &&
+                    double.parse(priceController.text.toString()) == 0.0) {
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text(
+                          'الكمية أكبر من 1 و السعر يساوي صفر , لا يمكن',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        actions: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Main_Color,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: Text(
+                                  "حسنا",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  double price = double.parse(priceController.text);
+                  int quantity = int.parse(qtyController.text);
+                  int ponus1filnal = int.parse(ponus1Controller.text);
+
+                  // Call the updateCartItem function in CartProvider
+                  cartProvider.updateCartItem(
+                    item.copyWith(
+                      name: nameController.text,
+                      price: price,
+                      quantity: quantity,
+                      ponus1: ponus1filnal,
+                    ),
+                  );
+                  setState(() {});
+
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('حفظ البيانات'),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/customers/customer_card/customer_card.dart';
 import 'package:flutter_application_1/Server/server.dart';
@@ -6,10 +7,15 @@ import 'package:flutter_application_1/Services/AppBar/appbar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../Services/Drawer/drawer.dart';
 
 class Customers extends StatefulWidget {
-  const Customers({Key? key}) : super(key: key);
+  List CustomersArray;
+  Customers({
+    Key? key,
+    required this.CustomersArray,
+  }) : super(key: key);
 
   @override
   State<Customers> createState() => _CustomersState();
@@ -18,6 +24,7 @@ class Customers extends StatefulWidget {
 class _CustomersState extends State<Customers> {
   @override
   bool search = false;
+  var filteredCustomers = [];
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +44,20 @@ class _CustomersState extends State<Customers> {
                 height: 50,
                 width: double.infinity,
                 child: TextField(
-                  controller: searchController,
-                  onChanged: (_) {
-                    if (searchController.text != "") {
+                  onChanged: (searchInput) {
+                    if (searchInput.isEmpty) {
                       setState(() {
-                        search = true;
+                        filteredCustomers = widget.CustomersArray;
                       });
                     } else {
                       setState(() {
-                        search = false;
+                        filteredCustomers = filteredCustomers
+                            .where((customer) =>
+                                customer['c_name']
+                                    .toLowerCase()
+                                    .contains(searchInput.toLowerCase()) ||
+                                customer['c_name'].contains(searchInput))
+                            .toList();
                       });
                     }
                   },
@@ -132,66 +144,21 @@ class _CustomersState extends State<Customers> {
                 ),
               ),
             ),
-            search
-                ? FutureBuilder(
-                    future: searchFunction(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          child: SpinKitPulse(
-                            color: Main_Color,
-                            size: 60,
-                          ),
-                        );
-                      } else {
-                        if (snapshot.data != null) {
-                          var Customers = snapshot.data["customers"];
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: Customers.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return CustomerCard(
-                                index: index,
-                                id: Customers[index]['id'] ?? 0,
-                                name: Customers[index]['c_name'] ?? "",
-                                price_code:
-                                    Customers[index]['price_code'] ?? "",
-                                phone: Customers[index]['phone1'] ?? " - ",
-                              );
-                            },
-                          );
-                        } else {
-                          return Center(
-                              child: SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: CircularProgressIndicator()));
-                        }
-                      }
-                    },
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemCount: AllCustomres.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CustomerCard(
-                        index: index,
-                        id: AllCustomres[index]['id'] ?? 0,
-                        name: AllCustomres[index]['c_name'] ?? "",
-                        price_code: AllCustomres[index]['price_code'] ?? "",
-                        phone: AllCustomres[index]['phone1'] ?? " - ",
-                      );
-                    },
-                  ),
-            SizedBox(
-              height: 30,
-            )
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: filteredCustomers.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CustomerCard(
+                  index: index,
+                  id: filteredCustomers[index]['id'] ?? 0,
+                  name: filteredCustomers[index]['c_name'] ?? "",
+                  price_code: filteredCustomers[index]['price_code'] ?? "",
+                  phone: filteredCustomers[index]['phone1'] ?? " - ",
+                );
+              },
+            ),
           ],
         )),
       )),
@@ -213,6 +180,7 @@ class _CustomersState extends State<Customers> {
     // bool? test_notes = prefs.getBool('notes');
     bool? test_existed_qty = prefs.getBool('existed_qty');
     String? store_id_new = prefs.getString('store_id');
+    filteredCustomers = widget.CustomersArray;
     if (store_id_new == null) {
       setState(() {
         store_id = "";
@@ -277,18 +245,5 @@ class _CustomersState extends State<Customers> {
         existed_qty = false;
       });
     }
-  }
-
-  TextEditingController searchController = TextEditingController();
-
-  searchFunction() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    var url =
-        'https://yaghco.website/quds_laravel/api/search/${searchController.text}/$company_id/$salesman_id';
-    var response = await http.get(Uri.parse(url));
-    var res = jsonDecode(response.body);
-    return res;
   }
 }

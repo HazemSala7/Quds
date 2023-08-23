@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/Screens/kashf_hesab/kashf_card/kashf_card.dart';
@@ -358,252 +359,256 @@ class _KashfHesabState extends State<KashfHesab> {
         drawer: DrawerMain(),
         appBar: PreferredSize(
             child: AppBarBack(), preferredSize: Size.fromHeight(50)),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                        onTap: () async {
-                          try {
-                            pdfPrinter(true);
-                          } catch (e) {
-                            Fluttertoast.showToast(
-                                msg: "عدد المنتجات كبير جدا");
-                          }
-                        },
-                        child: Container(
-                            height: 40,
-                            width: 130,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Main_Color),
-                            child: Center(
-                                child: Text(
-                              "طباعه مع منتجات",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )))),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    InkWell(
-                        onTap: () async {
-                          try {
-                            pdfPrinter(false);
-                          } catch (e) {
-                            Fluttertoast.showToast(
-                                msg: "حدث خطأ ما , الرجاء المحاوله فيما بعد");
-                          }
-                        },
-                        child: Container(
-                            height: 40,
-                            width: 130,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Main_Color),
-                            child: Center(
-                                child: Text(
-                              "طباعه بدون منتجات",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )))),
-                  ],
+        body: _isFirstLoadRunning
+            ? Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: SpinKitPulse(
+                  color: Main_Color,
+                  size: 60,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  "كشف حساب",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: Container(
-                  height: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 10,
-                      left: 10,
-                    ),
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "الرصيد",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
+                        InkWell(
+                            onTap: () async {
+                              try {
+                                pdfPrinter(true);
+                              } catch (e) {
+                                Fluttertoast.showToast(
+                                    msg: "عدد المنتجات كبير جدا");
+                              }
+                            },
+                            child: Container(
+                                height: 40,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Main_Color),
+                                child: Center(
+                                    child: Text(
+                                  "طباعه مع منتجات",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )))),
+                        SizedBox(
+                          width: 20,
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "منه",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "له",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "البيان",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "التاريخ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Main_Color,
-                                border: Border.all(color: Color(0xffD6D3D3))),
-                            child: Center(
-                              child: Text(
-                                "رقم السند",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
+                        InkWell(
+                            onTap: () async {
+                              try {
+                                pdfPrinter(false);
+                              } catch (e) {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "حدث خطأ ما , الرجاء المحاوله فيما بعد");
+                              }
+                            },
+                            child: Container(
+                                height: 40,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Main_Color),
+                                child: Center(
+                                    child: Text(
+                                  "طباعه بدون منتجات",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )))),
                       ],
                     ),
                   ),
-                ),
-              ),
-              FutureBuilder(
-                future: getCustomers(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: SpinKitPulse(
-                        color: Main_Color,
-                        size: 60,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      "كشف حساب",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          right: 10,
+                          left: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "الرصيد",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "منه",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "له",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "البيان",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "التاريخ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Main_Color,
+                                    border:
+                                        Border.all(color: Color(0xffD6D3D3))),
+                                child: Center(
+                                  child: Text(
+                                    "رقم السند",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    );
-                  } else {
-                    if (snapshot.data != null) {
-                      var Customers = snapshot.data["statments"];
-                      customersBalances.clear();
-                      for (var customer in Customers) {
-                        customersBalances
-                            .add(customer['money_amount'].toString());
-                      }
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _controller,
+                      itemCount: listPDF.length,
+                      itemBuilder: (context, index) {
+                        for (var customer in listPDF) {
+                          customersBalances
+                              .add(customer['money_amount'].toString());
+                        }
+                        return KashfCard(
+                          actions: listPDF[index]['action'] ?? [],
+                          action_id: listPDF[index]['action_id'] ?? "-",
+                          balance: getCustomerBalance(index),
+                          bayan: listPDF[index]['action_type'] ?? "",
+                          mnh: double.parse(listPDF[index]['money_amount']
+                                      .toString()) >
+                                  0
+                              ? listPDF[index]['money_amount'].toString()
+                              : "0",
+                          lah: double.parse(listPDF[index]['money_amount']
+                                      .toString()) <
+                                  0
+                              ? double.parse(listPDF[index]['money_amount']
+                                      .toString()) *
+                                  -1
+                              : "0",
+                          date: listPDF[index]['action_date'] ?? "",
+                        );
+                      },
+                    ),
+                  ),
+                  // when the _loadMore function is running
+                  if (_isLoadMoreRunning == true)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10, bottom: 40),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
 
-                      return ListView.builder(
-                        itemCount: Customers.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return KashfCard(
-                            actions: Customers[index]['action'] ?? [],
-                            action_id: Customers[index]['action_id'] ?? "-",
-                            balance: getCustomerBalance(index),
-                            bayan: Customers[index]['action_type'] ?? "",
-                            mnh: double.parse(Customers[index]['money_amount']
-                                        .toString()) >
-                                    0
-                                ? Customers[index]['money_amount'].toString()
-                                : "0",
-                            lah: double.parse(Customers[index]['money_amount']
-                                        .toString()) <
-                                    0
-                                ? double.parse(Customers[index]['money_amount']
-                                        .toString()) *
-                                    -1
-                                : "0",
-                            date: Customers[index]['action_date'] ?? "",
-                          );
-                        },
-                      );
-                    } else {
-                      return Center(
-                          child: SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: CircularProgressIndicator()));
-                    }
-                  }
-                },
+                  // When nothing else to load
+                  if (_hasNextPage == false)
+                    Container(
+                      padding: const EdgeInsets.only(top: 30, bottom: 40),
+                      color: Main_Color,
+                      child: const Center(
+                        child: Text('You have fetched all of the products'),
+                      ),
+                    ),
+                ],
               ),
-              SizedBox(
-                height: 30,
-              ),
-            ],
-          ),
-        ),
       )),
     );
   }
@@ -710,24 +715,6 @@ class _KashfHesabState extends State<KashfHesab> {
     );
   }
 
-  getCustomers() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    int? company_id = prefs.getInt('company_id');
-
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'ContentType': 'application/json'
-    };
-
-    var url =
-        'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
-    print("url");
-    print(url);
-    var response = await http.get(Uri.parse(url), headers: headers);
-    var res = jsonDecode(response.body);
-    return res;
-  }
 
   var listPDF = [];
   List array_mnh = [];
@@ -736,55 +723,134 @@ class _KashfHesabState extends State<KashfHesab> {
 
   List array_lah = [];
   double total_lah = 0.0;
-  getCustome1rs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'ContentType': 'application/json'
-    };
-
-    var url =
-        'https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}';
-    var response = await http.get(Uri.parse(url), headers: headers);
-    var res = jsonDecode(response.body)["statments"];
-    setState(() {
-      listPDF = res;
-    });
-
-    for (int i = 0; i < listPDF.length; i++) {
-      if (double.parse(listPDF[i]['money_amount'].toString()) > 0) {
-        var money = listPDF[i]['money_amount'].toString();
-        setState(() {
-          array_mnh.add(money);
-        });
-      } else {
-        var money = double.parse(listPDF[i]['money_amount'].toString()) * -1;
-        setState(() {
-          array_lah.add(money);
-        });
-      }
-    }
-    for (int i = 0; i < array_mnh.length; i++) {
-      setState(() {
-        total_mnh = total_mnh + double.parse(array_mnh[i].toString());
-      });
-    }
-    for (int i = 0; i < array_lah.length; i++) {
-      setState(() {
-        total_lah = total_lah + double.parse(array_lah[i].toString());
-      });
-    }
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCustome1rs();
+    _firstLoad();
+    _controller = ScrollController()..addListener(_loadMore);
+  }
+
+  // At the beginning, we fetch the first 20 posts
+  int _page = 0;
+  // you can change this value to fetch more or less posts per page (10, 15, 5, etc)
+  final int _limit = 20;
+
+  // There is next page or not
+  bool _hasNextPage = true;
+
+  // Used to display loading indicators when _firstLoad function is running
+  bool _isFirstLoadRunning = false;
+
+  // Used to display loading indicators when _loadMore function is running
+  bool _isLoadMoreRunning = false;
+
+  // This function will be called when the app launches (see the initState function)
+  void _firstLoad() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    String? code_price = prefs.getString('price_code');
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+    try {
+      var url =
+          "https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+      final res = await http.get(Uri.parse(url));
+      setState(() {
+        listPDF = json.decode(res.body)["statments"]["data"];
+        for (int i = 0; i < listPDF.length; i++) {
+          if (double.parse(listPDF[i]['money_amount'].toString()) > 0) {
+            var money = listPDF[i]['money_amount'].toString();
+            setState(() {
+              array_mnh.add(money);
+            });
+          } else {
+            var money =
+                double.parse(listPDF[i]['money_amount'].toString()) * -1;
+            setState(() {
+              array_lah.add(money);
+            });
+          }
+        }
+        for (int i = 0; i < array_mnh.length; i++) {
+          setState(() {
+            total_mnh = total_mnh + double.parse(array_mnh[i].toString());
+          });
+        }
+        for (int i = 0; i < array_lah.length; i++) {
+          setState(() {
+            total_lah = total_lah + double.parse(array_lah[i].toString());
+          });
+        }
+      });
+    } catch (err) {
+      if (kDebugMode) {
+        print('Something went wrong');
+      }
+    }
+
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
+
+  // This function will be triggered whenver the user scroll
+  // to near the bottom of the list view
+  void _loadMore() async {
+    print("loaded");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    String? code_price = prefs.getString('price_code');
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller!.position.extentAfter < 300) {
+      setState(() {
+        _isLoadMoreRunning = true; // Display a progress indicator at the bottom
+      });
+      _page += 1; // Increase _page by 1
+
+      try {
+        var url =
+            "https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+
+        final res = await http.get(Uri.parse(url));
+
+        final List fetchedPosts = json.decode(res.body)["statments"]["data"];
+        if (fetchedPosts.isNotEmpty) {
+          setState(() {
+            listPDF.addAll(fetchedPosts);
+          });
+        } else {
+          // This means there is no more data
+          // and therefore, we will not send another GET request
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
+      } catch (err) {
+        if (kDebugMode) {
+          print('Something went wrong!');
+        }
+      }
+
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
+  }
+
+  // The controller for the ListView
+  ScrollController? _controller;
+
+  @override
+  void dispose() {
+    _controller?.removeListener(_loadMore);
+    super.dispose();
   }
 
   pw.Container order_card(

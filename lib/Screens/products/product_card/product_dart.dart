@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../LocalDB/Models/CartModel.dart';
+import '../../../LocalDB/Provider/CartProvider.dart';
 import '../../../Server/server.dart';
 import '../../add_product/add_product.dart';
 import '../../edit_product_data/edit_product_data.dart';
@@ -31,6 +35,7 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -173,19 +178,21 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 InkWell(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: SizedBox(
-                              height: 100,
-                              width: 100,
-                              child:
-                                  Center(child: CircularProgressIndicator())),
-                        );
-                      },
+                    final newItem = CartItem(
+                      productId: int.parse(widget.id.toString()),
+                      name: widget.name,
+                      price: double.parse(widget.price.toString()),
+                      quantity: 1,
+                      ponus1: 0,
+                      ponus2: 0,
                     );
-                    send();
+                    cartProvider.addToCart(newItem);
+                    Fluttertoast.showToast(
+                      msg: "تم اضافه هذا المنتج الى الفاتوره بنجاح",
+                    );
+                    Timer(Duration(milliseconds: 300), () {
+                      Fluttertoast.cancel();
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(

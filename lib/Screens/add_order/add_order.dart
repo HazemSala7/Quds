@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../LocalDB/Provider/CartProvider.dart';
 import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
 import '../products/products.dart';
@@ -434,7 +436,6 @@ class _AddOrderState extends State<AddOrder> {
       });
     } else {
       // print("Date is not selected");
-
     }
   }
 
@@ -442,6 +443,8 @@ class _AddOrderState extends State<AddOrder> {
   TextEditingController valueController = TextEditingController();
   TextEditingController NotesController = TextEditingController();
   send(pdf) async {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    ;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var now = DateTime.now();
     var formatterDate = DateFormat('yy-MM-dd');
@@ -451,24 +454,80 @@ class _AddOrderState extends State<AddOrder> {
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
     String? store_id_order = prefs.getString('store_id');
-    var url = 'https://yaghco.website/quds_laravel/api/add_order';
-    final response = await http.post(
-      Uri.parse(url),
-      body: {
-        'f_date': actualDate.toString(),
-        'f_value': valueController.text,
-        'fatora_id': widget.fatora_id.toString(),
-        'customer_id': widget.id.toString(),
-        'company_id': company_id.toString(),
-        'f_code': "1",
-        'salesman_id': salesman_id.toString(),
-        'f_discount':
-            DiscountController.text == "" ? "0" : DiscountController.text,
-        'store_id': store_id_order.toString(),
-        'notes': NotesController.text == "" ? "-" : NotesController.text,
-        'f_time': actualTime.toString(),
-      },
-    );
+    List<Map<String, dynamic>> productsArray = cartProvider.getProductsArray();
+    String jsonData = jsonEncode(productsArray);
+    List<dynamic> parsedData = jsonDecode(jsonData);
+    List ProductsIDarray = [];
+    List ProductsNamearray = [];
+    List qtyArray = [];
+    List priceArray = [];
+    List ponus1Array = [];
+    List ponus2Array = [];
+    List discountArray = [];
+    List totalArray = [];
+    List notesArray = [];
+    for (int i = 0; i < parsedData.length; i++) {
+      ProductsIDarray.add(parsedData[i]["product_id"]);
+      ProductsNamearray.add(parsedData[i]["name"]);
+      priceArray.add(parsedData[i]["price"]);
+      qtyArray.add(parsedData[i]["quantity"]);
+      ponus1Array.add(parsedData[i]["ponus1"]);
+      ponus2Array.add(0);
+      discountArray.add(0);
+      totalArray.add(0);
+      notesArray.add("-");
+    }
+    var url = 'https://yaghco.website/quds_laravel/api/add_order_test';
+    var request = new http.MultipartRequest("POST", Uri.parse(url));
+    for (int i = 0; i < ProductsIDarray.length; i++) {
+      request.fields['product_id[$i]'] = ProductsIDarray[i].toString();
+    }
+    for (int i = 0; i < ProductsNamearray.length; i++) {
+      request.fields['product_name[$i]'] = ProductsNamearray[i].toString();
+    }
+    for (int i = 0; i < priceArray.length; i++) {
+      request.fields['p_price[$i]'] = priceArray[i].toString();
+    }
+    for (int i = 0; i < qtyArray.length; i++) {
+      request.fields['p_quantity[$i]'] = qtyArray[i].toString();
+    }
+    for (int i = 0; i < ponus1Array.length; i++) {
+      request.fields['bonus1[$i]'] = ponus1Array[i].toString();
+    }
+    for (int i = 0; i < ponus2Array.length; i++) {
+      request.fields['bonus2[$i]'] = ponus2Array[i].toString();
+    }
+    for (int i = 0; i < discountArray.length; i++) {
+      request.fields['discount[$i]'] = discountArray[i].toString();
+    }
+    for (int i = 0; i < notesArray.length; i++) {
+      request.fields['notes[$i]'] = notesArray[i].toString();
+    }
+    request.fields['f_date'] = actualDate.toString();
+    request.fields['f_value'] = valueController.text;
+    request.fields['customer_id'] = widget.id.toString();
+    request.fields['company_id'] = company_id.toString();
+    request.fields['salesman_id'] = salesman_id.toString();
+    request.fields['f_code'] = "1";
+    request.fields['f_discount'] =
+        DiscountController.text == "" ? "0" : DiscountController.text;
+    request.fields['store_id'] = store_id_order.toString();
+    request.fields['f_time'] = actualTime.toString();
+    // final response = await http.post(
+    //   Uri.parse(url),
+    //   body: {
+    //     'f_date': actualDate.toString(),
+    //     'customer_id': widget.id.toString(),
+    //     'company_id': company_id.toString(),
+    //     'f_code': "1",
+    //     'salesman_id': salesman_id.toString(),
+    //     'f_discount':
+    //         DiscountController.text == "" ? "0" : DiscountController.text,
+    //     'store_id': store_id_order.toString(),
+    //     'notes': NotesController.text == "" ? "-" : NotesController.text,
+    //     'f_time': actualTime.toString(),
+    //   },
+    // );
     if (store_id_order == "") {
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(
@@ -491,17 +550,23 @@ class _AddOrderState extends State<AddOrder> {
         },
       );
     } else {
-      var data = jsonDecode(response.body);
-      if (data['status'] == 'true') {
-        Navigator.of(context, rootNavigator: true).pop();
-        Fluttertoast.showToast(msg: "تم اضافه الفاتوره بنجاح");
-        pdf;
-        Navigator.pop(context);
-        Navigator.pop(context);
-      } else {
-        Navigator.of(context, rootNavigator: true).pop();
-        print('fsdsdfs');
-      }
+      var headers = {'ContentType': 'application/json'};
+      request.headers.addAll(headers);
+      var response = await request.send();
+      response.stream.transform(utf8.decoder).listen((value) async {
+        Map valueMap = json.decode(value);
+        if (valueMap['status'].toString() == 'true') {
+          Navigator.of(context, rootNavigator: true).pop();
+          Fluttertoast.showToast(msg: "تم اضافه الفاتوره بنجاح");
+          cartProvider.clearCart();
+          pdf;
+          Navigator.pop(context);
+          Navigator.pop(context);
+        } else {
+          Navigator.of(context, rootNavigator: true).pop();
+          print('failed');
+        }
+      });
     }
   }
 

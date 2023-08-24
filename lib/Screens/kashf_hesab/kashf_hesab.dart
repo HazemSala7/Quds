@@ -161,13 +161,13 @@ class _KashfHesabState extends State<KashfHesab> {
     );
     widgets.add(firstpadding);
     final listview = pw.ListView.builder(
-      itemCount: listPDF.length,
+      itemCount: listPDFAll.length,
       itemBuilder: (context, index) {
         customersBalances.clear();
-        for (var customer in listPDF) {
+        for (var customer in listPDFAll) {
           customersBalances.add(customer['money_amount'].toString());
         }
-        return listPDF[index]["action_type"] != "مبيعات"
+        return listPDFAll[index]["action_type"] != "مبيعات"
             ? firstrowPDF(index)
             : pw.Column(children: [
                 firstrowPDF(index),
@@ -248,7 +248,7 @@ class _KashfHesabState extends State<KashfHesab> {
                               ),
                             ),
                           ),
-                          listPDF[index]["action"].length == 0
+                          listPDFAll[index]["action"].length == 0
                               ? pw.Text(
                                   "لا يوجد منتجات",
                                 )
@@ -256,24 +256,25 @@ class _KashfHesabState extends State<KashfHesab> {
                                   padding: const pw.EdgeInsets.only(bottom: 15),
                                   child: pw.ListView.builder(
                                     itemCount:
-                                        listPDF[index]["action"].length > 15
+                                        listPDFAll[index]["action"].length > 15
                                             ? 15
-                                            : listPDF[index]["action"].length,
+                                            : listPDFAll[index]["action"]
+                                                .length,
                                     itemBuilder: (context, i) {
                                       return order_card(
-                                        product_name: listPDF[index]["action"]
-                                                [i]['product_name'] ??
+                                        product_name: listPDFAll[index]
+                                                ["action"][i]['product_name'] ??
                                             "-",
-                                        product_id: listPDF[index]["action"][i]
-                                                ['product_id'] ??
+                                        product_id: listPDFAll[index]["action"]
+                                                [i]['product_id'] ??
                                             "-",
-                                        qty: listPDF[index]["action"][i]
+                                        qty: listPDFAll[index]["action"][i]
                                                 ['p_quantity'] ??
                                             "-",
-                                        price: listPDF[index]["action"][i]
+                                        price: listPDFAll[index]["action"][i]
                                                 ['p_price'] ??
                                             "-",
-                                        total: listPDF[index]["action"][i]
+                                        total: listPDFAll[index]["action"][i]
                                                 ['total'] ??
                                             "-",
                                       );
@@ -379,7 +380,20 @@ class _KashfHesabState extends State<KashfHesab> {
                         InkWell(
                             onTap: () async {
                               try {
-                                pdfPrinter(true);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())),
+                                    );
+                                  },
+                                );
+                                getAllStatments(true);
                               } catch (e) {
                                 Fluttertoast.showToast(
                                     msg: "عدد المنتجات كبير جدا");
@@ -404,7 +418,20 @@ class _KashfHesabState extends State<KashfHesab> {
                         InkWell(
                             onTap: () async {
                               try {
-                                pdfPrinter(false);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())),
+                                    );
+                                  },
+                                );
+                                getAllStatments(false);
                               } catch (e) {
                                 Fluttertoast.showToast(
                                     msg:
@@ -564,6 +591,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       controller: _controller,
                       itemCount: listPDF.length,
                       itemBuilder: (context, index) {
+                        customersBalances.clear();
                         for (var customer in listPDF) {
                           customersBalances
                               .add(customer['money_amount'].toString());
@@ -629,7 +657,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${listPDF[index]['action_id'] ?? "-"}",
+                        "${listPDFAll[index]['action_id'] ?? "-"}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -642,7 +670,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 2,
                     child: pw.Center(
                       child: pw.Text(
-                        "${listPDF[index]['action_date'] ?? ""}",
+                        "${listPDFAll[index]['action_date'] ?? ""}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -655,7 +683,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 3,
                     child: pw.Center(
                       child: pw.Text(
-                        "${listPDF[index]['action_type'] ?? ""}",
+                        "${listPDFAll[index]['action_type'] ?? ""}",
                         style: pw.TextStyle(fontSize: 14),
                       ),
                     ),
@@ -667,7 +695,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${double.parse(listPDF[index]['money_amount'].toString()) < 0 ? double.parse(listPDF[index]['money_amount'].toString()) * -1 : "0"}",
+                        "${double.parse(listPDFAll[index]['money_amount'].toString()) < 0 ? double.parse(listPDFAll[index]['money_amount'].toString()) * -1 : "0"}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -680,7 +708,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${double.parse(listPDF[index]['money_amount'].toString()) > 0 ? listPDF[index]['money_amount'].toString() : "0"}",
+                        "${double.parse(listPDFAll[index]['money_amount'].toString()) > 0 ? listPDFAll[index]['money_amount'].toString() : "0"}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold, fontSize: 14),
                       ),
@@ -716,6 +744,7 @@ class _KashfHesabState extends State<KashfHesab> {
     );
   }
 
+  var listPDFAll = [];
   var listPDF = [];
   List array_mnh = [];
   List action_type = [];
@@ -797,6 +826,30 @@ class _KashfHesabState extends State<KashfHesab> {
     });
   }
 
+  getAllStatments(bool? withPro) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    String? code_price = prefs.getString('price_code');
+    try {
+      var url =
+          "https://yaghco.website/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+      final res = await http.get(Uri.parse(url));
+      setState(() {
+        listPDFAll = json.decode(res.body)["statments"];
+      });
+      print("listPDFAll");
+      print(listPDFAll);
+      Navigator.of(context, rootNavigator: true).pop();
+      pdfPrinter(withPro!);
+    } catch (err) {
+      if (kDebugMode) {
+        Navigator.of(context, rootNavigator: true).pop();
+        print('Something went wrong');
+      }
+    }
+  }
+
   // This function will be triggered whenver the user scroll
   // to near the bottom of the list view
   void _loadMore() async {
@@ -822,8 +875,14 @@ class _KashfHesabState extends State<KashfHesab> {
 
         final List fetchedPosts = json.decode(res.body)["statments"]["data"];
         if (fetchedPosts.isNotEmpty) {
+          // Filter out duplicates based on unique identifiers
+          final uniqueFetchedPosts = fetchedPosts
+              .where((newPost) => !listPDF
+                  .any((existingPost) => newPost['id'] == existingPost['id']))
+              .toList();
+
           setState(() {
-            listPDF.addAll(fetchedPosts);
+            listPDF.addAll(uniqueFetchedPosts);
           });
         } else {
           // This means there is no more data

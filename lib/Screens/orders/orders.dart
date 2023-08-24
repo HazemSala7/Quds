@@ -193,7 +193,7 @@ class _OrdersState extends State<Orders> {
                               customer_name: " - ",
                               value: Customers[index]['f_value'] ?? "",
                               notes: Customers[index]['notes'] ?? "",
-                              fatora_id: Customers[index]['fatora_id'] ?? "",
+                              fatora_id: Customers[index]['id'] ?? 1,
                               date: Customers[index]['f_date'] ?? "",
                             );
                           } else {
@@ -204,7 +204,7 @@ class _OrdersState extends State<Orders> {
                                   "",
                               value: Customers[index]['f_value'] ?? "",
                               notes: Customers[index]['notes'] ?? "",
-                              fatora_id: Customers[index]['fatora_id'] ?? "",
+                              fatora_id: Customers[index]['id'] ?? 1,
                               date: Customers[index]['f_date'] ?? "",
                             );
                           }
@@ -327,7 +327,7 @@ class _OrdersState extends State<Orders> {
   Widget order_card(
       {String date = "",
       String value = "",
-      String fatora_id = "",
+      int fatora_id = 0,
       String customer = "",
       String customer_name = "",
       String notes = ""}) {

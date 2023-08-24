@@ -60,7 +60,8 @@ class _KashfHesabState extends State<KashfHesab> {
           children: [
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
-                child: pw.Text(widget.name.toString())),
+                child: pw.Text(widget.name.toString(),
+                    style: pw.TextStyle(fontSize: 16))),
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
                 child: pw.Text("السيد : ")),
@@ -714,7 +715,6 @@ class _KashfHesabState extends State<KashfHesab> {
       ),
     );
   }
-
 
   var listPDF = [];
   List array_mnh = [];

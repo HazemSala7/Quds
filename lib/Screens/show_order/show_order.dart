@@ -27,6 +27,7 @@ class _ShowOrderState extends State<ShowOrder> {
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
 
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Container(
       color: Main_Color,
       child: SafeArea(
@@ -114,36 +115,9 @@ class _ShowOrderState extends State<ShowOrder> {
               ),
             ),
           ),
-          FutureBuilder(
-            future: getInvoices(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              final cartProvider = Provider.of<CartProvider>(context);
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return BottomContainer(total: 0, fatora_id: "0");
-              } else {
-                if (snapshot.data != null) {
-                  if (snapshot.data["invoiceproducts"].length == 0) {
-                    return BottomContainer(
-                      total: calculateTotal(cartProvider.cartItems),
-                      fatora_id: "0",
-                    );
-                  } else {
-                    // var tot = snapshot.data["total"];
-                    var total_qty = snapshot.data["total_qty"];
-                    var fatora_id =
-                        snapshot.data["invoiceproducts"][0]["fatora_id"] ?? "0";
-                    return BottomContainer(
-                      total: calculateTotal(cartProvider.cartItems),
-                      fatora_id: fatora_id,
-                    );
-                  }
-                } else {
-                  return BottomContainer(
-                    total: calculateTotal(cartProvider.cartItems),
-                  );
-                }
-              }
-            },
+          BottomContainer(
+            total: calculateTotal(cartProvider.cartItems),
+            fatora_id: "0",
           ),
         ],
       )),

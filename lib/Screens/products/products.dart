@@ -51,114 +51,24 @@ class _ProductsState extends State<Products> {
         appBar: PreferredSize(
             child: AppBarBack(), preferredSize: Size.fromHeight(50)),
         body: _isFirstLoadRunning
-            ? Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: SpinKitPulse(
-                  color: Main_Color,
-                  size: 60,
+            ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    topMethod(),
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: SpinKitPulse(
+                        color: Main_Color,
+                        size: 60,
+                      ),
+                    ),
+                  ],
                 ),
               )
             : Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 15, left: 15, top: 15, bottom: 15),
-                    child: Row(
-                      children: [
-                        Text(
-                          "أسم الزبون : ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          widget.name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Main_Color),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 15, left: 15, top: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "الأصناف",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ShowOrder(
-                                          id: widget.id,
-                                          name: widget.name,
-                                        )));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 150,
-                            child: Center(
-                              child: Text(
-                                "عرض الطلبيه",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.white),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Main_Color),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 50, left: 50, top: 25),
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      child: TextField(
-                        controller: idController,
-                        textInputAction: TextInputAction.done,
-                        textAlign: TextAlign.center,
-                        onChanged: (_) {
-                          if (idController.text != "") {
-                            searchProducts();
-                          } else {
-                            _firstLoad();
-                          }
-                        },
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'بحث عن أسم الصنف',
-                          hintStyle: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 14),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Main_Color, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2.0, color: Color(0xffD6D3D3)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  topMethod(),
                   Expanded(
                     child: GridView.builder(
                         gridDelegate:
@@ -208,6 +118,104 @@ class _ProductsState extends State<Products> {
     );
   }
 
+  Widget topMethod() {
+    return Column(
+      children: [
+        Padding(
+          padding:
+              const EdgeInsets.only(right: 15, left: 15, top: 15, bottom: 15),
+          child: Row(
+            children: [
+              Text(
+                "أسم الزبون : ",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                widget.name,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Main_Color),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 15, left: 15, top: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "الأصناف",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ShowOrder(
+                                id: widget.id,
+                                name: widget.name,
+                              )));
+                },
+                child: Container(
+                  height: 40,
+                  width: 150,
+                  child: Center(
+                    child: Text(
+                      "عرض الطلبيه",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Main_Color),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 50, left: 50, top: 25),
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            child: TextField(
+              controller: idController,
+              textInputAction: TextInputAction.done,
+              textAlign: TextAlign.center,
+              onChanged: (_) {
+                if (idController.text != "") {
+                  searchProducts();
+                } else {
+                  _firstLoad();
+                }
+              },
+              obscureText: false,
+              decoration: InputDecoration(
+                hintText: 'بحث عن أسم الصنف',
+                hintStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Main_Color, width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   var PRODUCTS = [];
 
   // var pr;
@@ -243,7 +251,7 @@ class _ProductsState extends State<Products> {
       var url =
           'https://yaghco.website/quds_laravel/api/search_products/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id.toString()}/${code_price}';
       var response = await http.get(Uri.parse(url));
-      var res = jsonDecode(response.body)["products"];
+      var res = jsonDecode(response.body)["products"]["data"];
       setState(() {
         _posts = res;
       });

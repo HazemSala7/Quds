@@ -116,19 +116,25 @@ class _CustomerDetailsState extends State<CustomerDetails> {
         'http://yaghco.website/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
 
     var response = await http.get(Uri.parse(url));
-    var res = jsonDecode(response.body)["products"][0];
+    try {
+      var res = jsonDecode(response.body)["products"][0];
 
-    Navigator.of(context, rootNavigator: true).pop();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddProduct(
-                  id: res["id"],
-                  name: res["p_name"],
-                  customer_id: widget.name.toString(),
-                  price: res["price"],
-                  qty: res["quantity"],
-                )));
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddProduct(
+                    id: res["id"],
+                    name: res["p_name"],
+                    customer_id: widget.name.toString(),
+                    price: res["price"],
+                    image: res["images"],
+                    qty: res["quantity"],
+                  )));
+    } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      Fluttertoast.showToast(msg: "المنتج غير متوفر!");
+    }
   }
 
   dont() {

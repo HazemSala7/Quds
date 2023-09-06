@@ -69,6 +69,34 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         },
       );
+    } else if (idController.text == "app" &&
+        passwordController.text == "store") {
+      var headers = {'ContentType': 'application/json'};
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('company_id', 5);
+      await prefs.setInt('salesman_id', 999);
+      await prefs.setBool('login', true);
+      await prefs.setString('just', "true");
+      setState(() {
+        JUST = true;
+      });
+      var url = 'https://yaghco.website/quds_laravel/api/customers/5/999';
+      var response = await http.get(Uri.parse(url), headers: headers);
+      var res = jsonDecode(response.body)['customers'];
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Customers(
+            CustomersArray: res,
+          ),
+        ),
+        (route) => false,
+      );
+
+      Fluttertoast.showToast(
+        msg: 'تم تسجيل الدخول بنجاح',
+      );
     } else {
       String? deviceId = await _getId();
       var url = 'https://yaghco.website/quds_laravel/api/login';

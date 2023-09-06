@@ -61,7 +61,7 @@ class _KashfHesabState extends State<KashfHesab> {
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
                 child: pw.Text(widget.name.toString(),
-                    style: pw.TextStyle(fontSize: 10))),
+                    style: pw.TextStyle(fontSize: 8))),
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
                 child: pw.Text("السيد : ")),
@@ -83,7 +83,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "رقم السند",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -95,7 +95,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "التاريخ",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -107,7 +107,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "البيان",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -119,7 +119,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "له",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -131,7 +131,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "منه",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -143,7 +143,7 @@ class _KashfHesabState extends State<KashfHesab> {
             child: pw.Center(
               child: pw.Text(
                 "الرصيد",
-                style: pw.TextStyle(fontSize: 4),
+                style: pw.TextStyle(fontSize: 5),
               ),
             ),
           ),
@@ -376,7 +376,7 @@ class _KashfHesabState extends State<KashfHesab> {
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
                 child: pw.Text(widget.name.toString(),
-                    style: pw.TextStyle(fontSize: 16))),
+                    style: pw.TextStyle(fontSize: 15))),
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
                 child: pw.Text("السيد : ")),
@@ -976,7 +976,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_id'] ?? "-"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 4),
+                            fontWeight: pw.FontWeight.bold, fontSize: 5),
                       ),
                     ),
                   ),
@@ -989,7 +989,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_date'] ?? ""}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 4),
+                            fontWeight: pw.FontWeight.bold, fontSize: 5),
                       ),
                     ),
                   ),
@@ -1001,7 +1001,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     child: pw.Center(
                       child: pw.Text(
                         "${listPDFAll[index]['action_type'] ?? ""}",
-                        style: pw.TextStyle(fontSize: 4),
+                        style: pw.TextStyle(fontSize: 5),
                       ),
                     ),
                   ),
@@ -1014,7 +1014,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) < 0 ? double.parse(listPDFAll[index]['money_amount'].toString()) * -1 : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 4),
+                            fontWeight: pw.FontWeight.bold, fontSize: 5),
                       ),
                     ),
                   ),
@@ -1027,7 +1027,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) > 0 ? listPDFAll[index]['money_amount'].toString() : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 4),
+                            fontWeight: pw.FontWeight.bold, fontSize: 5),
                       ),
                     ),
                   ),
@@ -1040,7 +1040,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${getCustomerBalance(index)}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 4),
+                            fontWeight: pw.FontWeight.bold, fontSize: 5),
                       ),
                     ),
                   ),

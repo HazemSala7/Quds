@@ -453,7 +453,7 @@ class _AddOrderState extends State<AddOrder> {
     String actualTime = formatterTime.format(now);
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
-    String? store_id_order = prefs.getString('store_id');
+    String? store_id_order = prefs.getString('store_id') ?? "1";
     List<Map<String, dynamic>> productsArray = cartProvider.getProductsArray();
     String jsonData = jsonEncode(productsArray);
     List<dynamic> parsedData = jsonDecode(jsonData);
@@ -513,6 +513,7 @@ class _AddOrderState extends State<AddOrder> {
         DiscountController.text == "" ? "0" : DiscountController.text;
     request.fields['store_id'] = store_id_order.toString();
     request.fields['f_time'] = actualTime.toString();
+    request.fields['note'] = NotesController.text;
     if (store_id_order == "") {
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(

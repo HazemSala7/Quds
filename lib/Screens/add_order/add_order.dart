@@ -10,6 +10,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../LocalDB/Models/CartModel.dart';
 import '../../LocalDB/Provider/CartProvider.dart';
 import '../../Server/server.dart';
 import '../../Services/Drawer/drawer.dart';
@@ -33,25 +34,10 @@ class _AddOrderState extends State<AddOrder> {
     valueController.text = widget.total;
   }
 
-  var listPDF = [];
-  getInvoices() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    var url =
-        'https://yaghco.website/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
-    var response = await http.get(Uri.parse(url));
-    var res = jsonDecode(response.body);
-    setState(() {
-      listPDF = res["invoiceproducts"];
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     setContrllers();
-    getInvoices();
   }
 
   Widget build(BuildContext context) {
@@ -218,8 +204,12 @@ class _AddOrderState extends State<AddOrder> {
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: InkWell(
                                     onTap: () {
+                                      final cartProvider =
+                                          Provider.of<CartProvider>(context,
+                                              listen: false);
+                                      List<CartItem> cartItems =
+                                          cartProvider.cartItems;
                                       Navigator.pop(context);
-
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -233,7 +223,7 @@ class _AddOrderState extends State<AddOrder> {
                                           );
                                         },
                                       );
-                                      send(pdfFatora5CM());
+                                      send(pdfFatora5CM(cartItems));
                                     },
                                     child: Container(
                                       height: 40,
@@ -257,6 +247,11 @@ class _AddOrderState extends State<AddOrder> {
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: InkWell(
                                     onTap: () {
+                                      final cartProvider =
+                                          Provider.of<CartProvider>(context,
+                                              listen: false);
+                                      List<CartItem> cartItems =
+                                          cartProvider.cartItems;
                                       Navigator.pop(context);
                                       showDialog(
                                         context: context,
@@ -271,7 +266,7 @@ class _AddOrderState extends State<AddOrder> {
                                           );
                                         },
                                       );
-                                      send(pdfFatora8CM());
+                                      send(pdfFatora8CM(cartItems));
                                     },
                                     child: Container(
                                       height: 40,
@@ -295,8 +290,13 @@ class _AddOrderState extends State<AddOrder> {
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: InkWell(
                                     onTap: () {
+                                      final cartProvider =
+                                          Provider.of<CartProvider>(context,
+                                              listen: false);
+                                      List<CartItem> cartItems =
+                                          cartProvider.cartItems;
                                       Navigator.pop(context);
-                                      // pdfFatoraA4();
+
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -310,7 +310,7 @@ class _AddOrderState extends State<AddOrder> {
                                           );
                                         },
                                       );
-                                      send(pdfFatoraA4());
+                                      send(pdfFatoraA4(cartItems));
                                     },
                                     child: Container(
                                       height: 40,
@@ -513,21 +513,6 @@ class _AddOrderState extends State<AddOrder> {
         DiscountController.text == "" ? "0" : DiscountController.text;
     request.fields['store_id'] = store_id_order.toString();
     request.fields['f_time'] = actualTime.toString();
-    // final response = await http.post(
-    //   Uri.parse(url),
-    //   body: {
-    //     'f_date': actualDate.toString(),
-    //     'customer_id': widget.id.toString(),
-    //     'company_id': company_id.toString(),
-    //     'f_code': "1",
-    //     'salesman_id': salesman_id.toString(),
-    //     'f_discount':
-    //         DiscountController.text == "" ? "0" : DiscountController.text,
-    //     'store_id': store_id_order.toString(),
-    //     'notes': NotesController.text == "" ? "-" : NotesController.text,
-    //     'f_time': actualTime.toString(),
-    //   },
-    // );
     if (store_id_order == "") {
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(
@@ -572,7 +557,7 @@ class _AddOrderState extends State<AddOrder> {
 
   nothing() {}
 
-  pdfFatoraA4() async {
+  pdfFatoraA4(var cartItems) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? shop_no = prefs.getString('shop_no');
     var now = DateTime.now();
@@ -582,32 +567,32 @@ class _AddOrderState extends State<AddOrder> {
     String actualTime = formatterTime.format(now);
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
-    var imagelogo = pw.MemoryImage(
-      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
-    );
+    // var imagelogo = pw.MemoryImage(
+    //   (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    // );
     List<pw.Widget> widgets = [];
     final title = pw.Column(
       children: [
-        pw.Directionality(
-            textDirection: pw.TextDirection.rtl,
-            child: pw.Text("شركه يغمور للتجاره",
-                style: pw.TextStyle(fontSize: 20))),
-        pw.SizedBox(
-          height: 5,
-        ),
-        pw.Directionality(
-            textDirection: pw.TextDirection.rtl,
-            child: pw.Text("الخليل  - دوار المناره",
-                style: pw.TextStyle(fontSize: 20))),
-        pw.SizedBox(
-          height: 5,
-        ),
-        pw.Directionality(
-            textDirection: pw.TextDirection.rtl,
-            child: pw.Text("0595324689", style: pw.TextStyle(fontSize: 20))),
-        pw.SizedBox(
-          height: 5,
-        ),
+        // pw.Directionality(
+        //     textDirection: pw.TextDirection.rtl,
+        //     child: pw.Text("شركه يغمور للتجاره",
+        //         style: pw.TextStyle(fontSize: 20))),
+        // pw.SizedBox(
+        //   height: 5,
+        // ),
+        // pw.Directionality(
+        //     textDirection: pw.TextDirection.rtl,
+        //     child: pw.Text("الخليل  - دوار المناره",
+        //         style: pw.TextStyle(fontSize: 20))),
+        // pw.SizedBox(
+        //   height: 5,
+        // ),
+        // pw.Directionality(
+        //     textDirection: pw.TextDirection.rtl,
+        //     child: pw.Text("0595324689", style: pw.TextStyle(fontSize: 20))),
+        // pw.SizedBox(
+        //   height: 5,
+        // ),
         pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
           pw.Row(children: [
             pw.Text(actualDate.toString(),
@@ -713,9 +698,12 @@ class _AddOrderState extends State<AddOrder> {
       ),
     );
     widgets.add(firstrow);
+
     final listview = pw.ListView.builder(
-      itemCount: listPDF.length,
+      itemCount: cartItems.length,
       itemBuilder: (context, index) {
+        CartItem item = cartItems[index];
+        double total = item.price * item.quantity;
         return pw.Container(
           height: 40,
           decoration: pw.BoxDecoration(
@@ -733,7 +721,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['total'] ?? ""}",
+                          "${total.toString()}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 17,
@@ -750,7 +738,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_price'] ?? ""}",
+                          "${item.price}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 17,
@@ -767,7 +755,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          "${item.quantity}",
                           style: pw.TextStyle(
                             fontSize: 17,
                             fontWeight: pw.FontWeight.bold,
@@ -784,7 +772,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['product_name'] ?? ""}",
+                          "${item.name}",
                           style: pw.TextStyle(
                             fontSize: 17,
                           ),
@@ -849,7 +837,7 @@ class _AddOrderState extends State<AddOrder> {
     );
   }
 
-  pdfFatora8CM() async {
+  pdfFatora8CM(var cartItems) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? shop_no = prefs.getString('shop_no');
     var now = DateTime.now();
@@ -859,19 +847,19 @@ class _AddOrderState extends State<AddOrder> {
     String actualTime = formatterTime.format(now);
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
-    var imagelogo = pw.MemoryImage(
-      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
-    );
+    // var imagelogo = pw.MemoryImage(
+    //   (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    // );
     List<pw.Widget> widgets = [];
     final title = pw.Column(
       children: [
-        pw.Container(
-            height: 70,
-            width: double.infinity,
-            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
-        pw.SizedBox(
-          height: 5,
-        ),
+        // pw.Container(
+        //     height: 70,
+        //     width: double.infinity,
+        //     child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
+        // pw.SizedBox(
+        //   height: 5,
+        // ),
         pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
           pw.Row(children: [
             pw.Text(actualDate.toString(),
@@ -972,16 +960,19 @@ class _AddOrderState extends State<AddOrder> {
       ),
     );
     widgets.add(firstrow);
+
     final listview = pw.ListView.builder(
-      itemCount: listPDF.length,
+      itemCount: cartItems.length,
       itemBuilder: (context, index) {
-        return pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 5),
-          child: pw.Container(
-            height: 15,
-            decoration: pw.BoxDecoration(
-              border: pw.Border.all(color: PdfColors.grey400),
-            ),
+        CartItem item = cartItems[index];
+        double total = item.price * item.quantity;
+        return pw.Container(
+          height: 30,
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: PdfColors.grey400),
+          ),
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.only(right: 5, left: 5),
             child: pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -992,7 +983,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['total'] ?? ""}",
+                          "${total.toString()}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 8,
@@ -1009,7 +1000,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_price'] ?? ""}",
+                          "${item.price}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 8,
@@ -1026,7 +1017,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          "${item.quantity}",
                           style: pw.TextStyle(
                             fontSize: 8,
                             fontWeight: pw.FontWeight.bold,
@@ -1043,7 +1034,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['product_name'] ?? ""}",
+                          "${item.name}",
                           style: pw.TextStyle(
                             fontSize: 8,
                           ),
@@ -1111,7 +1102,7 @@ class _AddOrderState extends State<AddOrder> {
     );
   }
 
-  pdfFatora5CM() async {
+  pdfFatora5CM(var cartItems) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? shop_no = prefs.getString('shop_no');
     var now = DateTime.now();
@@ -1121,16 +1112,16 @@ class _AddOrderState extends State<AddOrder> {
     String actualTime = formatterTime.format(now);
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
-    var imagelogo = pw.MemoryImage(
-      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
-    );
+    // var imagelogo = pw.MemoryImage(
+    //   (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    // );
     List<pw.Widget> widgets = [];
     final title = pw.Column(
       children: [
-        pw.Container(
-            height: 70,
-            width: double.infinity,
-            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
+        // pw.Container(
+        //     height: 70,
+        //     width: double.infinity,
+        //     child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
         pw.SizedBox(
           height: 5,
         ),
@@ -1234,16 +1225,19 @@ class _AddOrderState extends State<AddOrder> {
       ),
     );
     widgets.add(firstrow);
+
     final listview = pw.ListView.builder(
-      itemCount: listPDF.length,
+      itemCount: cartItems.length,
       itemBuilder: (context, index) {
-        return pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 5),
-          child: pw.Container(
-            height: 15,
-            decoration: pw.BoxDecoration(
-              border: pw.Border.all(color: PdfColors.grey400),
-            ),
+        CartItem item = cartItems[index];
+        double total = item.price * item.quantity;
+        return pw.Container(
+          height: 40,
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: PdfColors.grey400),
+          ),
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.only(right: 5, left: 5),
             child: pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -1254,7 +1248,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['total'] ?? ""}",
+                          "${total.toString()}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 6,
@@ -1271,7 +1265,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_price'] ?? ""}",
+                          "${item.price}",
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 6,
@@ -1288,7 +1282,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['p_quantity'] ?? ""}",
+                          "${item.quantity}",
                           style: pw.TextStyle(
                             fontSize: 6,
                             fontWeight: pw.FontWeight.bold,
@@ -1305,7 +1299,7 @@ class _AddOrderState extends State<AddOrder> {
                     child: pw.Container(
                       child: pw.Center(
                         child: pw.Text(
-                          "${listPDF[index]['product_name'] ?? ""}",
+                          "${item.name}",
                           style: pw.TextStyle(
                             fontSize: 6,
                           ),

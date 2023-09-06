@@ -40,7 +40,322 @@ class _KashfHesabState extends State<KashfHesab> {
     return sum;
   }
 
-  pdfPrinter(bool withproduct) async {
+  pdfPrinter8CM(bool withproduct) async {
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Center(
+          child: pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Text(
+              "كشف حساب",
+              style: pw.TextStyle(fontSize: 15),
+            ),
+          ),
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(widget.name.toString(),
+                    style: pw.TextStyle(fontSize: 10))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("السيد : ")),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+      children: [
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "رقم السند",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 2,
+            child: pw.Center(
+              child: pw.Text(
+                "التاريخ",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 3,
+            child: pw.Center(
+              child: pw.Text(
+                "البيان",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "له",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "منه",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+        pw.Directionality(
+          textDirection: pw.TextDirection.rtl,
+          child: pw.Expanded(
+            flex: 1,
+            child: pw.Center(
+              child: pw.Text(
+                "الرصيد",
+                style: pw.TextStyle(fontSize: 4),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+    widgets.add(firstrow);
+    final firstpadding = pw.Padding(
+      padding: pw.EdgeInsets.only(top: 10),
+      child: pw.Container(
+        width: double.infinity,
+        height: 2,
+        color: PdfColors.grey,
+      ),
+    );
+    widgets.add(firstpadding);
+    final listview = pw.ListView.builder(
+      itemCount: listPDFAll.length,
+      itemBuilder: (context, index) {
+        customersBalances.clear();
+        for (var customer in listPDFAll) {
+          customersBalances.add(customer['money_amount'].toString());
+        }
+        return listPDFAll[index]["action_type"] != "مبيعات"
+            ? firstrowPDF(index, false)
+            : pw.Column(children: [
+                firstrowPDF(index, false),
+                withproduct
+                    ? pw.Column(
+                        children: [
+                          pw.Padding(
+                            padding: const pw.EdgeInsets.only(top: 15),
+                            child: pw.Container(
+                              height: 40,
+                              width: double.infinity,
+                              child: pw.Padding(
+                                padding: const pw.EdgeInsets.only(
+                                  right: 10,
+                                  left: 10,
+                                ),
+                                child: pw.Row(
+                                  mainAxisAlignment:
+                                      pw.MainAxisAlignment.spaceAround,
+                                  children: [
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text("المجموع الكلي",
+                                                    style: pw.TextStyle(
+                                                        fontSize: 8))),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text("السعر",
+                                                    style: pw.TextStyle(
+                                                        fontSize: 8))),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text("الكمية",
+                                                    style: pw.TextStyle(
+                                                        fontSize: 8))),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 2,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text("أسم الصنف",
+                                                    style: pw.TextStyle(
+                                                        fontSize: 8))),
+                                          )),
+                                    ),
+                                    pw.Directionality(
+                                      textDirection: pw.TextDirection.rtl,
+                                      child: pw.Expanded(
+                                          flex: 1,
+                                          child: pw.Container(
+                                            child: pw.Center(
+                                                child: pw.Text("رقم الصنف",
+                                                    style: pw.TextStyle(
+                                                        fontSize: 8))),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          listPDFAll[index]["action"].length == 0
+                              ? pw.Text(
+                                  "لا يوجد منتجات",
+                                )
+                              : pw.Padding(
+                                  padding: const pw.EdgeInsets.only(bottom: 15),
+                                  child: pw.ListView.builder(
+                                    itemCount:
+                                        listPDFAll[index]["action"].length > 15
+                                            ? 15
+                                            : listPDFAll[index]["action"]
+                                                .length,
+                                    itemBuilder: (context, i) {
+                                      return order_card(
+                                        product_name: listPDFAll[index]
+                                                ["action"][i]['product_name'] ??
+                                            "-",
+                                        product_id: listPDFAll[index]["action"]
+                                                [i]['product_id'] ??
+                                            "-",
+                                        qty: listPDFAll[index]["action"][i]
+                                                ['p_quantity'] ??
+                                            "-",
+                                        price: listPDFAll[index]["action"][i]
+                                                ['p_price'] ??
+                                            "-",
+                                        total: listPDFAll[index]["action"][i]
+                                                ['total'] ??
+                                            "-",
+                                      );
+                                    },
+                                  ),
+                                )
+                        ],
+                      )
+                    : pw.Container()
+              ]);
+      },
+    );
+    widgets.add(listview);
+    final totals = pw.Column(
+      children: [
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(total_mnh.toString(),
+                    style: pw.TextStyle(fontSize: 12))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("الرصيد المدين : ",
+                    style: pw.TextStyle(fontSize: 12))),
+          ],
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text(total_lah.toString(),
+                    style: pw.TextStyle(fontSize: 12))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("الرصيد الدائن : ",
+                    style: pw.TextStyle(fontSize: 12))),
+          ],
+        ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("${total_mnh - total_lah}",
+                    style: pw.TextStyle(fontSize: 12))),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("المجموع النهائي : ",
+                    style: pw.TextStyle(fontSize: 12))),
+          ],
+        ),
+      ],
+    );
+    widgets.add(totals);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        maxPages: 20,
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat(
+          4 * PdfPageFormat.cm,
+          20 * PdfPageFormat.cm,
+        ),
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
+  pdfPrinterA4(bool withproduct) async {
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
     List<pw.Widget> widgets = [];
@@ -168,9 +483,9 @@ class _KashfHesabState extends State<KashfHesab> {
           customersBalances.add(customer['money_amount'].toString());
         }
         return listPDFAll[index]["action_type"] != "مبيعات"
-            ? firstrowPDF(index)
+            ? firstrowPDF(index, true)
             : pw.Column(children: [
-                firstrowPDF(index),
+                firstrowPDF(index, true),
                 withproduct
                     ? pw.Column(
                         children: [
@@ -642,9 +957,11 @@ class _KashfHesabState extends State<KashfHesab> {
     );
   }
 
-  pw.Padding firstrowPDF(int index) {
+  pw.Padding firstrowPDF(int index, bool A4) {
     return pw.Padding(
-      padding: const pw.EdgeInsets.only(right: 15, left: 15, top: 15),
+      padding: A4
+          ? pw.EdgeInsets.only(right: 15, left: 15, top: 15)
+          : pw.EdgeInsets.only(top: 15),
       child: pw.Container(
         child: pw.Column(
           children: [
@@ -659,7 +976,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_id'] ?? "-"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 14),
+                            fontWeight: pw.FontWeight.bold, fontSize: 4),
                       ),
                     ),
                   ),
@@ -672,7 +989,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_date'] ?? ""}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 14),
+                            fontWeight: pw.FontWeight.bold, fontSize: 4),
                       ),
                     ),
                   ),
@@ -684,7 +1001,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     child: pw.Center(
                       child: pw.Text(
                         "${listPDFAll[index]['action_type'] ?? ""}",
-                        style: pw.TextStyle(fontSize: 14),
+                        style: pw.TextStyle(fontSize: 4),
                       ),
                     ),
                   ),
@@ -697,7 +1014,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) < 0 ? double.parse(listPDFAll[index]['money_amount'].toString()) * -1 : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 14),
+                            fontWeight: pw.FontWeight.bold, fontSize: 4),
                       ),
                     ),
                   ),
@@ -710,7 +1027,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) > 0 ? listPDFAll[index]['money_amount'].toString() : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 14),
+                            fontWeight: pw.FontWeight.bold, fontSize: 4),
                       ),
                     ),
                   ),
@@ -723,7 +1040,7 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${getCustomerBalance(index)}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 14),
+                            fontWeight: pw.FontWeight.bold, fontSize: 4),
                       ),
                     ),
                   ),
@@ -790,15 +1107,46 @@ class _KashfHesabState extends State<KashfHesab> {
       final res = await http.get(Uri.parse(url));
       setState(() {
         listPDF = json.decode(res.body)["statments"]["data"];
-        for (int i = 0; i < listPDF.length; i++) {
-          if (double.parse(listPDF[i]['money_amount'].toString()) > 0) {
-            var money = listPDF[i]['money_amount'].toString();
+      });
+    } catch (err) {
+      if (kDebugMode) {
+        print('Something went wrong');
+      }
+    }
+
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
+
+  getAllStatments(bool? withPro) async {
+    setState(() {
+      total_lah = 0.0;
+      total_mnh = 0.0;
+      listPDFAll.clear();
+      array_mnh.clear();
+      array_lah.clear();
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    String? code_price = prefs.getString('price_code');
+    try {
+      var url =
+          "https://yaghco.website/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+      final res = await http.get(Uri.parse(url));
+      setState(() {
+        listPDFAll = json.decode(res.body)["statments"];
+        for (int i = 0; i < listPDFAll.length; i++) {
+          if (double.parse(listPDFAll[i]['money_amount'].toString()) > 0) {
+            var money = listPDFAll[i]['money_amount'].toString();
+
             setState(() {
               array_mnh.add(money);
             });
           } else {
             var money =
-                double.parse(listPDF[i]['money_amount'].toString()) * -1;
+                double.parse(listPDFAll[i]['money_amount'].toString()) * -1;
             setState(() {
               array_lah.add(money);
             });
@@ -815,37 +1163,117 @@ class _KashfHesabState extends State<KashfHesab> {
           });
         }
       });
-    } catch (err) {
-      if (kDebugMode) {
-        print('Something went wrong');
-      }
-    }
-
-    setState(() {
-      _isFirstLoadRunning = false;
-    });
-  }
-
-  getAllStatments(bool? withPro) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    String? code_price = prefs.getString('price_code');
-    try {
-      var url =
-          "https://yaghco.website/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
-      final res = await http.get(Uri.parse(url));
-      setState(() {
-        listPDFAll = json.decode(res.body)["statments"];
-      });
-      print("listPDFAll");
-      print(listPDFAll);
       Navigator.of(context, rootNavigator: true).pop();
-      pdfPrinter(withPro!);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: SizedBox(
+                              height: 100,
+                              width: 100,
+                              child:
+                                  Center(child: CircularProgressIndicator())),
+                        );
+                      },
+                    );
+                    pdfPrinter8CM(withPro!);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: Main_Color,
+                    ),
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        "طباعه 8سم",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: SizedBox(
+                              height: 100,
+                              width: 100,
+                              child:
+                                  Center(child: CircularProgressIndicator())),
+                        );
+                      },
+                    );
+                    pdfPrinterA4(withPro!);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: Main_Color,
+                    ),
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        "طباعة A4",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: Main_Color,
+                    ),
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        "لا أريد",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
     } catch (err) {
       if (kDebugMode) {
         Navigator.of(context, rootNavigator: true).pop();
-        print('Something went wrong');
+        print('Something went wrong , $err');
       }
     }
   }
@@ -921,7 +1349,7 @@ class _KashfHesabState extends State<KashfHesab> {
       String total = ""}) {
     return pw.Container(
       width: double.infinity,
-      height: 40,
+      height: 15,
       child: pw.Padding(
         padding: const pw.EdgeInsets.only(left: 10, right: 10),
         child: pw.Row(
@@ -935,9 +1363,8 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 1,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(
-                      "$total",
-                    )),
+                        child: pw.Text("$total",
+                            style: pw.TextStyle(fontSize: 8))),
                   )),
             ),
             pw.Directionality(
@@ -946,9 +1373,8 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 1,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(
-                      "$price",
-                    )),
+                        child: pw.Text("$price",
+                            style: pw.TextStyle(fontSize: 8))),
                   )),
             ),
 
@@ -958,9 +1384,7 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 1,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(
-                      qty,
-                    )),
+                        child: pw.Text(qty, style: pw.TextStyle(fontSize: 8))),
                   )),
             ),
             pw.Directionality(
@@ -969,9 +1393,8 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 2,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(
-                      product_name,
-                    )),
+                        child: pw.Text(product_name,
+                            style: pw.TextStyle(fontSize: 8))),
                   )),
             ),
             pw.Directionality(
@@ -980,9 +1403,8 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 1,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(
-                      product_id == "" ? "-" : product_id,
-                    )),
+                        child: pw.Text(product_id == "" ? "-" : product_id,
+                            style: pw.TextStyle(fontSize: 8))),
                   )),
             ),
           ],

@@ -301,8 +301,6 @@ class _OrdersState extends State<Orders> {
     };
     var url =
         'https://yaghco.website/quds_laravel/api/orders/$company_id/$salesman_id';
-    print("url");
-    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

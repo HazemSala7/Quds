@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screens/products/product_view/product_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -59,7 +60,7 @@ class _ProductCardState extends State<ProductCard> {
             child: Wrap(
               children: [
                 Stack(
-                  alignment: Alignment.topLeft,
+                  alignment: Alignment.topCenter,
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -106,23 +107,42 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProductData(
-                                        id: widget.id,
-                                        name: widget.name,
-                                        price: widget.price,
-                                        qty: widget.qty,
-                                      )));
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 30,
-                        ))
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProductData(
+                                            id: widget.id,
+                                            name: widget.name,
+                                            price: widget.price,
+                                            qty: widget.qty,
+                                          )));
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 30,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductView(
+                                            image: widget.image,
+                                          )));
+                            },
+                            icon: Icon(
+                              Icons.image,
+                              color: Colors.white,
+                              size: 30,
+                            )),
+                      ],
+                    )
                   ],
                 ),
                 Container(

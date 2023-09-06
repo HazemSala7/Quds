@@ -76,12 +76,6 @@ class _ShowOrderState extends State<ShowOrder> {
                         itemBuilder: (context, index) {
                           CartItem item = cartItems[index];
                           double total = item.price * item.quantity;
-                          // var total = item.price *
-                          //     double.parse(item.quantity.toString());
-                          // double Alltotal = 0;
-                          // for (CartItem item in cartItems) {
-                          //   total += total;
-                          // }
                           return OrderCard(
                             ponus_one: item.ponus1,
                             editProduct: () {
@@ -275,18 +269,6 @@ class _ShowOrderState extends State<ShowOrder> {
     );
   }
 
-  removeProduct(id) async {
-    var url = 'https://yaghco.website/quds_laravel/api/remove_fatora';
-    var response = await http.post(Uri.parse(url), body: {"id": id.toString()});
-    var data = jsonDecode(response.body);
-
-    if (data['status'] == 'true') {
-      Fluttertoast.showToast(msg: "تم حذف المنتج بنجاح");
-    } else {
-      Fluttertoast.showToast(msg: "حصل خطأ في عمليه الحذف");
-    }
-  }
-
   Widget BottomContainer({var total, var fatora_id}) {
     return Container(
       height: 50,
@@ -352,16 +334,5 @@ class _ShowOrderState extends State<ShowOrder> {
         ),
       ),
     );
-  }
-
-  getInvoices() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    var url =
-        'https://yaghco.website/quds_laravel/api/invoiceproducts/${company_id.toString()}/${salesman_id.toString()}';
-    var response = await http.get(Uri.parse(url));
-    var res = jsonDecode(response.body);
-    return res;
   }
 }

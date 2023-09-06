@@ -1,11 +1,15 @@
 import 'dart:convert';
-
+import 'package:flutter/services.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/catches/catch_card/catch_card.dart';
 import 'package:flutter_application_1/Screens/total_receivables/total_card/total_card.dart';
 import 'package:flutter_application_1/Services/AppBar/appbar_back.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../Server/server.dart';
@@ -34,10 +38,40 @@ class _CatchesState extends State<Catches> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  "سندات القبض",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              );
+                            },
+                          );
+                          pdfFatora8CM();
+                        },
+                        child: Container(
+                            height: 40,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Main_Color),
+                            child: Center(
+                                child: Text(
+                              "طباعه PDF",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )))),
+                  ],
                 ),
               ),
               Padding(
@@ -206,7 +240,7 @@ class _CatchesState extends State<Catches> {
                 ),
               ),
               FutureBuilder(
-                future: start_date.text != "" ? filterQabds() : getCustomers(),
+                future: start_date.text != "" ? filterQabds() : getQabds(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(
@@ -273,6 +307,7 @@ class _CatchesState extends State<Catches> {
   void initState() {
     super.initState();
     setControllers();
+    setQabds();
   }
 
   setStart() async {
@@ -339,43 +374,274 @@ class _CatchesState extends State<Catches> {
     return res;
   }
 
-  getCustomers() async {
+  var Qadbs;
+
+  getQabds() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
-
     var headers = {
       'Authorization': 'Bearer $token',
       'ContentType': 'application/json'
     };
-
     var url =
         'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
-
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
-
     return res;
   }
 
-  searchCustomers() async {
+  setQabds() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
-
     var headers = {
       'Authorization': 'Bearer $token',
       'ContentType': 'application/json'
     };
-
     var url =
-        'http://yaghco.website/quds_laravel/api/customers/search?id=${searchController.text}';
+        'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
-    // print("res");
-    // print(res);
-    return res;
+    setState(() {
+      Qadbs = res["qabds"];
+    });
+  }
+
+  pdfFatora8CM() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? shop_no = prefs.getString('shop_no');
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    var formatterTime = DateFormat('kk:mm:ss');
+    String actualDate = formatterDate.format(now);
+    String actualTime = formatterTime.format(now);
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+          pw.Row(children: [
+            pw.Text(actualDate.toString(),
+                style:
+                    pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+            pw.SizedBox(width: 5),
+            pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Text("التاريخ : ", style: pw.TextStyle(fontSize: 9))),
+          ]),
+        ]),
+        pw.SizedBox(height: 2),
+      ],
+    );
+    widgets.add(title);
+    final firstrow = pw.Container(
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(color: PdfColors.grey400),
+      ),
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          // pw.Directionality(
+          //   textDirection: pw.TextDirection.rtl,
+          //   child: pw.Expanded(
+          //     flex: 1,
+          //     child: pw.Container(
+          //       child: pw.Center(
+          //         child: pw.Text(
+          //           "رقم الزبون",
+          //           style: pw.TextStyle(fontSize: 8),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 2,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "ملاحظات",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 2,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "التاريخ",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "المبلغ",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.Expanded(
+              flex: 1,
+              child: pw.Container(
+                child: pw.Center(
+                  child: pw.Text(
+                    "أسم الزبون",
+                    style: pw.TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    widgets.add(firstrow);
+
+    final listview = pw.ListView.builder(
+      itemCount: Qadbs.length,
+      itemBuilder: (context, index) {
+        var BALANCE = double.parse(Qadbs[index]['chks']) +
+            double.parse(Qadbs[index]['cash']) +
+            double.parse(Qadbs[index]['discount']);
+        return pw.Container(
+          height: 15,
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: PdfColors.grey400),
+          ),
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.only(right: 5, left: 5),
+            child: pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                // pw.Directionality(
+                //   textDirection: pw.TextDirection.rtl,
+                //   child: pw.Expanded(
+                //     flex: 1,
+                //     child: pw.Container(
+                //       child: pw.Center(
+                //         child: pw.Text(
+                //           "${Qadbs[index]["customer_id"] ?? 1}",
+                //           style: pw.TextStyle(
+                //             fontWeight: pw.FontWeight.bold,
+                //             fontSize: 8,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${Qadbs[index]["notes"] ?? "-"}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${Qadbs[index]["q_date"] ?? "-"}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${BALANCE}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      child: pw.Center(
+                        child: pw.Text(
+                          "${Qadbs[index]['customer']["c_name"] ?? "-"}",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    widgets.add(listview);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat(
+          4 * PdfPageFormat.cm,
+          20 * PdfPageFormat.cm,
+        ),
+
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
   }
 }

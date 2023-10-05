@@ -51,7 +51,7 @@ class CartDatabaseHelper {
     await db.execute('''
       CREATE TABLE cart (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        productId INTEGER NOT NULL,
+        productId TEXT NOT NULL,
         name TEXT NOT NULL,
         image TEXT NOT NULL,
         price REAL NOT NULL,

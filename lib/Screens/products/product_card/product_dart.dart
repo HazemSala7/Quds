@@ -199,6 +199,8 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 InkWell(
                   onTap: () {
+                    print("widget.id.toString()");
+                    print(widget.id.toString());
                     final newItem = CartItem(
                       productId: widget.id.toString(),
                       name: widget.name,

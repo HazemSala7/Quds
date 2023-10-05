@@ -179,72 +179,66 @@ class _KashfHesabState extends State<KashfHesab> {
                             child: pw.Container(
                               height: 40,
                               width: double.infinity,
-                              child: pw.Padding(
-                                padding: const pw.EdgeInsets.only(
-                                  right: 10,
-                                  left: 10,
-                                ),
-                                child: pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceAround,
-                                  children: [
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text("المجموع الكلي",
-                                                    style: pw.TextStyle(
-                                                        fontSize: 8))),
-                                          )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text("السعر",
-                                                    style: pw.TextStyle(
-                                                        fontSize: 8))),
-                                          )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text("الكمية",
-                                                    style: pw.TextStyle(
-                                                        fontSize: 8))),
-                                          )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 2,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text("أسم الصنف",
-                                                    style: pw.TextStyle(
-                                                        fontSize: 8))),
-                                          )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text("رقم الصنف",
-                                                    style: pw.TextStyle(
-                                                        fontSize: 8))),
-                                          )),
-                                    ),
-                                  ],
-                                ),
+                              child: pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceAround,
+                                children: [
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text("المجموع الكلي",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text("السعر",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text("الكمية",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 3,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text("أسم الصنف",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text("رقم الصنف",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -262,6 +256,7 @@ class _KashfHesabState extends State<KashfHesab> {
                                                 .length,
                                     itemBuilder: (context, i) {
                                       return order_card(
+                                        fat8cm: true,
                                         product_name: listPDFAll[index]
                                                 ["action"][i]['product_name'] ??
                                             "-",
@@ -577,6 +572,7 @@ class _KashfHesabState extends State<KashfHesab> {
                                                 .length,
                                     itemBuilder: (context, i) {
                                       return order_card(
+                                        fat8cm: false,
                                         product_name: listPDFAll[index]
                                                 ["action"][i]['product_name'] ??
                                             "-",
@@ -1343,6 +1339,7 @@ class _KashfHesabState extends State<KashfHesab> {
   pw.Container order_card(
       {String product_id = "",
       String product_name = "",
+      bool fat8cm = false,
       String name = "",
       String qty = "",
       String price = "",
@@ -1351,7 +1348,8 @@ class _KashfHesabState extends State<KashfHesab> {
       width: double.infinity,
       height: 15,
       child: pw.Padding(
-        padding: const pw.EdgeInsets.only(left: 10, right: 10),
+        padding:
+            pw.EdgeInsets.only(left: fat8cm ? 0 : 10, right: fat8cm ? 0 : 10),
         child: pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
           children: [
@@ -1364,7 +1362,7 @@ class _KashfHesabState extends State<KashfHesab> {
                   child: pw.Container(
                     child: pw.Center(
                         child: pw.Text("$total",
-                            style: pw.TextStyle(fontSize: 8))),
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
                   )),
             ),
             pw.Directionality(
@@ -1374,7 +1372,7 @@ class _KashfHesabState extends State<KashfHesab> {
                   child: pw.Container(
                     child: pw.Center(
                         child: pw.Text("$price",
-                            style: pw.TextStyle(fontSize: 8))),
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
                   )),
             ),
 
@@ -1384,17 +1382,21 @@ class _KashfHesabState extends State<KashfHesab> {
                   flex: 1,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(qty, style: pw.TextStyle(fontSize: 8))),
+                        child: pw.Text(qty,
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
                   )),
             ),
             pw.Directionality(
               textDirection: pw.TextDirection.rtl,
               child: pw.Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: pw.Container(
                     child: pw.Center(
-                        child: pw.Text(product_name,
-                            style: pw.TextStyle(fontSize: 8))),
+                        child: pw.Text(
+                            product_name.length > 20
+                                ? product_name.substring(0, 20) + '...'
+                                : product_name,
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
                   )),
             ),
             pw.Directionality(
@@ -1404,7 +1406,7 @@ class _KashfHesabState extends State<KashfHesab> {
                   child: pw.Container(
                     child: pw.Center(
                         child: pw.Text(product_id == "" ? "-" : product_id,
-                            style: pw.TextStyle(fontSize: 8))),
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
                   )),
             ),
           ],

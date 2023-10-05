@@ -114,6 +114,8 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     String? code_price = prefs.getString('price_code');
     var url =
         'http://yaghco.website/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
+    print("url");
+    print(url);
 
     var response = await http.get(Uri.parse(url));
     try {

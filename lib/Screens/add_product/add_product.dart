@@ -594,7 +594,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       onPressed: () {
                         final newItem = CartItem(
-                          productId: int.parse(widget.id.toString()),
+                          productId: widget.id.toString(),
                           name: widget.name,
                           image: widget.image,
                           price: double.parse(priceController.text),

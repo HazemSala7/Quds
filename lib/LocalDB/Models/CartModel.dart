@@ -1,6 +1,6 @@
 class CartItem {
   final int? id;
-  final int productId; // Unique identifier for the product
+  final String productId;
   final int ponus1;
   final int ponus2;
   final String name;
@@ -50,7 +50,7 @@ class CartItem {
 
   CartItem copyWith({
     int? id,
-    int? productId,
+    String? productId,
     String? name,
     String? image,
     double? price,

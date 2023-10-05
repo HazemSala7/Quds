@@ -200,7 +200,7 @@ class _ProductCardState extends State<ProductCard> {
                 InkWell(
                   onTap: () {
                     final newItem = CartItem(
-                      productId: int.parse(widget.id.toString()),
+                      productId: widget.id.toString(),
                       name: widget.name,
                       image: widget.image,
                       price: double.parse(widget.price.toString()),

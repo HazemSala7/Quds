@@ -265,380 +265,439 @@ class _CatchReceiptState extends State<CatchReceipt> {
                                     return SingleChildScrollView(
                                       child: AlertDialog(
                                         actions: <Widget>[
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                          Stack(
+                                            alignment: Alignment.topRight,
                                             children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    right: 15,
-                                                    left: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "قيمه الشيك",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5, left: 5, top: 5),
-                                                child: Container(
-                                                  height: 50,
-                                                  width: double.infinity,
-                                                  child: TextField(
-                                                    keyboardType: TextInputType
-                                                        .numberWithOptions(
-                                                            signed: true,
-                                                            decimal: true),
-                                                    controller: valueController,
-                                                    obscureText: false,
-                                                    decoration: InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Color(
-                                                                0xff34568B),
-                                                            width: 2.0),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width: 2.0,
-                                                            color: Color(
-                                                                0xffD6D3D3)),
-                                                      ),
-                                                      hintText: "قيمه الشيك",
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 50,
+                                                            right: 15,
+                                                            left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "قيمه الشيك",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    right: 15,
-                                                    left: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "تاريخ الاستحقاق",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5,
+                                                            left: 5,
+                                                            top: 5),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                signed: true,
+                                                                decimal: true),
+                                                        controller:
+                                                            valueController,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff34568B),
+                                                                width: 2.0),
+                                                          ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                width: 2.0,
+                                                                color: Color(
+                                                                    0xffD6D3D3)),
+                                                          ),
+                                                          hintText:
+                                                              "قيمه الشيك",
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5, left: 5, top: 5),
-                                                child: Container(
-                                                  height: 50,
-                                                  width: double.infinity,
-                                                  child: TextField(
-                                                    onTap: _pickDate,
-                                                    controller:
-                                                        datechekController,
-                                                    obscureText: false,
-                                                    decoration: InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Color(
-                                                                0xff34568B),
-                                                            width: 2.0),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width: 2.0,
-                                                            color: Color(
-                                                                0xffD6D3D3)),
-                                                      ),
-                                                      hintText:
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10,
+                                                            right: 15,
+                                                            left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
                                                           "تاريخ الاستحقاق",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    right: 15,
-                                                    left: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "رقم الشك",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5, left: 5, top: 5),
-                                                child: Container(
-                                                  height: 50,
-                                                  width: double.infinity,
-                                                  child: TextField(
-                                                    controller:
-                                                        cheknumController,
-                                                    obscureText: false,
-                                                    decoration: InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Color(
-                                                                0xff34568B),
-                                                            width: 2.0),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5,
+                                                            left: 5,
+                                                            top: 5),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        onTap: _pickDate,
+                                                        controller:
+                                                            datechekController,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff34568B),
+                                                                width: 2.0),
+                                                          ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                width: 2.0,
+                                                                color: Color(
+                                                                    0xffD6D3D3)),
+                                                          ),
+                                                          hintText:
+                                                              "تاريخ الاستحقاق",
+                                                        ),
                                                       ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width: 2.0,
-                                                            color: Color(
-                                                                0xffD6D3D3)),
-                                                      ),
-                                                      hintText: "رقم الشك",
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    right: 15,
-                                                    left: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "رقم البنك",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5, left: 5, top: 5),
-                                                child: Container(
-                                                  height: 50,
-                                                  width: double.infinity,
-                                                  child: TextField(
-                                                    controller:
-                                                        bank_numController,
-                                                    obscureText: false,
-                                                    decoration: InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Color(
-                                                                0xff34568B),
-                                                            width: 2.0),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width: 2.0,
-                                                            color: Color(
-                                                                0xffD6D3D3)),
-                                                      ),
-                                                      hintText: "رقم البنك",
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10,
+                                                            right: 15,
+                                                            left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "رقم الشك",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    right: 15,
-                                                    left: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "رقم الحساب",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5, left: 5, top: 5),
-                                                child: Container(
-                                                  height: 50,
-                                                  width: double.infinity,
-                                                  child: TextField(
-                                                    controller:
-                                                        accountnumController,
-                                                    obscureText: false,
-                                                    decoration: InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Color(
-                                                                0xff34568B),
-                                                            width: 2.0),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5,
+                                                            left: 5,
+                                                            top: 5),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        controller:
+                                                            cheknumController,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff34568B),
+                                                                width: 2.0),
+                                                          ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                width: 2.0,
+                                                                color: Color(
+                                                                    0xffD6D3D3)),
+                                                          ),
+                                                          hintText: "رقم الشك",
+                                                        ),
                                                       ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width: 2.0,
-                                                            color: Color(
-                                                                0xffD6D3D3)),
-                                                      ),
-                                                      hintText: "رقم الحساب",
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 25,
-                                                    left: 25,
-                                                    top: 25),
-                                                child: MaterialButton(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10))),
-                                                  height: 50,
-                                                  minWidth: double.infinity,
-                                                  color: Color(0xff34568B),
-                                                  textColor: Colors.white,
-                                                  child: Text(
-                                                    "اضافه شيك",
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10,
+                                                            right: 15,
+                                                            left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "رقم البنك",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  onPressed: () {
-                                                    if (valueController.text ==
-                                                            "" ||
-                                                        datechekController
-                                                                .text ==
-                                                            "") {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            content: Text(
-                                                                'الرجاء تعبئه جميع الفراغات'),
-                                                            actions: <Widget>[
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: Text(
-                                                                  'حسنا',
-                                                                  style: TextStyle(
-                                                                      color: Color(
-                                                                          0xff34568B)),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    } else {
-                                                      cheks_array.add(
-                                                          valueController.text);
-                                                      setState(() {
-                                                        chk_no_array.add(
-                                                            cheknumController
-                                                                .text);
-                                                        value_array.add(
-                                                            valueController
-                                                                .text);
-                                                        date_array.add(
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5,
+                                                            left: 5,
+                                                            top: 5),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        controller:
+                                                            bank_numController,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff34568B),
+                                                                width: 2.0),
+                                                          ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                width: 2.0,
+                                                                color: Color(
+                                                                    0xffD6D3D3)),
+                                                          ),
+                                                          hintText: "رقم البنك",
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10,
+                                                            right: 15,
+                                                            left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "رقم الحساب",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5,
+                                                            left: 5,
+                                                            top: 5),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: double.infinity,
+                                                      child: TextField(
+                                                        controller:
+                                                            accountnumController,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff34568B),
+                                                                width: 2.0),
+                                                          ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                width: 2.0,
+                                                                color: Color(
+                                                                    0xffD6D3D3)),
+                                                          ),
+                                                          hintText:
+                                                              "رقم الحساب",
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 25,
+                                                            left: 25,
+                                                            top: 25),
+                                                    child: MaterialButton(
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          10))),
+                                                      height: 50,
+                                                      minWidth: double.infinity,
+                                                      color: Color(0xff34568B),
+                                                      textColor: Colors.white,
+                                                      child: Text(
+                                                        "اضافه شيك",
+                                                        style: TextStyle(
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      onPressed: () {
+                                                        if (valueController
+                                                                    .text ==
+                                                                "" ||
                                                             datechekController
-                                                                .text);
-                                                        account_num_array.add(
-                                                            accountnumController
-                                                                .text);
-                                                        bank_num_array.add(
-                                                            bank_numController
-                                                                .text);
-
-                                                        check_total +=
-                                                            double.parse(
+                                                                    .text ==
+                                                                "") {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                content: Text(
+                                                                    'الرجاء تعبئه جميع الفراغات'),
+                                                                actions: <Widget>[
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                      'حسنا',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Color(0xff34568B)),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        } else {
+                                                          cheks_array.add(
+                                                              valueController
+                                                                  .text);
+                                                          setState(() {
+                                                            chk_no_array.add(
+                                                                cheknumController
+                                                                    .text);
+                                                            value_array.add(
                                                                 valueController
                                                                     .text);
-                                                        TOTAL.text = check_total
-                                                            .toString();
+                                                            date_array.add(
+                                                                datechekController
+                                                                    .text);
+                                                            account_num_array.add(
+                                                                accountnumController
+                                                                    .text);
+                                                            bank_num_array.add(
+                                                                bank_numController
+                                                                    .text);
 
-                                                        var init_value = double.parse(
-                                                                DiscountController
+                                                            check_total +=
+                                                                double.parse(
+                                                                    valueController
+                                                                        .text);
+                                                            TOTAL.text =
+                                                                check_total
+                                                                    .toString();
+
+                                                            var init_value = double.parse(
+                                                                    DiscountController.text ==
+                                                                            ""
+                                                                        ? "0"
+                                                                        : DiscountController
+                                                                            .text) +
+                                                                double.parse(CashController
                                                                             .text ==
                                                                         ""
                                                                     ? "0"
-                                                                    : DiscountController
+                                                                    : CashController
                                                                         .text) +
-                                                            double.parse(CashController
-                                                                        .text ==
-                                                                    ""
-                                                                ? "0"
-                                                                : CashController
-                                                                    .text) +
-                                                            double.parse(
-                                                                TOTAL.text == ""
-                                                                    ? "0"
-                                                                    : TOTAL
-                                                                        .text);
+                                                                double.parse(
+                                                                    TOTAL.text ==
+                                                                            ""
+                                                                        ? "0"
+                                                                        : TOTAL
+                                                                            .text);
 
-                                                        MAINTOTAL.text =
-                                                            init_value
-                                                                .toString();
-                                                      });
-                                                      Navigator.pop(context);
-                                                      setState(() {
-                                                        cheknumController.text =
-                                                            "";
-                                                        valueController.text =
-                                                            "";
-                                                        datechekController
-                                                            .text = "";
-                                                        accountnumController
-                                                            .text = "";
-                                                        bank_numController
-                                                            .text = "";
-                                                      });
-                                                    }
-                                                  },
-                                                ),
+                                                            MAINTOTAL.text =
+                                                                init_value
+                                                                    .toString();
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                          setState(() {
+                                                            cheknumController
+                                                                .text = "";
+                                                            valueController
+                                                                .text = "";
+                                                            datechekController
+                                                                .text = "";
+                                                            accountnumController
+                                                                .text = "";
+                                                            bank_numController
+                                                                .text = "";
+                                                          });
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.arrow_back_sharp,
+                                                    size: 30,
+                                                  )),
                                             ],
                                           ),
                                         ],
@@ -825,15 +884,126 @@ class _CatchReceiptState extends State<CatchReceipt> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              content: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              actions: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(pdfFatora8cm());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "طباعه 8سم",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(pdfFatoraA4());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "طباعه A4",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator())),
+                                          );
+                                        },
+                                      );
+                                      send(nothing());
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Main_Color,
+                                      ),
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "لا أريد",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             );
                           },
                         );
-                        send();
                       },
                     ),
                   ),
@@ -845,6 +1015,8 @@ class _CatchReceiptState extends State<CatchReceipt> {
       ),
     );
   }
+
+  nothing() {}
 
   var check_total = 0.0;
 
@@ -895,7 +1067,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
   TextEditingController DiscountController = TextEditingController();
   TextEditingController ChksController = TextEditingController();
   TextEditingController NotesController = TextEditingController();
-  send() async {
+  send(pdf) async {
     if (MAINTOTAL.text == '') {
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(
@@ -978,7 +1150,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
           Fluttertoast.showToast(
             msg: "تم اضافه سند القبض بنجاح",
           );
-          pdfFatora();
+          pdf;
           Navigator.pop(context);
         } else {
           Navigator.of(context, rootNavigator: true).pop();
@@ -988,7 +1160,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
     }
   }
 
-  pdfFatora() async {
+  pdfFatoraA4() async {
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
     var imagelogo = pw.MemoryImage(
@@ -997,11 +1169,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
     List<pw.Widget> widgets = [];
     final title = pw.Column(
       children: [
-        pw.Container(
-            height: 200,
-            width: double.infinity,
-            child: pw.Image(imagelogo, fit: pw.BoxFit.cover)),
-        pw.SizedBox(height: 20),
+        pw.SizedBox(height: 10),
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           children: [
@@ -1192,6 +1360,220 @@ class _CatchReceiptState extends State<CatchReceipt> {
           base: arabicFont,
         ),
         pageFormat: PdfPageFormat.a4,
+        build: (context) => widgets, //here goes the widgets list
+      ),
+    );
+    Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
+  pdfFatora8cm() async {
+    var arabicFont =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
+    var imagelogo = pw.MemoryImage(
+      (await rootBundle.load('assets/quds_logo.jpeg')).buffer.asUint8List(),
+    );
+    List<pw.Widget> widgets = [];
+    final title = pw.Column(
+      children: [
+        pw.SizedBox(height: 10),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.center,
+          children: [
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Center(
+                child: pw.Text("سند قبض", style: pw.TextStyle(fontSize: 8)),
+              ),
+            )
+          ],
+        ),
+        pw.SizedBox(height: 20),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(widget.name.toString(),
+                        style: pw.TextStyle(fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text(" السيد: ", style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(CashController.text,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("المجموع النقدي : ",
+                      style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(TOTAL.text,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("مجموع الشيكات : ",
+                      style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(DiscountController.text,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("الخصم : ", style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(MAINTOTAL.text,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text("المجوع الكلي : ",
+                      style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.Container(
+                  width: 40,
+                  height: 20,
+                  decoration: pw.BoxDecoration(border: pw.Border.all()),
+                  child: pw.Center(
+                      child: pw.Directionality(
+                    textDirection: pw.TextDirection.rtl,
+                    child: pw.Text(NotesController.text,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 8)),
+                  ))),
+              pw.SizedBox(width: 10),
+              pw.Directionality(
+                  textDirection: pw.TextDirection.rtl,
+                  child: pw.Text(" الملاحظات : ",
+                      style: pw.TextStyle(fontSize: 8))),
+              pw.SizedBox(
+                width: 40,
+              ),
+            ]),
+          ],
+        ),
+        pw.SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+    widgets.add(title);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        pageFormat: PdfPageFormat(
+          4 * PdfPageFormat.cm,
+          20 * PdfPageFormat.cm,
+        ),
         build: (context) => widgets, //here goes the widgets list
       ),
     );

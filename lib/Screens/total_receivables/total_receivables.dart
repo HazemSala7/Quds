@@ -120,101 +120,6 @@ class _TotalReceivablesState extends State<TotalReceivables> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15, top: 40),
-                child: Container(
-                  height: 40,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Main_Color,
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Text(
-                              "الرقم",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Main_Color,
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Text(
-                              "الرصيد",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Main_Color,
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Text(
-                              "أسم الزبون",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Main_Color,
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Text(
-                              "رقم الهاتف",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Main_Color,
-                              border: Border.all(color: Colors.white)),
-                          child: Center(
-                            child: Text(
-                              "واتس اب",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               FutureBuilder(
                 future: searchController.text != ""
                     ? searchCustomersByID()
@@ -234,19 +139,148 @@ class _TotalReceivablesState extends State<TotalReceivables> {
                   } else {
                     if (snapshot.data != null) {
                       var Customers = snapshot.data["customers"];
-                      return ListView.builder(
-                        itemCount: Customers.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return TotalCard(
-                            index: index,
-                            id: Customers[index]['id'] ?? "0",
-                            balance: Customers[index]['c_balance'] ?? "",
-                            name: Customers[index]['c_name'] ?? "",
-                            phone: Customers[index]['phone1'] ?? " - ",
-                          );
-                        },
+                      var SUM = snapshot.data["sum"] ?? 0.0;
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 20),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "مجموع الرصيد : ",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  SUM.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, left: 15, top: 10),
+                            child: Container(
+                              height: 40,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Main_Color,
+                                          border:
+                                              Border.all(color: Colors.white)),
+                                      child: Center(
+                                        child: Text(
+                                          "الرقم",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Main_Color,
+                                          border:
+                                              Border.all(color: Colors.white)),
+                                      child: Center(
+                                        child: Text(
+                                          "الرصيد",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Main_Color,
+                                          border:
+                                              Border.all(color: Colors.white)),
+                                      child: Center(
+                                        child: Text(
+                                          "أسم الزبون",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Main_Color,
+                                          border:
+                                              Border.all(color: Colors.white)),
+                                      child: Center(
+                                        child: Text(
+                                          "رقم الهاتف",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Main_Color,
+                                          border:
+                                              Border.all(color: Colors.white)),
+                                      child: Center(
+                                        child: Text(
+                                          "واتس اب",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          ListView.builder(
+                            itemCount: Customers.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return TotalCard(
+                                index: index,
+                                id: Customers[index]['id'] ?? "0",
+                                balance: Customers[index]['c_balance'] ?? "",
+                                name: Customers[index]['c_name'] ?? "",
+                                phone: Customers[index]['phone1'] ?? " - ",
+                              );
+                            },
+                          ),
+                        ],
                       );
                     } else {
                       return Center(
@@ -302,8 +336,7 @@ class _TotalReceivablesState extends State<TotalReceivables> {
     };
     var url =
         'http://yaghco.website/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}/search?id=${searchController.text}';
-    print("url");
-    print(url);
+
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

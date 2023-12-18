@@ -330,7 +330,7 @@ class _SarfState extends State<Sarf> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/filter_sarfs/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
+        'https://aliexpress.ps/quds_laravel/api/filter_sarfs/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -348,7 +348,7 @@ class _SarfState extends State<Sarf> {
     };
 
     var url =
-        'https://yaghco.website/quds_laravel/api/sarfs/${company_id.toString()}/${salesman_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/sarfs/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
 
@@ -367,7 +367,7 @@ class _SarfState extends State<Sarf> {
     };
 
     var url =
-        'http://yaghco.website/quds_laravel/api/customers/search?id=${searchController.text}';
+        'http://aliexpress.ps/quds_laravel/api/customers/search?id=${searchController.text}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     // print("res");

@@ -31,12 +31,12 @@ class _DrawerMainState extends State<DrawerMain> {
           Stack(
             alignment: Alignment.topLeft,
             children: [
-              Center(
-                child: DrawerHeader(
-                  child: Image.asset(
-                    'assets/quds_logo.jpeg',
-                    fit: BoxFit.contain,
-                  ),
+              DrawerHeader(
+                padding: EdgeInsets.all(0),
+                child: Image.asset(
+                  'assets/images/logo.jpg',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
               ),
             ],

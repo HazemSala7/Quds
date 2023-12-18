@@ -318,7 +318,7 @@ class _TotalReceivablesState extends State<TotalReceivables> {
     };
 
     var url =
-        'https://yaghco.website/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
 
@@ -335,7 +335,7 @@ class _TotalReceivablesState extends State<TotalReceivables> {
       'ContentType': 'application/json'
     };
     var url =
-        'http://yaghco.website/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}/search?id=${searchController.text}';
+        'http://aliexpress.ps/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}/search?id=${searchController.text}';
 
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
@@ -352,7 +352,7 @@ class _TotalReceivablesState extends State<TotalReceivables> {
       'ContentType': 'application/json'
     };
     var url =
-        'http://yaghco.website/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}/${searchControllerByName.text}';
+        'http://aliexpress.ps/quds_laravel/api/customers/${company_id.toString()}/${salesman_id.toString()}/${searchControllerByName.text}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

@@ -179,7 +179,7 @@ class _CategoriesState extends State<Categories> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
     var url =
-        'https://yaghco.website/quds_laravel/api/categories/${company_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/categories/${company_id.toString()}';
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body);
     return res;

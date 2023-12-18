@@ -161,7 +161,7 @@ class _InvoicesState extends State<Invoices> {
     };
 
     var url =
-        'https://yaghco.website/quds_laravel/api/orders/${company_id.toString()}/${salesman_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/orders/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

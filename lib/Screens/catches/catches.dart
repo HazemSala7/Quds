@@ -368,7 +368,7 @@ class _CatchesState extends State<Catches> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/filter_qabds/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
+        'https://aliexpress.ps/quds_laravel/api/filter_qabds/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -386,7 +386,7 @@ class _CatchesState extends State<Catches> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -402,7 +402,7 @@ class _CatchesState extends State<Catches> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
+        'https://aliexpress.ps/quds_laravel/api/qabds/${company_id.toString()}/${salesman_id.toString()}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     setState(() {

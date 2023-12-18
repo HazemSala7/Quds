@@ -910,7 +910,7 @@ class _KashfHesabState extends State<KashfHesab> {
                         return KashfCard(
                           actions: listPDF[index]['action'] ?? [],
                           action_id: listPDF[index]['action_id'] ?? "-",
-                          balance: getCustomerBalance(index),
+                          balance: listPDF[index]['balance'].toString(),
                           bayan: listPDF[index]['action_type'] ?? "",
                           mnh: double.parse(listPDF[index]['money_amount']
                                       .toString()) >
@@ -1099,7 +1099,7 @@ class _KashfHesabState extends State<KashfHesab> {
     });
     try {
       var url =
-          "https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+          "https://aliexpress.ps/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
       final res = await http.get(Uri.parse(url));
       setState(() {
         listPDF = json.decode(res.body)["statments"]["data"];
@@ -1129,7 +1129,7 @@ class _KashfHesabState extends State<KashfHesab> {
     String? code_price = prefs.getString('price_code');
     try {
       var url =
-          "https://yaghco.website/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+          "https://aliexpress.ps/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
       final res = await http.get(Uri.parse(url));
       setState(() {
         listPDFAll = json.decode(res.body)["statments"];
@@ -1277,7 +1277,6 @@ class _KashfHesabState extends State<KashfHesab> {
   // This function will be triggered whenver the user scroll
   // to near the bottom of the list view
   void _loadMore() async {
-    print("loaded");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
@@ -1293,7 +1292,7 @@ class _KashfHesabState extends State<KashfHesab> {
 
       try {
         var url =
-            "https://yaghco.website/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}?page=$_page";
+            "https://aliexpress.ps/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
 
         final res = await http.get(Uri.parse(url));
 

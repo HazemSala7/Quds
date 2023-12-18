@@ -8,6 +8,7 @@ bool ponus2 = false;
 bool discount = false;
 bool notes = false;
 bool existed_qty = false;
+bool order_kashf_from_new_to_old = false;
 bool desc = false;
 bool JUST = false;
 var store_id = "1";

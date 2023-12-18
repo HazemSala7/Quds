@@ -596,7 +596,7 @@ class _EditProductState extends State<EditProduct> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int? company_id = prefs.getInt('company_id');
       int? salesman_id = prefs.getInt('salesman_id');
-      var url = 'https://yaghco.website/quds_laravel/api/edit_fatora';
+      var url = 'https://aliexpress.ps/quds_laravel/api/edit_fatora';
       final response = await http.post(
         Uri.parse(url),
         body: {

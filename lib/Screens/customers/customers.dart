@@ -179,6 +179,8 @@ class _CustomersState extends State<Customers> {
     bool? test_discount = prefs.getBool('discount');
     // bool? test_notes = prefs.getBool('notes');
     bool? test_existed_qty = prefs.getBool('existed_qty');
+    bool? _order_kashf_from_new_to_old =
+        prefs.getBool('order_kashf_from_new_to_old');
     String? store_id_new = prefs.getString('store_id');
     filteredCustomers = widget.CustomersArray;
     if (store_id_new == null) {
@@ -198,6 +200,15 @@ class _CustomersState extends State<Customers> {
     } else {
       setState(() {
         ponus1 = false;
+      });
+    }
+    if (_order_kashf_from_new_to_old == true) {
+      setState(() {
+        order_kashf_from_new_to_old = true;
+      });
+    } else {
+      setState(() {
+        order_kashf_from_new_to_old = false;
       });
     }
     if (test_desc == true) {

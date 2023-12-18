@@ -477,7 +477,7 @@ class _AddOrderState extends State<AddOrder> {
       totalArray.add(0);
       notesArray.add("-");
     }
-    var url = 'https://yaghco.website/quds_laravel/api/add_order_test';
+    var url = 'https://aliexpress.ps/quds_laravel/api/add_order_test';
     var request = new http.MultipartRequest("POST", Uri.parse(url));
     for (int i = 0; i < ProductsIDarray.length; i++) {
       request.fields['product_id[$i]'] = ProductsIDarray[i].toString();
@@ -543,9 +543,15 @@ class _AddOrderState extends State<AddOrder> {
         Map valueMap = json.decode(value);
         if (valueMap['status'].toString() == 'true') {
           Navigator.of(context, rootNavigator: true).pop();
-          Fluttertoast.showToast(msg: "تم اضافه الفاتوره بنجاح");
+          Fluttertoast.showToast(
+              msg: "تم اضافه الفاتوره بنجاح",
+              backgroundColor: Colors.green,
+              fontSize: 18);
           cartProvider.clearCart();
           pdf;
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
         } else {

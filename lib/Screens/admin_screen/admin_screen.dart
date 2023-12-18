@@ -366,7 +366,7 @@ class _AdminScreenState extends State<AdminScreen> {
       );
     } else {
       String? deviceId = await _getId();
-      var url = 'https://yaghco.website/quds_laravel/api/register';
+      var url = 'https://aliexpress.ps/quds_laravel/api/register';
       var headers = {"Accept": "application/json"};
       final response = await http.post(Uri.parse(url),
           body: {
@@ -396,7 +396,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
   editUser() async {
     String? deviceId = await _getId();
-    var url = 'https://yaghco.website/quds_laravel/api/delete_user/$deviceId';
+    var url = 'https://aliexpress.ps/quds_laravel/api/delete_user/$deviceId';
     var headers = {"Accept": "application/json"};
     final response = await http.post(Uri.parse(url), headers: headers);
 
@@ -404,7 +404,7 @@ class _AdminScreenState extends State<AdminScreen> {
     if (data['status'] == 'true') {
       Navigator.of(context, rootNavigator: true).pop();
 
-      var url = 'https://yaghco.website/quds_laravel/api/register';
+      var url = 'https://aliexpress.ps/quds_laravel/api/register';
       var headers = {"Accept": "application/json"};
       final response = await http.post(Uri.parse(url),
           body: {

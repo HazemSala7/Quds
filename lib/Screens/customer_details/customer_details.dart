@@ -82,7 +82,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
     var url =
-        'http://yaghco.website/quds_laravel/api/check_invoiceproducts/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/$pro_id';
+        'http://aliexpress.ps/quds_laravel/api/check_invoiceproducts/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/$pro_id';
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body);
     if (res["invoiceproducts"].length == 0) {
@@ -97,7 +97,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
     var url =
-        'http://yaghco.website/quds_laravel/api/get_price_barcode/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/$pro_id';
+        'http://aliexpress.ps/quds_laravel/api/get_price_barcode/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/$pro_id';
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body);
     if (res["invoiceproducts"].length == 0) {
@@ -113,7 +113,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     int? salesman_id = prefs.getInt('salesman_id');
     String? code_price = prefs.getString('price_code');
     var url =
-        'http://yaghco.website/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
+        'http://aliexpress.ps/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
     print("url");
     print(url);
 
@@ -161,7 +161,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
     var url =
-        'http://yaghco.website/quds_laravel/api/search_products_barcode/${company_id.toString()}/${scanBarcode.toString()}';
+        'http://aliexpress.ps/quds_laravel/api/search_products_barcode/${company_id.toString()}/${scanBarcode.toString()}';
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body)["prodcuts"][0];
     if (res.length == 0) {

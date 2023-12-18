@@ -258,6 +258,28 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         SettingsCard(
+                          status: order_kashf_from_new_to_old,
+                          Status: () async {
+                            setState(() {
+                              order_kashf_from_new_to_old =
+                                  !order_kashf_from_new_to_old;
+                            });
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.setBool('order_kashf_from_new_to_old',
+                                order_kashf_from_new_to_old);
+                          },
+                          name: "ترتيب كشف الحساب من الأحدث الى الأقدم",
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            width: double.infinity,
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SettingsCard(
                           status: desc,
                           Status: () async {
                             setState(() {

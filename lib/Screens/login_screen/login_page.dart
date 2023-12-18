@@ -8,8 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../Services/Drawer/drawer.dart';
+import 'package:animate_do/animate_do.dart';
 import '../admin_screen/admin_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -80,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         JUST = true;
       });
-      var url = 'https://yaghco.website/quds_laravel/api/customers/5/999';
+      var url = 'https://aliexpress.ps/quds_laravel/api/customers/5/999';
       var response = await http.get(Uri.parse(url), headers: headers);
       var res = jsonDecode(response.body)['customers'];
       Navigator.of(context, rootNavigator: true).pop();
@@ -99,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } else {
       String? deviceId = await _getId();
-      var url = 'https://yaghco.website/quds_laravel/api/login';
+      var url = 'https://aliexpress.ps/quds_laravel/api/login';
       var response = await http.post(Uri.parse(url), body: {
         "name": idController.text,
         "device_id": deviceId,
@@ -132,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setBool('login', true);
         var headers = {'ContentType': 'application/json'};
         var url =
-            'https://yaghco.website/quds_laravel/api/customers/$company_id/$salesman_id';
+            'https://aliexpress.ps/quds_laravel/api/customers/$company_id/$salesman_id';
         var response = await http.get(Uri.parse(url), headers: headers);
         var res = jsonDecode(response.body)['customers'];
         Navigator.of(context, rootNavigator: true).pop();
@@ -181,201 +180,196 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       color: Main_Color,
       child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Main_Color,
-            title: Text(
-              'برنامج القدس للمحاسبة',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            elevation: 0,
-            centerTitle: true,
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      width: MediaQuery.of(context).size.width - 80,
-                      child: Image.asset(
-                        'assets/quds_logo.jpeg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.login,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 25, right: 15, left: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "أسم المستخدم",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      child: TextField(
-                        controller: idController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(left: 7),
-                            child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 50,
-                                child: Icon(Icons.person, size: 25)),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Scaffold(
+                body: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 400,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/background.png'),
+                              fit: BoxFit.fill)),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            left: 30,
+                            width: 80,
+                            height: 200,
+                            child: FadeInUp(
+                                duration: Duration(seconds: 1),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/light-1.png'))),
+                                )),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xff34568B), width: 2.0),
+                          Positioned(
+                            left: 140,
+                            width: 80,
+                            height: 150,
+                            child: FadeInUp(
+                                duration: Duration(milliseconds: 1200),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/light-2.png'))),
+                                )),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                width: 2.0, color: Color(0xffD6D3D3)),
+                          Positioned(
+                            right: 40,
+                            top: 40,
+                            width: 80,
+                            height: 150,
+                            child: FadeInUp(
+                                duration: Duration(milliseconds: 1300),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/clock.png'))),
+                                )),
                           ),
-                          hintText: "أسم المستخدم",
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 25, right: 15, left: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "كلمه المرور",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      child: TextField(
-                        controller: passwordController,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(left: 7),
-                            child: InkWell(
-                              onTap: () {
-                                toggle();
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(
-                                  'assets/view.jpeg',
-                                  height: 25,
-                                  width: 25,
-                                  fit: BoxFit.fitWidth,
-                                  color: Color(0xffB1B1B1),
-                                ),
-                              ),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xff34568B), width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                width: 2.0, color: Color(0xffD6D3D3)),
-                          ),
-                          hintText: "كلمه المرور",
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 15, left: 15, top: 35),
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      height: 50,
-                      minWidth: double.infinity,
-                      color: Color(0xff34568B),
-                      textColor: Colors.white,
-                      child: Text(
-                        AppLocalizations.of(context)!.login,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: SizedBox(
-                                  height: 100,
-                                  width: 100,
+                          Positioned(
+                            child: FadeInUp(
+                                duration: Duration(milliseconds: 1600),
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 50),
                                   child: Center(
-                                      child: CircularProgressIndicator())),
-                            );
-                          },
-                        );
-
-                        loginFunction();
-                      },
+                                    child: Text(
+                                      "تسجيل دخول",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.only(right: 15, left: 15, top: 35),
-                  //   child: MaterialButton(
-                  //     shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.all(Radius.circular(10))),
-                  //     height: 50,
-                  //     minWidth: double.infinity,
-                  //     color: Color(0xff34568B),
-                  //     textColor: Colors.white,
-                  //     child: Text(
-                  //       "Saver",
-                  //       style: TextStyle(
-                  //           fontSize: 22, fontWeight: FontWeight.bold),
-                  //     ),
-                  //     onPressed: () async {
-                  //       await GallerySaver.saveImage(
-                  //           "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg");
-                  //     },
-                  //   ),
-                  // ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: Column(
+                        children: <Widget>[
+                          FadeInUp(
+                              duration: Duration(milliseconds: 1800),
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color:
+                                            Color.fromRGBO(143, 148, 251, 1)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color:
+                                              Color.fromRGBO(143, 148, 251, .2),
+                                          blurRadius: 20.0,
+                                          offset: Offset(0, 10))
+                                    ]),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      143, 148, 251, 1)))),
+                                      child: TextField(
+                                        controller: idController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "أسم المستخدم",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700])),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        controller: passwordController,
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "كلمة المرور",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700])),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          FadeInUp(
+                              duration: Duration(milliseconds: 1900),
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator())),
+                                      );
+                                    },
+                                  );
+
+                                  loginFunction();
+                                },
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(colors: [
+                                        Color.fromRGBO(83, 89, 219, 1),
+                                        Color.fromRGBO(32, 39, 160, 0.6),
+                                      ])),
+                                  child: Center(
+                                    child: Text(
+                                      "تسجيل الدخول",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 70,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
+            )),
+            Material(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "1.1.0+2",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

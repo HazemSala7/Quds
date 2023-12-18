@@ -265,7 +265,7 @@ class _KashfCardState extends State<KashfCard> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/getkashfs/${widget.action_id.toString()}/$company_id/$salesman_id/2';
+        'https://aliexpress.ps/quds_laravel/api/getkashfs/${widget.action_id.toString()}/$company_id/$salesman_id/2';
     print("|");
     print(url);
     var response = await http.get(Uri.parse(url), headers: headers);

@@ -1108,7 +1108,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
       int? company_id = prefs.getInt('company_id');
       int? salesman_id = prefs.getInt('salesman_id');
       String? store_id_order = prefs.getString('store_id');
-      var url = 'https://yaghco.website/quds_laravel/api/add_catch_receipt';
+      var url = 'https://aliexpress.ps/quds_laravel/api/add_catch_receipt';
       var request = new http.MultipartRequest("POST", Uri.parse(url));
       request.fields['store_id'] = "1";
       request.fields['customer_id'] = widget.id.toString();

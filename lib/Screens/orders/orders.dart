@@ -300,7 +300,7 @@ class _OrdersState extends State<Orders> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/orders/$company_id/$salesman_id';
+        'https://aliexpress.ps/quds_laravel/api/orders/$company_id/$salesman_id';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -316,7 +316,7 @@ class _OrdersState extends State<Orders> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://yaghco.website/quds_laravel/api/filter_orders/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
+        'https://aliexpress.ps/quds_laravel/api/filter_orders/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

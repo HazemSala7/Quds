@@ -436,7 +436,7 @@ class _ProductCardState extends State<ProductCard> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
-    var url = 'https://yaghco.website/quds_laravel/api/addFatora';
+    var url = 'https://aliexpress.ps/quds_laravel/api/addFatora';
 
     final response = await http.post(
       Uri.parse(url),

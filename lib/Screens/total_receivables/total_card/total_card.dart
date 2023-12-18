@@ -4,7 +4,7 @@ import 'package:flutter_application_1/Server/server.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../customer_details/customer_details.dart';
 
 class TotalCard extends StatefulWidget {
@@ -142,10 +142,7 @@ class _TotalCardState extends State<TotalCard> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Color(0xffD6D3D3))),
-                      child: Center(
-                          child: Icon(
-                        Icons.facebook,
-                      )),
+                      child: Center(child: FaIcon(FontAwesomeIcons.whatsapp)),
                     ),
                   ),
                 ),

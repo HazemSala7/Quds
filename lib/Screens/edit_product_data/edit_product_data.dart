@@ -364,10 +364,8 @@ class _EditProductDataState extends State<EditProductData> {
       'Content-Type': 'application/json;charset=UTF-8',
       'Charset': 'utf-8'
     };
-    var request = new http.MultipartRequest(
-        "POST",
-        Uri.parse(
-            "https://yaghco.website/quds_laravel/api/edit_product_image"));
+    var request = new http.MultipartRequest("POST",
+        Uri.parse("https://aliexpress.ps/quds_laravel/api/edit_product_image"));
     request.fields['id'] = widget.id.toString();
     request.fields['company_id'] = company_id.toString();
     request.headers.addAll(headers);

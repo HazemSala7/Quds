@@ -282,6 +282,9 @@ class _ProductsState extends State<Products> {
       var url = widget.category_id != "all"
           ? "https://aliexpress.ps/quds_laravel/api/products/${company_id.toString()}/${widget.category_id}/${salesman_id.toString()}/${widget.id.toString()}/${code_price}?page=$_page"
           : "https://aliexpress.ps/quds_laravel/api/allProducts/${company_id.toString()}/${salesman_id.toString()}/${widget.id.toString()}/${code_price}?page=$_page";
+
+      print("url");
+      print(url);
       final res = await http.get(Uri.parse(url));
       setState(() {
         _posts = json.decode(res.body)["products"]["data"];

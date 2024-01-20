@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -663,6 +664,68 @@ class _KashfHesabState extends State<KashfHesab> {
     );
   }
 
+  TextEditingController start_date = TextEditingController();
+  TextEditingController end_date = TextEditingController();
+  setControllers() {
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    String actualDate = formatterDate.format(now);
+    setState(() {
+      end_date.text = actualDate;
+    });
+  }
+
+  setStart() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(
+            2000), //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2101));
+
+    if (pickedDate != null) {
+      // print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      // print(
+      //     formattedDate); //formatted date output using intl package =>  2021-03-16
+      //you can implement different kind of Date Format here according to your requirement
+
+      setState(() {
+        start_date.text = formattedDate; //set output date to TextField value.
+      });
+      if (start_date.text != "") {
+        filterStatments();
+      } else {
+        _firstLoad();
+      }
+    } else {
+      // print("Date is not selected");
+    }
+  }
+
+  setEnd() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(
+            2000), //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2101));
+
+    if (pickedDate != null) {
+      // print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      // print(
+      //     formattedDate); //formatted date output using intl package =>  2021-03-16
+      //you can implement different kind of Date Format here according to your requirement
+
+      setState(() {
+        end_date.text = formattedDate; //set output date to TextField value.
+      });
+    } else {
+      // print("Date is not selected");
+    }
+  }
+
   Widget build(BuildContext context) {
     return Container(
       color: Main_Color,
@@ -766,11 +829,71 @@ class _KashfHesabState extends State<KashfHesab> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      "كشف حساب",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    padding:
+                        const EdgeInsets.only(right: 25, left: 25, top: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            child: TextField(
+                              onTap: setStart,
+                              controller: start_date,
+                              readOnly: true,
+                              textInputAction: TextInputAction.done,
+                              textAlign: TextAlign.center,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                hintText: 'من تاريخ',
+                                hintStyle: TextStyle(
+                                    fontWeight: FontWeight.w400, fontSize: 14),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Main_Color, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 2.0, color: Color(0xffD6D3D3)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            child: TextField(
+                              textInputAction: TextInputAction.done,
+                              textAlign: TextAlign.center,
+                              onTap: setEnd,
+                              controller: end_date,
+                              readOnly: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                hintText: 'الى تاريخ',
+                                hintStyle: TextStyle(
+                                    fontWeight: FontWeight.w400, fontSize: 14),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Main_Color, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 2.0, color: Color(0xffD6D3D3)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
@@ -1070,6 +1193,7 @@ class _KashfHesabState extends State<KashfHesab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setControllers();
     _firstLoad();
     _controller = ScrollController()..addListener(_loadMore);
   }
@@ -1087,6 +1211,29 @@ class _KashfHesabState extends State<KashfHesab> {
 
   // Used to display loading indicators when _loadMore function is running
   bool _isLoadMoreRunning = false;
+
+  filterStatments() async {
+    print("test");
+    setState(() {
+      _isFirstLoadRunning = true;
+      listPDF = [];
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'ContentType': 'application/json'
+    };
+    var url =
+        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}';
+    var response = await http.get(Uri.parse(url), headers: headers);
+    setState(() {
+      listPDF = json.decode(response.body)["statments"]["data"];
+      _isFirstLoadRunning = false;
+    });
+  }
 
   // This function will be called when the app launches (see the initState function)
   void _firstLoad() async {

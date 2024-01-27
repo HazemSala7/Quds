@@ -1,6 +1,7 @@
 class CartItem {
   final int? id;
   final String productId;
+  final String notes;
   final int ponus1;
   final int ponus2;
   final String name;
@@ -12,6 +13,7 @@ class CartItem {
   CartItem(
       {this.id,
       required this.productId,
+      required this.notes,
       required this.ponus1,
       required this.ponus2,
       required this.discount,
@@ -24,6 +26,7 @@ class CartItem {
     return {
       'id': id,
       'productId': productId,
+      'notes': notes,
       'name': name,
       'image': image,
       'price': price,
@@ -38,6 +41,7 @@ class CartItem {
     return CartItem(
       id: json['id'],
       productId: json['productId'],
+      notes: json['notes'],
       name: json['name'],
       image: json['image'],
       price: json['price'],
@@ -51,6 +55,7 @@ class CartItem {
   CartItem copyWith({
     int? id,
     String? productId,
+    String? notes,
     String? name,
     String? image,
     double? price,
@@ -62,6 +67,7 @@ class CartItem {
     return CartItem(
       id: id ?? this.id,
       productId: productId ?? this.productId,
+      notes: notes ?? this.notes,
       name: name ?? this.name,
       image: image ?? this.image,
       price: price ?? this.price,

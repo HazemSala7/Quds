@@ -475,7 +475,7 @@ class _AddOrderState extends State<AddOrder> {
       ponus2Array.add(0);
       discountArray.add(0);
       totalArray.add(0);
-      notesArray.add("-");
+      notesArray.add(parsedData[i]["notes"]);
     }
     var url = 'https://aliexpress.ps/quds_laravel/api/add_order_test';
     var request = new http.MultipartRequest("POST", Uri.parse(url));

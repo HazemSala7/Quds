@@ -300,6 +300,28 @@ class _OrderCardState extends State<OrderCard> {
                               ),
                             ],
                           ),
+                          Visibility(
+                            visible: notes,
+                            child: Row(
+                              children: [
+                                Text(
+                                  "الملاحظات :",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  widget.notes,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     )

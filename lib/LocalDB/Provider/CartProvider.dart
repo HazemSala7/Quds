@@ -92,6 +92,8 @@ class CartProvider extends ChangeNotifier {
         'price': item.price,
         'quantity': item.quantity,
         'ponus1': item.ponus1,
+        'ponus2': item.ponus2,
+        'notes': item.notes,
       };
       productsArray.add(productData);
     }

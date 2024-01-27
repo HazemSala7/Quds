@@ -81,7 +81,7 @@ class _ShowOrderState extends State<ShowOrder> {
                             editProduct: () {
                               _editCartItem(cartProvider, item);
                             },
-                            notes: " - ",
+                            notes: item.notes,
                             product_id: item.productId,
                             id: 2,
                             ItemCart: item,

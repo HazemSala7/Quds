@@ -594,6 +594,9 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       onPressed: () {
                         final newItem = CartItem(
+                          notes: notesController.text == ""
+                              ? "-"
+                              : notesController.text,
                           productId: widget.id.toString(),
                           name: widget.name,
                           image: widget.image,

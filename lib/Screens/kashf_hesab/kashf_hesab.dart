@@ -1213,7 +1213,6 @@ class _KashfHesabState extends State<KashfHesab> {
   bool _isLoadMoreRunning = false;
 
   filterStatments() async {
-    print("test");
     setState(() {
       _isFirstLoadRunning = true;
       listPDF = [];

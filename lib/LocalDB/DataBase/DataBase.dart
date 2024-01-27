@@ -52,6 +52,7 @@ class CartDatabaseHelper {
       CREATE TABLE cart (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         productId TEXT NOT NULL,
+        notes TEXT NOT NULL,
         name TEXT NOT NULL,
         image TEXT NOT NULL,
         price REAL NOT NULL,

@@ -320,7 +320,7 @@ class _KashfHesabState extends State<KashfHesab> {
           children: [
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
-                child: pw.Text("${total_mnh - total_lah}",
+                child: pw.Text("${LastBalanceValue}",
                     style: pw.TextStyle(fontSize: 12))),
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
@@ -636,7 +636,7 @@ class _KashfHesabState extends State<KashfHesab> {
           children: [
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
-                child: pw.Text("${total_mnh - total_lah}",
+                child: pw.Text("${LastBalanceValue}",
                     style: pw.TextStyle(fontSize: 18))),
             pw.Directionality(
                 textDirection: pw.TextDirection.rtl,
@@ -1095,7 +1095,8 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_id'] ?? "-"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 5),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1108,7 +1109,8 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${listPDFAll[index]['action_date'] ?? ""}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 5),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1120,7 +1122,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     child: pw.Center(
                       child: pw.Text(
                         "${listPDFAll[index]['action_type'] ?? ""}",
-                        style: pw.TextStyle(fontSize: 5),
+                        style: pw.TextStyle(fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1133,7 +1135,8 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) < 0 ? double.parse(listPDFAll[index]['money_amount'].toString()) * -1 : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 5),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1146,7 +1149,8 @@ class _KashfHesabState extends State<KashfHesab> {
                       child: pw.Text(
                         "${double.parse(listPDFAll[index]['money_amount'].toString()) > 0 ? listPDFAll[index]['money_amount'].toString() : "0"}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 5),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1157,9 +1161,10 @@ class _KashfHesabState extends State<KashfHesab> {
                     flex: 1,
                     child: pw.Center(
                       child: pw.Text(
-                        "${getCustomerBalance(index)}",
+                        "${listPDFAll[index]['balance'].toString()}",
                         style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold, fontSize: 5),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: A4 ? 14 : 5),
                       ),
                     ),
                   ),
@@ -1216,6 +1221,7 @@ class _KashfHesabState extends State<KashfHesab> {
     setState(() {
       _isFirstLoadRunning = true;
       listPDF = [];
+      listPDFAll = [];
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
@@ -1226,13 +1232,16 @@ class _KashfHesabState extends State<KashfHesab> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}';
+        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}';
     var response = await http.get(Uri.parse(url), headers: headers);
     setState(() {
       listPDF = json.decode(response.body)["statments"]["data"];
+      listPDFAll = json.decode(response.body)["statments"]["data"];
       _isFirstLoadRunning = false;
     });
   }
+
+  var LastBalanceValue;
 
   // This function will be called when the app launches (see the initState function)
   void _firstLoad() async {
@@ -1274,37 +1283,67 @@ class _KashfHesabState extends State<KashfHesab> {
     int? salesman_id = prefs.getInt('salesman_id');
     String? code_price = prefs.getString('price_code');
     try {
-      var url =
-          "https://aliexpress.ps/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
-      final res = await http.get(Uri.parse(url));
-      setState(() {
-        listPDFAll = json.decode(res.body)["statments"];
-        for (int i = 0; i < listPDFAll.length; i++) {
-          if (double.parse(listPDFAll[i]['money_amount'].toString()) > 0) {
-            var money = listPDFAll[i]['money_amount'].toString();
+      if (start_date.text == "" || end_date.text == "") {
+        var url =
+            "https://aliexpress.ps/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
 
-            setState(() {
+        final res = await http.get(Uri.parse(url));
+        setState(() {
+          listPDFAll = json.decode(res.body)["statments"];
+          for (int i = 0; i < listPDFAll.length; i++) {
+            if (double.parse(listPDFAll[i]['money_amount'].toString()) > 0) {
+              var money = listPDFAll[i]['money_amount'].toString();
+
               array_mnh.add(money);
-            });
-          } else {
-            var money =
-                double.parse(listPDFAll[i]['money_amount'].toString()) * -1;
-            setState(() {
+            } else {
+              var money =
+                  double.parse(listPDFAll[i]['money_amount'].toString()) * -1;
+
               array_lah.add(money);
-            });
+            }
           }
-        }
-        for (int i = 0; i < array_mnh.length; i++) {
-          setState(() {
+          for (int i = 0; i < array_mnh.length; i++) {
             total_mnh = total_mnh + double.parse(array_mnh[i].toString());
-          });
-        }
-        for (int i = 0; i < array_lah.length; i++) {
-          setState(() {
+          }
+          for (int i = 0; i < array_lah.length; i++) {
             total_lah = total_lah + double.parse(array_lah[i].toString());
-          });
-        }
-      });
+          }
+          var lastBalance =
+              listPDFAll.isNotEmpty ? listPDFAll.last['balance'] : null;
+
+          LastBalanceValue = lastBalance;
+        });
+      } else {
+        var url =
+            "https://aliexpress.ps/quds_laravel/api/get_all_filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}";
+        final res = await http.get(Uri.parse(url));
+        setState(() {
+          listPDFAll = json.decode(res.body)["statments"];
+          for (int i = 0; i < listPDFAll.length; i++) {
+            if (double.parse(listPDFAll[i]['money_amount'].toString()) > 0) {
+              var money = listPDFAll[i]['money_amount'].toString();
+
+              array_mnh.add(money);
+            } else {
+              var money =
+                  double.parse(listPDFAll[i]['money_amount'].toString()) * -1;
+
+              array_lah.add(money);
+            }
+          }
+          for (int i = 0; i < array_mnh.length; i++) {
+            total_mnh = total_mnh + double.parse(array_mnh[i].toString());
+          }
+          for (int i = 0; i < array_lah.length; i++) {
+            total_lah = total_lah + double.parse(array_lah[i].toString());
+          }
+          var lastBalance =
+              listPDFAll.isNotEmpty ? listPDFAll.last['balance'] : null;
+
+          LastBalanceValue = lastBalance;
+        });
+      }
+
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(
         context: context,

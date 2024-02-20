@@ -50,10 +50,13 @@ class _DrawerMainState extends State<DrawerMain> {
               },
               name: "مجمل الذمم",
               myicon: Icon(Icons.money)),
-          Padding(
-            padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
-            child: Container(
-                width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
+          Visibility(
+            visible: JUST,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
+              child: Container(
+                  width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
+            ),
           ),
           Visibility(
             visible: JUST,
@@ -106,23 +109,17 @@ class _DrawerMainState extends State<DrawerMain> {
                   width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
             ),
           ),
-          Visibility(
-            visible: JUST,
-            child: DrawerCard(
-                navi: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Settings()));
-                },
-                name: "تعريفات أوليه",
-                myicon: Icon(Icons.perm_device_information)),
-          ),
-          Visibility(
-            visible: JUST,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
-              child: Container(
-                  width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
-            ),
+          DrawerCard(
+              navi: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Settings()));
+              },
+              name: "تعريفات أوليه",
+              myicon: Icon(Icons.perm_device_information)),
+          Padding(
+            padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
+            child: Container(
+                width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
           ),
           DrawerCard(
               navi: () async {

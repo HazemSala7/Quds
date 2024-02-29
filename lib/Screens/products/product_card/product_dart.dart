@@ -205,21 +205,44 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddProduct(
-                                  packingNumber: widget.packingNumber,
-                                  packingPrice: widget.packingPrice,
-                                  id: widget.id,
-                                  name: widget.name,
-                                  productColors: widget.product_colors,
-                                  image: widget.image,
-                                  customer_id: widget.customer_id.toString(),
-                                  price: widget.price,
-                                  qty: widget.qty,
-                                  desc: widget.desc,
-                                )));
+                    if (widget.product_colors.length == 0) {
+                      final newItem = CartItem(
+                        productId: widget.id.toString(),
+                        color: "",
+                        colorsNames: [],
+                        name: widget.name,
+                        image: widget.image,
+                        notes: "-",
+                        price: double.parse(widget.price.toString()),
+                        discount: 0.0,
+                        quantity: 1,
+                        ponus1: 0,
+                        ponus2: 0,
+                      );
+                      cartProvider.addToCart(newItem);
+                      Fluttertoast.showToast(
+                        msg: "تم اضافه هذا المنتج الى الفاتوره بنجاح",
+                      );
+                      Timer(Duration(milliseconds: 300), () {
+                        Fluttertoast.cancel();
+                      });
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddProduct(
+                                    packingNumber: widget.packingNumber,
+                                    packingPrice: widget.packingPrice,
+                                    id: widget.id,
+                                    name: widget.name,
+                                    productColors: widget.product_colors,
+                                    image: widget.image,
+                                    customer_id: widget.customer_id.toString(),
+                                    price: widget.price,
+                                    qty: widget.qty,
+                                    desc: widget.desc,
+                                  )));
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(

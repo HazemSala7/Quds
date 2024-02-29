@@ -12,7 +12,8 @@ import '../../Services/Drawer/drawer.dart';
 
 class AddProduct extends StatefulWidget {
   final id, name, qty, customer_id, desc, image;
-  var price;
+  var price, packingNumber, packingPrice;
+  var productColors;
   AddProduct(
       {Key? key,
       this.id,
@@ -21,6 +22,9 @@ class AddProduct extends StatefulWidget {
       this.image,
       this.customer_id,
       this.qty,
+      required this.productColors,
+      required this.packingNumber,
+      required this.packingPrice,
       required this.price})
       : super(key: key);
 
@@ -34,6 +38,8 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController nameController = TextEditingController();
   TextEditingController invoiceID = TextEditingController();
   TextEditingController qty = TextEditingController();
+  TextEditingController packingnumber = TextEditingController();
+  TextEditingController packingprice = TextEditingController();
   TextEditingController qtyController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController bonus1Controller = TextEditingController();
@@ -41,8 +47,15 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController notesController = TextEditingController();
   TextEditingController discountContrller = TextEditingController();
   TextEditingController totalController = TextEditingController();
+  String selectedColor = '';
+  List<String> _Names = [];
 
   setContrllers() async {
+    if (widget.packingNumber != null || widget.packingNumber != "") {
+      packingnumber.text = widget.packingNumber.toString();
+      packingprice.text = widget.packingPrice.toString();
+    }
+
     nameController.text = widget.name;
     priceController.text = widget.price.toString();
     qtyController.text = widget.qty.toString();
@@ -76,49 +89,8 @@ class _AddProductState extends State<AddProduct> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "اضافة صنف",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.only(top: 20, right: 15, left: 15),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         "رقم الفاتوره",
-                  //         style: TextStyle(
-                  //             fontSize: 16, fontWeight: FontWeight.bold),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
-                  //   child: Container(
-                  //     height: 50,
-                  //     width: double.infinity,
-                  //     child: TextField(
-                  //       controller: invoiceID,
-                  //       obscureText: false,
-                  //       decoration: InputDecoration(
-                  //         focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Color(0xff34568B), width: 2.0),
-                  //         ),
-                  //         enabledBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               width: 2.0, color: Color(0xffD6D3D3)),
-                  //         ),
-                  //         hintText: "رقم الفاتوره",
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.network(widget.image, height: 100)),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),
@@ -156,6 +128,124 @@ class _AddProductState extends State<AddProduct> {
                       ),
                     ),
                   ),
+                  Visibility(
+                    visible: widget.packingNumber == null ||
+                            widget.packingNumber == ""
+                        ? false
+                        : true,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 15, left: 15),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "عدد التعبئة",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "سعر التعبئة",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 15, left: 15, top: 5),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 50,
+                                  child: TextField(
+                                    readOnly: true,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                    controller: packingnumber,
+                                    onChanged: (hazem) {
+                                      setState(() {
+                                        var init_total = double.parse(
+                                                qty.text) *
+                                            double.parse(priceController.text) *
+                                            (1 -
+                                                (double.parse(discountContrller
+                                                        .text) /
+                                                    100));
+                                        totalController.text =
+                                            init_total.toString();
+                                      });
+                                    },
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff34568B),
+                                            width: 2.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 2.0,
+                                            color: Color(0xffD6D3D3)),
+                                      ),
+                                      hintText: "عدد التعبئة",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 50,
+                                  child: TextField(
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                    readOnly: true,
+                                    controller: packingprice,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff34568B),
+                                            width: 2.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 2.0,
+                                            color: Color(0xffD6D3D3)),
+                                      ),
+                                      hintText: "سعر التعبئة",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),
@@ -175,116 +265,134 @@ class _AddProductState extends State<AddProduct> {
                     child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: Color(0xffD6D3D3))),
-                        // height: 50,
+                        height: 50,
                         width: double.infinity,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(widget.desc.toString()),
                         )),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, right: 15, left: 15),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Visibility(
+                    visible: widget.productColors.length == 0 ? true : false,
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "الكمية",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Visibility(
-                          visible: existed_qty,
-                          child: SizedBox(
-                            width: 15,
-                          ),
-                        ),
-                        Visibility(
-                          visible: existed_qty,
-                          child: Expanded(
-                            flex: 1,
-                            child: Text(
-                              "الكمية الموجوده",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 50,
-                            child: TextField(
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
-                              controller: qty,
-                              onChanged: (hazem) {
-                                setState(() {
-                                  var init_total = double.parse(qty.text) *
-                                      double.parse(priceController.text) *
-                                      (1 -
-                                          (double.parse(
-                                                  discountContrller.text) /
-                                              100));
-                                  totalController.text = init_total.toString();
-                                });
-                              },
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(0xff34568B), width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2.0, color: Color(0xffD6D3D3)),
-                                ),
-                                hintText: "الكمية",
-                              ),
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: existed_qty,
-                          child: SizedBox(
-                            width: 15,
-                          ),
-                        ),
-                        Visibility(
-                          visible: existed_qty,
-                          child: Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              child: TextField(
-                                keyboardType: TextInputType.numberWithOptions(
-                                    signed: true, decimal: true),
-                                readOnly: true,
-                                controller: qtyController,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xff34568B), width: 2.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xffD6D3D3)),
-                                  ),
-                                  hintText: "الكمية الموجوده",
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 15, left: 15),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "الكمية",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
+                              Visibility(
+                                visible: existed_qty,
+                                child: SizedBox(
+                                  width: 15,
+                                ),
+                              ),
+                              Visibility(
+                                visible: existed_qty,
+                                child: Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "الكمية الموجوده",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 15, left: 15, top: 5),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 50,
+                                  child: TextField(
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                    controller: qty,
+                                    onChanged: (hazem) {
+                                      setState(() {
+                                        var init_total = double.parse(
+                                                qty.text) *
+                                            double.parse(priceController.text) *
+                                            (1 -
+                                                (double.parse(discountContrller
+                                                        .text) /
+                                                    100));
+                                        totalController.text =
+                                            init_total.toString();
+                                      });
+                                    },
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff34568B),
+                                            width: 2.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 2.0,
+                                            color: Color(0xffD6D3D3)),
+                                      ),
+                                      hintText: "الكمية",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: existed_qty,
+                                child: SizedBox(
+                                  width: 15,
+                                ),
+                              ),
+                              Visibility(
+                                visible: existed_qty,
+                                child: Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    child: TextField(
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              signed: true, decimal: true),
+                                      readOnly: true,
+                                      controller: qtyController,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff34568B),
+                                              width: 2.0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              width: 2.0,
+                                              color: Color(0xffD6D3D3)),
+                                        ),
+                                        hintText: "الكمية الموجوده",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -578,6 +686,78 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      itemCount: widget.productColors.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final colorData = widget.productColors[index];
+                        String colorCode = colorData['color'];
+                        bool isSelected = selectedColor == colorCode;
+
+                        int quantity = colorData['quantity'] ?? 0;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: BoxDecoration(
+                                    color: Color(int.parse('0xFF$colorCode')),
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 2.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Color: $colorCode', // Display color code
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (quantity > 0) {
+                                          quantity--;
+                                          colorData['quantity'] = quantity;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    quantity.toString(),
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      setState(() {
+                                        quantity++;
+                                        colorData['quantity'] = quantity;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(
                         right: 25, left: 25, top: 35, bottom: 30),
                     child: MaterialButton(
@@ -593,24 +773,75 @@ class _AddProductState extends State<AddProduct> {
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        final newItem = CartItem(
-                          notes: notesController.text == ""
-                              ? "-"
-                              : notesController.text,
-                          productId: widget.id.toString(),
-                          name: widget.name,
-                          image: widget.image,
-                          price: double.parse(priceController.text),
-                          discount: double.parse(discountContrller.text),
-                          quantity: int.parse(qty.text),
-                          ponus1: int.parse(bonus1Controller.text == ""
-                              ? "0"
-                              : bonus1Controller.text),
-                          ponus2: int.parse(bonus2Controller.text == ""
-                              ? "0"
-                              : bonus2Controller.text),
-                        );
-                        cartProvider.addToCart(newItem);
+                        if (widget.productColors.length == 0) {
+                          final newItem = CartItem(
+                            colorsNames:
+                                _Names.map((size) => size.toString()).toList(),
+                            notes: notesController.text == ""
+                                ? "-"
+                                : notesController.text,
+                            color: "",
+                            productId: widget.id.toString(),
+                            name: widget.name,
+                            image: widget.image,
+                            price: double.parse(priceController.text),
+                            discount: double.parse(discountContrller.text),
+                            quantity: qty.text == "" || qty.text == null
+                                ? 1
+                                : int.parse(qty.text),
+                            ponus1: int.parse(bonus1Controller.text == ""
+                                ? "0"
+                                : bonus1Controller.text),
+                            ponus2: int.parse(bonus2Controller.text == ""
+                                ? "0"
+                                : bonus2Controller.text),
+                          );
+                          cartProvider.addToCart(newItem);
+                        } else {
+                          for (int i = 0;
+                              i < widget.productColors.length;
+                              i++) {
+                            _Names.add(
+                                widget.productColors[i]["color"].toString());
+                          }
+                          for (int i = 0;
+                              i < widget.productColors.length;
+                              i++) {
+                            if (int.parse(
+                                    widget.productColors[i]['quantity'] == null
+                                        ? "0"
+                                        : widget.productColors[i]['quantity']
+                                            .toString()) >=
+                                1) {
+                              final newItem = CartItem(
+                                colorsNames:
+                                    _Names.map((size) => size.toString())
+                                        .toList(),
+                                notes: notesController.text == ""
+                                    ? "-"
+                                    : notesController.text,
+                                color:
+                                    widget.productColors[i]["color"].toString(),
+                                productId: widget.id.toString(),
+                                name: widget.name,
+                                image: widget.image,
+                                price: double.parse(priceController.text),
+                                discount: double.parse(discountContrller.text),
+                                quantity: int.parse(widget.productColors[i]
+                                        ['quantity']
+                                    .toString()),
+                                ponus1: int.parse(bonus1Controller.text == ""
+                                    ? "0"
+                                    : bonus1Controller.text),
+                                ponus2: int.parse(bonus2Controller.text == ""
+                                    ? "0"
+                                    : bonus2Controller.text),
+                              );
+                              cartProvider.addToCart(newItem);
+                            }
+                          }
+                        }
+
                         Fluttertoast.showToast(
                             msg: "تم اضافه هذا المنتج الى الفاتوره بنجاح");
                         Navigator.pop(context);
@@ -624,66 +855,5 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
     );
-  }
-
-  send() async {
-    if (nameController.text == '' || qtyController.text == '') {
-      Navigator.of(context, rootNavigator: true).pop();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text('الرجاء تعبئه جميع الفراغات'),
-            actions: <Widget>[
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'حسنا',
-                  style: TextStyle(color: Color(0xff34568B)),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      int? company_id = prefs.getInt('company_id');
-      int? salesman_id = prefs.getInt('salesman_id');
-      var url = 'https://aliexpress.ps/quds_laravel/api/addFatora';
-
-      final response = await http.post(
-        Uri.parse(url),
-        body: {
-          'product_id': widget.id.toString(),
-          'product_name': widget.name.toString(),
-          'customer_id': widget.customer_id.toString(),
-          'company_id': company_id.toString(),
-          'f_code': "1",
-          'salesman_id': salesman_id.toString(),
-          'p_quantity': qty.text,
-          'p_price': priceController.text,
-          'bonus1': bonus1Controller.text == "" ? "0" : bonus1Controller.text,
-          'bonus2': bonus2Controller.text == "" ? "0" : bonus2Controller.text,
-          'discount':
-              discountContrller.text == "" ? "0" : discountContrller.text,
-          'total': totalController.text,
-          'notes': notesController.text == "" ? "-" : notesController.text,
-        },
-      );
-
-      var data = jsonDecode(response.body);
-
-      if (data['message'] == 'Fatora created successfully') {
-        Navigator.of(context, rootNavigator: true).pop();
-        Fluttertoast.showToast(msg: "تم اضافه هذا المنتج الى الطلبيه بنجاح");
-        Navigator.pop(context);
-      } else {
-        Navigator.of(context, rootNavigator: true).pop();
-        // print('fsdsdfs');
-      }
-    }
   }
 }

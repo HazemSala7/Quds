@@ -466,10 +466,12 @@ class _AddOrderState extends State<AddOrder> {
     List discountArray = [];
     List totalArray = [];
     List notesArray = [];
+    List colorArray = [];
     for (int i = 0; i < parsedData.length; i++) {
       ProductsIDarray.add(parsedData[i]["product_id"]);
       ProductsNamearray.add(parsedData[i]["name"]);
       priceArray.add(parsedData[i]["price"]);
+      colorArray.add(parsedData[i]["color"].toString());
       qtyArray.add(parsedData[i]["quantity"]);
       ponus1Array.add(parsedData[i]["ponus1"]);
       ponus2Array.add(0);
@@ -481,6 +483,9 @@ class _AddOrderState extends State<AddOrder> {
     var request = new http.MultipartRequest("POST", Uri.parse(url));
     for (int i = 0; i < ProductsIDarray.length; i++) {
       request.fields['product_id[$i]'] = ProductsIDarray[i].toString();
+    }
+    for (int i = 0; i < colorArray.length; i++) {
+      request.fields['color_name[$i]'] = colorArray[i].toString();
     }
     for (int i = 0; i < ProductsNamearray.length; i++) {
       request.fields['product_name[$i]'] = ProductsNamearray[i].toString();

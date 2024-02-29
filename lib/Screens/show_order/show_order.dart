@@ -78,6 +78,7 @@ class _ShowOrderState extends State<ShowOrder> {
                           double total = item.price * item.quantity;
                           return OrderCard(
                             ponus_one: item.ponus1,
+                            color: item.color,
                             editProduct: () {
                               _editCartItem(cartProvider, item);
                             },
@@ -136,6 +137,8 @@ class _ShowOrderState extends State<ShowOrder> {
     // }
     final TextEditingController nameController =
         TextEditingController(text: item.name);
+    final TextEditingController colorController =
+        TextEditingController(text: item.color);
     final TextEditingController priceController =
         TextEditingController(text: item.price.toString());
     final TextEditingController ponus1Controller =

@@ -126,7 +126,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           context,
           MaterialPageRoute(
               builder: (context) => AddProduct(
+                    packingNumber: "",
+                    packingPrice: "",
                     id: res["id"],
+                    productColors: [],
                     name: res["p_name"],
                     customer_id: widget.name.toString(),
                     price: res["price"],
@@ -192,7 +195,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           context,
           MaterialPageRoute(
               builder: (context) => AddProduct(
+                    packingNumber: "",
+                    packingPrice: "",
                     id: res["id"],
+                    productColors: [],
                     name: res["p_name"],
                     customer_id: widget.name.toString(),
                     price: price,

@@ -91,6 +91,7 @@ class CartProvider extends ChangeNotifier {
         'name': item.name,
         'price': item.price,
         'quantity': item.quantity,
+        'color': item.color,
         'ponus1': item.ponus1,
         'ponus2': item.ponus2,
         'notes': item.notes,

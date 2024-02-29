@@ -15,12 +15,15 @@ import '../../edit_product_data/edit_product_data.dart';
 
 class ProductCard extends StatefulWidget {
   final image, name, desc, price_code, id;
-  var qty, price, customer_id;
+  var qty, price, customer_id, product_colors, packingPrice, packingNumber;
 
   ProductCard(
       {Key? key,
       this.image,
       required this.id,
+      required this.product_colors,
+      required this.packingPrice,
+      required this.packingNumber,
       required this.customer_id,
       required this.qty,
       this.price_code,
@@ -43,8 +46,11 @@ class _ProductCardState extends State<ProductCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => AddProduct(
+                      packingNumber: widget.packingNumber,
+                      packingPrice: widget.packingPrice,
                       id: widget.id,
                       name: widget.name,
+                      productColors: widget.product_colors,
                       image: widget.image,
                       customer_id: widget.customer_id.toString(),
                       price: widget.price,
@@ -199,24 +205,21 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 InkWell(
                   onTap: () {
-                    final newItem = CartItem(
-                      productId: widget.id.toString(),
-                      name: widget.name,
-                      image: widget.image,
-                      notes: "-",
-                      price: double.parse(widget.price.toString()),
-                      discount: 0.0,
-                      quantity: 1,
-                      ponus1: 0,
-                      ponus2: 0,
-                    );
-                    cartProvider.addToCart(newItem);
-                    Fluttertoast.showToast(
-                      msg: "تم اضافه هذا المنتج الى الفاتوره بنجاح",
-                    );
-                    Timer(Duration(milliseconds: 300), () {
-                      Fluttertoast.cancel();
-                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddProduct(
+                                  packingNumber: widget.packingNumber,
+                                  packingPrice: widget.packingPrice,
+                                  id: widget.id,
+                                  name: widget.name,
+                                  productColors: widget.product_colors,
+                                  image: widget.image,
+                                  customer_id: widget.customer_id.toString(),
+                                  price: widget.price,
+                                  qty: widget.qty,
+                                  desc: widget.desc,
+                                )));
                   },
                   child: Container(
                     decoration: BoxDecoration(

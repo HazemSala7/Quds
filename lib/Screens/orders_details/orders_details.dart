@@ -78,6 +78,13 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                         flex: 1,
                         child: Center(
                             child: Text(
+                          "لون الصنف",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ))),
+                    Expanded(
+                        flex: 1,
+                        child: Center(
+                            child: Text(
                           "الكمية",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ))),
@@ -125,6 +132,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                             // product_id: Customers[index]['product_id'] ?? "-",
                             product_name:
                                 Customers[index]['product_name'] ?? "-",
+                            color_name: Customers[index]['color_name'] ?? "-",
                             // Customers[index]['product']["p_name"] ?? "-",
                             product_id: Customers[index]['product_id'] ?? "-",
                             qty: Customers[index]['p_quantity'] ?? "-",
@@ -140,6 +148,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                             product_id: Customers[index]['product_id'] ?? "-",
                             qty: Customers[index]['p_quantity'] ?? "-",
                             price: Customers[index]['p_price'] ?? "-",
+                            color_name: Customers[index]['color_name'] ?? "-",
                             total: Customers[index]['total'] ?? "-",
                           );
                         }
@@ -172,7 +181,6 @@ class _OrdersDetailsState extends State<OrdersDetails> {
     };
     var url =
         'https://aliexpress.ps/quds_laravel/api/orderdetails/${widget.id.toString()}/$company_id/$salesman_id';
-    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -189,8 +197,6 @@ class _OrdersDetailsState extends State<OrdersDetails> {
     };
     var url =
         'https://aliexpress.ps/quds_laravel/api/getkashfs/${widget.id.toString()}/$company_id/$salesman_id/2';
-    print("url");
-    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
 
     var res = jsonDecode(response.body);
@@ -200,6 +206,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
   Widget order_card(
       {String product_id = "",
       String product_name = "",
+      String color_name = "",
       String name = "",
       String qty = "",
       String price = "",
@@ -225,6 +232,22 @@ class _OrdersDetailsState extends State<OrdersDetails> {
             // Expanded(flex: 1, child: Center(child: Text(product_id))),
             Expanded(flex: 1, child: Center(child: Text(product_id))),
             Expanded(flex: 1, child: Center(child: Text(product_name))),
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: 40,
+                height: 40,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(
+                  color: Color(int.parse('0xFF$color_name')),
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
             Expanded(flex: 1, child: Center(child: Text(qty))),
             Expanded(flex: 1, child: Center(child: Text("₪$price"))),
             Expanded(flex: 1, child: Center(child: Text("₪$total"))),

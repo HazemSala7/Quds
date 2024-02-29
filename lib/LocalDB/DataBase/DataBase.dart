@@ -55,6 +55,8 @@ class CartDatabaseHelper {
         notes TEXT NOT NULL,
         name TEXT NOT NULL,
         image TEXT NOT NULL,
+        color TEXT NOT NULL,
+        colorsNames TEXT NOT NULL,
         price REAL NOT NULL,
         quantity INTEGER NOT NULL,
         ponus1 INTEGER NOT NULL,

@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import '../../edit_product/edit_product.dart';
 
 class OrderCard extends StatefulWidget {
-  final image, name, total, notes, product_id;
+  final image, name, total, notes, product_id, color;
   Function removeProduct;
   Function editProduct;
   int id;
@@ -22,6 +22,7 @@ class OrderCard extends StatefulWidget {
       this.image,
       required this.qty,
       required this.product_id,
+      required this.color,
       required this.notes,
       required this.id,
       required this.invoice_id,
@@ -229,6 +230,40 @@ class _OrderCardState extends State<OrderCard> {
                                     fontWeight: FontWeight.bold, fontSize: 14),
                               ),
                             ],
+                          ),
+                          Visibility(
+                            visible: widget.color == null ||
+                                    widget.color.toString() == ""
+                                ? false
+                                : true,
+                            child: Row(
+                              children: [
+                                Text(
+                                  "اللون :",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 20,
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: BoxDecoration(
+                                    color: Color(int.parse(
+                                        '0xFF${widget.color}')), // Convert color code to Color object
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 2.0,
+                                    ),
+
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Row(
                             children: [

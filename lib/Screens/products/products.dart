@@ -90,8 +90,14 @@ class _ProductsState extends State<Products> {
                               itemCount: _posts != null ? _posts.length : 0,
                               itemBuilder: (_, int index) {
                                 return ProductCard(
+                                  packingNumber:
+                                      _posts[index]['Package_num'] ?? "",
+                                  packingPrice:
+                                      _posts[index]['Package_price'] ?? "",
                                   customer_id: widget.id.toString(),
                                   price: _posts[index]['price'] ?? "-",
+                                  product_colors:
+                                      _posts[index]['product_colors'] ?? [],
                                   name: _posts[index]['p_name'] ?? "-",
                                   desc: _posts[index]['description'] ?? "-",
                                   id: _posts[index]['id'],

@@ -33,7 +33,10 @@ class _CatchesState extends State<Catches> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "سندات القبض",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: SingleChildScrollView(
           child: Column(
             children: [

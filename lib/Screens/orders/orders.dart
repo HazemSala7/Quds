@@ -29,17 +29,13 @@ class _OrdersState extends State<Orders> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "الطلبيات",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: SingleChildScrollView(
             child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text(
-                "الطلبيات",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(right: 25, left: 25, top: 25),
               child: Row(

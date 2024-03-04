@@ -24,13 +24,19 @@ class CcustomerDetailsCardState extends State<CustomerDetailsCard> {
         widget.navi();
       },
       child: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 7,
-            blurRadius: 5,
-          ),
-        ], color: Main_Color, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 7,
+                blurRadius: 5,
+              ),
+            ],
+            gradient: LinearGradient(colors: [
+              Color.fromRGBO(83, 89, 219, 1),
+              Color.fromRGBO(32, 39, 160, 0.6),
+            ]),
+            borderRadius: BorderRadius.circular(10)),
         height: 100,
         width: 170,
         child: Padding(

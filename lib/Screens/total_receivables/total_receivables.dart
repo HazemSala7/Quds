@@ -27,17 +27,13 @@ class _TotalReceivablesState extends State<TotalReceivables> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "مجمل الذمم",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  "مجمل الذمم",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(right: 15, left: 15, top: 35),
                 child: Row(

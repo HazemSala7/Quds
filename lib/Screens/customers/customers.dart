@@ -92,7 +92,10 @@ class _CustomersState extends State<Customers> {
                         flex: 2,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Main_Color,
+                              gradient: LinearGradient(colors: [
+                                Color.fromRGBO(83, 89, 219, 1),
+                                Color.fromRGBO(32, 39, 160, 0.6),
+                              ]),
                               border: Border.all(color: Colors.white)),
                           child: Center(
                             child: Text(
@@ -109,7 +112,10 @@ class _CustomersState extends State<Customers> {
                         flex: 4,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Main_Color,
+                              gradient: LinearGradient(colors: [
+                                Color.fromRGBO(83, 89, 219, 1),
+                                Color.fromRGBO(32, 39, 160, 0.6),
+                              ]),
                               border: Border.all(color: Colors.white)),
                           child: Center(
                             child: Text(
@@ -126,7 +132,10 @@ class _CustomersState extends State<Customers> {
                         flex: 4,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Main_Color,
+                              gradient: LinearGradient(colors: [
+                                Color.fromRGBO(83, 89, 219, 1),
+                                Color.fromRGBO(32, 39, 160, 0.6),
+                              ]),
                               border: Border.all(color: Colors.white)),
                           child: Center(
                             child: Text(

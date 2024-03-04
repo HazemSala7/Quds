@@ -28,17 +28,13 @@ class _CategoriesState extends State<Categories> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "الأقسام الرئيسية",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  "الأقسام",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
                 child: FutureBuilder(

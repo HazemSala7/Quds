@@ -28,7 +28,10 @@ class _OrdersDetailsState extends State<OrdersDetails> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "تفاصيل الطلبية",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: SingleChildScrollView(
             child: Column(
           children: [

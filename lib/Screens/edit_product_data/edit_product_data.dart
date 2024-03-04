@@ -78,19 +78,14 @@ class _EditProductDataState extends State<EditProductData> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "تعديل صنف",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
             child: Container(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "تعديل صنف",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),

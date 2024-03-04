@@ -53,7 +53,10 @@ class _SettingsState extends State<Settings> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "الاعدادات",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
               child: Column(
             children: [

@@ -83,7 +83,10 @@ class _AddProductState extends State<AddProduct> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "اضافة صنف الى الطلبية",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
             child: Container(
               child: Column(

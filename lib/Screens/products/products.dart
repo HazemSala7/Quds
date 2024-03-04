@@ -53,7 +53,10 @@ class _ProductsState extends State<Products> {
             key: _scaffoldState,
             drawer: DrawerMain(),
             appBar: PreferredSize(
-                child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+                child: AppBarBack(
+                  title: "المنتجات",
+                ),
+                preferredSize: Size.fromHeight(50)),
             body: _isFirstLoadRunning
                 ? SingleChildScrollView(
                     child: Column(
@@ -175,8 +178,12 @@ class _ProductsState extends State<Products> {
                           ),
                         ),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Main_Color),
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: LinearGradient(colors: [
+                            Color.fromRGBO(83, 89, 219, 1),
+                            Color.fromRGBO(32, 39, 160, 0.6),
+                          ]),
+                        ),
                       ),
                     ),
                   ],

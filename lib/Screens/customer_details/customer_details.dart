@@ -233,7 +233,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "برنامج القدس للمحاسبة",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
             child: SingleChildScrollView(
@@ -293,7 +296,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                               width: 100,
                               height: 50,
                               decoration: BoxDecoration(
-                                  color: Main_Color,
+                                  gradient: LinearGradient(colors: [
+                                    Color.fromRGBO(83, 89, 219, 1),
+                                    Color.fromRGBO(32, 39, 160, 0.6),
+                                  ]),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Center(
                                 child: Text("بحث",
@@ -345,8 +351,12 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                     ),
                                   ),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Main_Color),
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
+                                  ),
                                 ),
                               ),
                             ),
@@ -384,8 +394,12 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                     ),
                                   ),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Main_Color),
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
+                                  ),
                                 ),
                               ),
                             ),

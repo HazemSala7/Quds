@@ -48,19 +48,14 @@ class _AddOrderState extends State<AddOrder> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "اضافة طلبية",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
             child: Container(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "اضافه فاتوره",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),

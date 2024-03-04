@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../Screens/money_movements/money_movements.dart';
 import '../../Screens/orders/orders.dart';
 import '../../Screens/settings/settings.dart';
 import '../../Screens/total_receivables/total_receivables.dart';
@@ -57,6 +58,18 @@ class _DrawerMainState extends State<DrawerMain> {
               child: Container(
                   width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
             ),
+          ),
+          DrawerCard(
+              navi: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MoneyMovement()));
+              },
+              name: "مجمل الحركات",
+              myicon: Icon(Icons.move_up)),
+          Padding(
+            padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
+            child: Container(
+                width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
           ),
           Visibility(
             visible: JUST,

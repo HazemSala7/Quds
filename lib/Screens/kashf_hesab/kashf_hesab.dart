@@ -734,7 +734,10 @@ class _KashfHesabState extends State<KashfHesab> {
         key: _scaffoldState,
         drawer: DrawerMain(),
         appBar: PreferredSize(
-            child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+            child: AppBarBack(
+              title: "كشف حساب",
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: _isFirstLoadRunning
             ? Container(
                 width: double.infinity,
@@ -1204,7 +1207,7 @@ class _KashfHesabState extends State<KashfHesab> {
   }
 
   // At the beginning, we fetch the first 20 posts
-  int _page = 0;
+  int _page = 1;
   // you can change this value to fetch more or less posts per page (10, 15, 5, etc)
   final int _limit = 20;
 

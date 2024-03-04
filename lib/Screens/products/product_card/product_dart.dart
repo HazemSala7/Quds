@@ -246,7 +246,10 @@ class _ProductCardState extends State<ProductCard> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Main_Color,
+                        gradient: LinearGradient(colors: [
+                          Color.fromRGBO(83, 89, 219, 1),
+                          Color.fromRGBO(32, 39, 160, 0.6),
+                        ]),
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(10),
                             bottomRight: Radius.circular(10))),

@@ -84,7 +84,10 @@ class _EditProductState extends State<EditProduct> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "تعديل صنف",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
             child: Container(
               child: Column(

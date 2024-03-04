@@ -41,19 +41,14 @@ class _AddSarfState extends State<AddSarf> {
           key: _scaffoldState,
           drawer: DrawerMain(),
           appBar: PreferredSize(
-              child: AppBarBack(), preferredSize: Size.fromHeight(50)),
+              child: AppBarBack(
+                title: "اضافه سند صرف",
+              ),
+              preferredSize: Size.fromHeight(50)),
           body: SingleChildScrollView(
             child: Container(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "اضافه سند صرف",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),

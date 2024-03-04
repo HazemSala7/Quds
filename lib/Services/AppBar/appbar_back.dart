@@ -3,7 +3,8 @@ import 'package:flutter_application_1/Server/server.dart';
 import 'package:flutter_application_1/main.dart';
 
 class AppBarBack extends StatefulWidget {
-  const AppBarBack({Key? key}) : super(key: key);
+  final title;
+  const AppBarBack({Key? key, required this.title}) : super(key: key);
 
   @override
   State<AppBarBack> createState() => _AppBarBackState();
@@ -13,9 +14,15 @@ class _AppBarBackState extends State<AppBarBack> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Main_Color,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Color.fromRGBO(83, 89, 219, 1),
+          Color.fromRGBO(32, 39, 160, 0.6),
+        ])),
+      ),
       title: Text(
-        'برنامج القدس للمحاسبة',
+        widget.title,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
       ),
       elevation: 0,

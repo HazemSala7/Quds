@@ -7,6 +7,7 @@ import '../Models/CartModel.dart';
 
 class CartDatabaseHelper {
   static final CartDatabaseHelper _instance = CartDatabaseHelper._internal();
+  static final int dbVersion = 2;
 
   factory CartDatabaseHelper() => _instance;
 
@@ -42,12 +43,18 @@ class CartDatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: dbVersion,
+      onUpgrade: _onUpgrade,
       onCreate: _createDb,
     );
   }
 
-  void _createDb(Database db, int version) async {
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    await db.execute('DROP TABLE IF EXISTS cart');
+    await _createDb(db, dbVersion);
+  }
+
+  Future<void> _createDb(Database db, int version) async {
     await db.execute('''
       CREATE TABLE cart (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

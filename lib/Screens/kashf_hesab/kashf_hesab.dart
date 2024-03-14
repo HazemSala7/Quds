@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:intl/intl.dart';
@@ -833,7 +834,7 @@ class _KashfHesabState extends State<KashfHesab> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(right: 25, left: 25, top: 25),
+                        const EdgeInsets.only(right: 25, left: 25, top: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -900,7 +901,7 @@ class _KashfHesabState extends State<KashfHesab> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 40),
+                    padding: const EdgeInsets.only(top: 20),
                     child: Container(
                       height: 40,
                       child: Padding(
@@ -914,7 +915,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 2,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -932,7 +936,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 1,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -950,7 +957,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 1,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -968,7 +978,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 2,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -986,7 +999,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 2,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -1004,7 +1020,10 @@ class _KashfHesabState extends State<KashfHesab> {
                               flex: 1,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Main_Color,
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
                                     border:
                                         Border.all(color: Color(0xffD6D3D3))),
                                 child: Center(
@@ -1061,16 +1080,6 @@ class _KashfHesabState extends State<KashfHesab> {
                       padding: EdgeInsets.only(top: 10, bottom: 40),
                       child: Center(
                         child: CircularProgressIndicator(),
-                      ),
-                    ),
-
-                  // When nothing else to load
-                  if (_hasNextPage == false)
-                    Container(
-                      padding: const EdgeInsets.only(top: 30, bottom: 40),
-                      color: Main_Color,
-                      child: const Center(
-                        child: Text('You have fetched all of the products'),
                       ),
                     ),
                 ],
@@ -1311,10 +1320,13 @@ class _KashfHesabState extends State<KashfHesab> {
           for (int i = 0; i < array_lah.length; i++) {
             total_lah = total_lah + double.parse(array_lah[i].toString());
           }
-          var lastBalance =
+          var lastBalanceASC =
               listPDFAll.isNotEmpty ? listPDFAll.last['balance'] : null;
+          var lastBalanceDESC =
+              listPDFAll.isNotEmpty ? listPDFAll.first['balance'] : null;
 
-          LastBalanceValue = lastBalance;
+          LastBalanceValue =
+              order_kashf_from_new_to_old ? lastBalanceDESC : lastBalanceASC;
         });
       } else {
         var url =
@@ -1496,10 +1508,9 @@ class _KashfHesabState extends State<KashfHesab> {
             listPDF.addAll(uniqueFetchedPosts);
           });
         } else {
-          // This means there is no more data
-          // and therefore, we will not send another GET request
-          setState(() {
-            _hasNextPage = false;
+          Fluttertoast.showToast(msg: "نهاية الكشف");
+          Timer(Duration(milliseconds: 300), () {
+            Fluttertoast.cancel();
           });
         }
       } catch (err) {

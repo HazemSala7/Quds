@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:intl/intl.dart';
@@ -429,16 +430,6 @@ class _MoneyMovementState extends State<MoneyMovement> {
                         child: CircularProgressIndicator(),
                       ),
                     ),
-
-                  // When nothing else to load
-                  if (_hasNextPage == false)
-                    Container(
-                      padding: const EdgeInsets.only(top: 30, bottom: 40),
-                      color: Main_Color,
-                      child: const Center(
-                        child: Text('You have fetched all of the products'),
-                      ),
-                    ),
                 ],
               ),
       )),
@@ -566,10 +557,9 @@ class _MoneyMovementState extends State<MoneyMovement> {
             listPDF.addAll(uniqueFetchedPosts);
           });
         } else {
-          // This means there is no more data
-          // and therefore, we will not send another GET request
-          setState(() {
-            _hasNextPage = false;
+          Fluttertoast.showToast(msg: "نهاية الحركات");
+          Timer(Duration(milliseconds: 300), () {
+            Fluttertoast.cancel();
           });
         }
       } catch (err) {

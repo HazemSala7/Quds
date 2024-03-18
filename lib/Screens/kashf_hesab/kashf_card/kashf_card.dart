@@ -214,6 +214,19 @@ class _KashfCardState extends State<KashfCard> {
                         flex: 1,
                         child: Container(
                           decoration: BoxDecoration(
+                              color: Color(0xffF8F8F8),
+                              border: Border.all(color: Color(0xffD6D3D3))),
+                          child: Center(
+                              child: Text(
+                            "بونص 1",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: Main_Color),
+                          )),
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
                               border: Border.all(color: Color(0xffD6D3D3))),
                           child: Center(
                               child: Text(
@@ -243,6 +256,7 @@ class _KashfCardState extends State<KashfCard> {
                   product_name: widget.actions[index]['product_name'] ?? "-",
                   // Customers[index]['product']["p_name"] ?? "-",
                   product_id: widget.actions[index]['product_id'] ?? "-",
+                  ponus1ini: widget.actions[index]['bonus1'].toString(),
                   qty: widget.actions[index]['p_quantity'] ?? "-",
                   price: widget.actions[index]['p_price'] ?? "-",
                   total: widget.actions[index]['total'] ?? "-",
@@ -255,28 +269,11 @@ class _KashfCardState extends State<KashfCard> {
     );
   }
 
-  getKashf() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'ContentType': 'application/json'
-    };
-    var url =
-        'https://aliexpress.ps/quds_laravel/api/getkashfs/${widget.action_id.toString()}/$company_id/$salesman_id/2';
-    print("|");
-    print(url);
-    var response = await http.get(Uri.parse(url), headers: headers);
-    var res = jsonDecode(response.body);
-    return res;
-  }
-
   Widget order_card(
       {String product_id = "",
       String product_name = "",
       String name = "",
+      String ponus1ini = "",
       String qty = "",
       String price = "",
       String total = ""}) {
@@ -334,6 +331,19 @@ class _KashfCardState extends State<KashfCard> {
                   child: Center(
                       child: Text(
                     "₪$price",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Main_Color),
+                  )),
+                )),
+            Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffF8F8F8),
+                      border: Border.all(color: Color(0xffD6D3D3))),
+                  child: Center(
+                      child: Text(
+                    "$ponus1ini",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Main_Color),
                   )),

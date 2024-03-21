@@ -118,11 +118,17 @@ class _AddOrderState extends State<AddOrder> {
                         controller: DiscountController,
                         obscureText: false,
                         onChanged: (_) {
-                          setState(() {
-                            var tot = double.parse(valueController.text) -
-                                double.parse(DiscountController.text);
-                            valueController.text = tot.toString();
-                          });
+                          if (DiscountController.text == "") {
+                            setState(() {
+                              valueafterController.text = valueController.text;
+                            });
+                          } else {
+                            setState(() {
+                              var tot = double.parse(valueController.text) -
+                                  double.parse(DiscountController.text);
+                              valueafterController.text = tot.toString();
+                            });
+                          }
                         },
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
@@ -134,6 +140,43 @@ class _AddOrderState extends State<AddOrder> {
                                 width: 2.0, color: Color(0xffD6D3D3)),
                           ),
                           hintText: "الخصم",
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 15, left: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "المجموع بعد الخصم",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+                    child: Container(
+                      height: 50,
+                      width: double.infinity,
+                      child: TextField(
+                        controller: valueafterController,
+                        obscureText: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(0xff34568B), width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Color(0xffD6D3D3)),
+                          ),
+                          hintText: "المجموع بعد الخصم",
                         ),
                       ),
                     ),
@@ -436,6 +479,7 @@ class _AddOrderState extends State<AddOrder> {
 
   TextEditingController DiscountController = TextEditingController();
   TextEditingController valueController = TextEditingController();
+  TextEditingController valueafterController = TextEditingController();
   TextEditingController NotesController = TextEditingController();
   send(pdf) async {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
@@ -504,7 +548,7 @@ class _AddOrderState extends State<AddOrder> {
       request.fields['notes[$i]'] = notesArray[i].toString();
     }
     request.fields['f_date'] = actualDate.toString();
-    request.fields['f_value'] = valueController.text;
+    request.fields['f_value'] = valueafterController.text;
     request.fields['customer_id'] = widget.id.toString();
     request.fields['company_id'] = company_id.toString();
     request.fields['salesman_id'] = salesman_id.toString();

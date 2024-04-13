@@ -533,14 +533,21 @@ class _AddProductState extends State<AddProduct> {
                       width: double.infinity,
                       child: TextField(
                         onChanged: (hazem) {
-                          setState(() {
-                            var init_total = double.parse(qty.text) *
-                                double.parse(priceController.text) *
-                                (1 -
-                                    (double.parse(discountContrller.text) /
-                                        100));
-                            totalController.text = init_total.toString();
-                          });
+                          if (widget.productColors.length == 0) {
+                            setState(() {
+                              var init_total = double.parse(qty.text) *
+                                  double.parse(priceController.text) *
+                                  (1 -
+                                      (double.parse(discountContrller.text) /
+                                          100));
+                              totalController.text = init_total.toString();
+                            });
+                          } else {
+                            setState(() {
+                              totalController.text =
+                                  calculateTotal().toString();
+                            });
+                          }
                         },
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
@@ -760,6 +767,17 @@ class _AddProductState extends State<AddProduct> {
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
                                         controller: _countController,
+                                        onChanged: (_) {
+                                          colorData['quantity'] =
+                                              int.parse(_.toString());
+                                          quantity = int.parse(_.toString());
+                                          int newQuantity = int.tryParse(
+                                                  quantity.toString()) ??
+                                              0;
+                                          updateProductColorQuantity(
+                                              index, newQuantity);
+                                          setState(() {});
+                                        },
                                         onSubmitted: (_) {
                                           colorData['quantity'] =
                                               int.parse(_.toString());

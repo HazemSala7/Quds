@@ -66,7 +66,9 @@ class _CatchCardState extends State<CatchCard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CustomerDetails()));
+                                builder: (context) => CustomerDetails(
+                                      balance: widget.balance,
+                                    )));
                       },
                       child: Text(
                         widget.phone,

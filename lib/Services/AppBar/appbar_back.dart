@@ -30,9 +30,6 @@ class _AppBarBackState extends State<AppBarBack> {
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
-          setState(() {
-            scanBarcode = '';
-          });
         },
         icon: Icon(Icons.arrow_back),
         iconSize: 25,

@@ -93,7 +93,14 @@ class _AddProductState extends State<AddProduct> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.network(widget.image, height: 100)),
+                      child: Image.network(widget.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
+                                "assets/quds_logo.jpeg",
+                                fit: BoxFit.cover,
+                              ),
+                          height: 200)),
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20, right: 15, left: 15),
@@ -700,6 +707,9 @@ class _AddProductState extends State<AddProduct> {
                         bool isSelected = selectedColor == colorCode;
 
                         int quantity = colorData['quantity'] ?? 0;
+                        TextEditingController _countController =
+                            TextEditingController();
+                        _countController.text = quantity.toString();
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -722,7 +732,7 @@ class _AddProductState extends State<AddProduct> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                'Color: $colorCode', // Display color code
+                                'Color: $colorCode',
                                 style: TextStyle(fontSize: 16),
                               ),
                               Spacer(),
@@ -735,13 +745,32 @@ class _AddProductState extends State<AddProduct> {
                                         if (quantity > 0) {
                                           quantity--;
                                           colorData['quantity'] = quantity;
+                                          int newQuantity = int.tryParse(
+                                                  quantity.toString()) ??
+                                              0;
+                                          updateProductColorQuantity(
+                                              index, newQuantity);
                                         }
                                       });
                                     },
                                   ),
-                                  Text(
-                                    quantity.toString(),
-                                    style: TextStyle(fontSize: 16),
+                                  SizedBox(
+                                    width: 40,
+                                    child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        controller: _countController,
+                                        onSubmitted: (_) {
+                                          colorData['quantity'] =
+                                              int.parse(_.toString());
+                                          quantity = int.parse(_.toString());
+                                          int newQuantity = int.tryParse(
+                                                  quantity.toString()) ??
+                                              0;
+                                          updateProductColorQuantity(
+                                              index, newQuantity);
+                                          setState(() {});
+                                        }),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.add),
@@ -749,6 +778,11 @@ class _AddProductState extends State<AddProduct> {
                                       setState(() {
                                         quantity++;
                                         colorData['quantity'] = quantity;
+                                        int newQuantity =
+                                            int.tryParse(quantity.toString()) ??
+                                                0;
+                                        updateProductColorQuantity(
+                                            index, newQuantity);
                                       });
                                     },
                                   ),
@@ -858,5 +892,22 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
     );
+  }
+
+  double calculateTotal() {
+    double totalPrice = 0.0;
+    for (var colorData in widget.productColors) {
+      int quantity = colorData['quantity'] ?? 0;
+      double colorPrice = quantity * double.parse(priceController.text);
+      totalPrice += colorPrice;
+    }
+    return totalPrice;
+  }
+
+  void updateProductColorQuantity(int index, int newQuantity) {
+    setState(() {
+      widget.productColors[index]['quantity'] = newQuantity;
+      totalController.text = calculateTotal().toString();
+    });
   }
 }

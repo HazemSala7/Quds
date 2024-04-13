@@ -212,6 +212,150 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
             ),
             Padding(
+              padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "رقم الشركه الثاني",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: TextField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  controller: companyID2Controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff34568B), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                    ),
+                    hintText: "رقم الشركه الثاني",
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "رقم المندوب الثاني",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: TextField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  controller: salesmanID2Controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff34568B), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                    ),
+                    hintText: "رقم المندوب الثاني",
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "رقم الشركة الثالث",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: TextField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  controller: companyID3Controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff34568B), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                    ),
+                    hintText: "رقم الشركة الثالث",
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "رقم المندوب الثالث",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: TextField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  controller: salesmanID3Controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff34568B), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 2.0, color: Color(0xffD6D3D3)),
+                    ),
+                    hintText: "رقم المندوب الثالث",
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(top: 25, right: 15, left: 15),
               child: Container(
                 width: double.infinity,
@@ -315,7 +459,11 @@ class _AdminScreenState extends State<AdminScreen> {
   TextEditingController repasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController companyIDController = TextEditingController();
+  TextEditingController companyID2Controller = TextEditingController();
+  TextEditingController companyID3Controller = TextEditingController();
   TextEditingController salesmanIDController = TextEditingController();
+  TextEditingController salesmanID2Controller = TextEditingController();
+  TextEditingController salesmanID3Controller = TextEditingController();
 
   send() async {
     if (companyIDController.text == '' ||
@@ -365,6 +513,40 @@ class _AdminScreenState extends State<AdminScreen> {
         },
       );
     } else {
+      String companyId = companyIDController.text;
+      String companyId2 = companyID2Controller.text;
+      String companyId3 = companyID3Controller.text;
+      Map<String, dynamic> requestData = {
+        'company_id': companyId,
+        'company_id_2': companyId2,
+        'company_id_3': companyId3,
+      };
+      if (companyId.isNotEmpty ||
+          companyId2.isNotEmpty ||
+          companyId3.isNotEmpty) {
+        // Add 'companies_length' if at least one company field is non-empty
+        requestData['companies_length'] = [companyId, companyId2, companyId3]
+            .where((element) => element.isNotEmpty)
+            .length
+            .toString();
+      }
+      String salesManID = salesmanIDController.text;
+      String salesManID2 = salesmanID2Controller.text;
+      String salesManID3 = salesmanID3Controller.text;
+      Map<String, dynamic> requestDataSalesMaxIDs = {
+        'salesman_id': salesManID,
+        'salesman_id_2': salesManID2,
+        'salesman_id_3': salesManID3,
+      };
+      if (salesManID.isNotEmpty ||
+          salesManID2.isNotEmpty ||
+          salesManID3.isNotEmpty) {
+        requestDataSalesMaxIDs['salesman_ids_length'] = [
+          salesManID,
+          salesManID2,
+          salesManID3
+        ].where((element) => element.isNotEmpty).length.toString();
+      }
       String? deviceId = await _getId();
       var url = 'https://aliexpress.ps/quds_laravel/api/register';
       var headers = {"Accept": "application/json"};
@@ -375,6 +557,13 @@ class _AdminScreenState extends State<AdminScreen> {
             'name': nameController.text,
             'just': orders ? "yes" : "no",
             'company_id': companyIDController.text,
+            'company_id_2': companyID2Controller.text,
+            'company_id_3': companyID3Controller.text,
+            'companies_length': requestData["companies_length"],
+            'salesman_id_2': salesmanID2Controller.text,
+            'salesman_id_3': salesmanID3Controller.text,
+            'salesman_ids_length':
+                requestDataSalesMaxIDs["salesman_ids_length"],
             'salesman_id': salesmanIDController.text,
           },
           headers: headers);
@@ -385,7 +574,7 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "تم اضافه المستخدم بنجاح");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      } else if (data['message'] == 'The given data was invalid.') {
+      } else if (response.statusCode != 200) {
         editUser();
       } else {
         Navigator.of(context, rootNavigator: true).pop();
@@ -401,7 +590,41 @@ class _AdminScreenState extends State<AdminScreen> {
     final response = await http.post(Uri.parse(url), headers: headers);
 
     var data = jsonDecode(response.body);
-    if (data['status'] == 'true') {
+    if (response.statusCode == 200) {
+      String companyId = companyIDController.text;
+      String companyId2 = companyID2Controller.text;
+      String companyId3 = companyID3Controller.text;
+      Map<String, dynamic> requestData = {
+        'company_id': companyId,
+        'company_id_2': companyId2,
+        'company_id_3': companyId3,
+      };
+      if (companyId.isNotEmpty ||
+          companyId2.isNotEmpty ||
+          companyId3.isNotEmpty) {
+        // Add 'companies_length' if at least one company field is non-empty
+        requestData['companies_length'] = [companyId, companyId2, companyId3]
+            .where((element) => element.isNotEmpty)
+            .length
+            .toString();
+      }
+      String salesManID = salesmanIDController.text;
+      String salesManID2 = salesmanID2Controller.text;
+      String salesManID3 = salesmanID3Controller.text;
+      Map<String, dynamic> requestDataSalesMaxIDs = {
+        'salesman_id': salesManID,
+        'salesman_id_2': salesManID2,
+        'salesman_id_3': salesManID3,
+      };
+      if (salesManID.isNotEmpty ||
+          salesManID2.isNotEmpty ||
+          salesManID3.isNotEmpty) {
+        requestDataSalesMaxIDs['salesman_ids_length'] = [
+          salesManID,
+          salesManID2,
+          salesManID3
+        ].where((element) => element.isNotEmpty).length.toString();
+      }
       Navigator.of(context, rootNavigator: true).pop();
 
       var url = 'https://aliexpress.ps/quds_laravel/api/register';
@@ -413,6 +636,13 @@ class _AdminScreenState extends State<AdminScreen> {
             'name': nameController.text,
             'just': orders ? "yes" : "no",
             'company_id': companyIDController.text,
+            'company_id_2': companyID2Controller.text,
+            'company_id_3': companyID3Controller.text,
+            'companies_length': requestData['companies_length'],
+            'salesman_id_2': salesmanID2Controller.text,
+            'salesman_id_3': salesmanID3Controller.text,
+            'salesman_ids_length':
+                requestDataSalesMaxIDs["salesman_ids_length"],
             'salesman_id': salesmanIDController.text,
           },
           headers: headers);

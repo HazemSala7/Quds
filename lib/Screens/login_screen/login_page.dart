@@ -110,8 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String token = data["data"]['access_token'] ?? "";
         int id = data["data"]['id'] ?? 0;
+        int companies_length = data["data"]['companies_length'] ?? 1;
         String company_id = data["data"]['company_id'] ?? "0";
         String salesman_id = data["data"]['salesman_id'] ?? "0";
+        String salesman_id2 = data["data"]['salesman_id_2'].toString();
+        String salesman_id3 = data["data"]['salesman_id_3'].toString();
         String just = data["data"]['just'] ?? "no";
         if (just == "no") {
           setState(() {
@@ -124,29 +127,157 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         await prefs.setString('access_token', token);
         await prefs.setInt('id', id);
-        await prefs.setInt('company_id', int.parse(company_id));
-        await prefs.setInt('salesman_id', int.parse(salesman_id));
+
         await prefs.setString('password', passwordController.text);
         await prefs.setString('just', just);
         await prefs.setBool('login', true);
-        var headers = {'ContentType': 'application/json'};
-        var url =
-            'https://aliexpress.ps/quds_laravel/api/customers/$company_id/$salesman_id';
-        var response = await http.get(Uri.parse(url), headers: headers);
-        var res = jsonDecode(response.body)['customers'];
-        Navigator.of(context, rootNavigator: true).pop();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => Customers(
-              CustomersArray: res,
+
+        if (companies_length == 1) {
+          await prefs.setInt('company_id', int.parse(company_id.toString()));
+          await prefs.setInt('salesman_id', int.parse(salesman_id.toString()));
+          var headers = {'ContentType': 'application/json'};
+          var url =
+              'https://aliexpress.ps/quds_laravel/api/customers/$company_id/$salesman_id';
+          var response = await http.get(Uri.parse(url), headers: headers);
+          var res = jsonDecode(response.body)['customers'];
+          Navigator.of(context, rootNavigator: true).pop();
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => Customers(
+                CustomersArray: res,
+              ),
             ),
-          ),
-          (route) => false,
-        );
-        Fluttertoast.showToast(
-          msg: 'تم تسجيل الدخول بنجاح',
-        );
+            (route) => false,
+          );
+          Fluttertoast.showToast(
+            msg: 'تم تسجيل الدخول بنجاح',
+          );
+        } else {
+          var Companies = [];
+          if (companies_length == 2) {
+            Companies.add(company_id);
+            Companies.add(data["data"]['company_id_2'].toString());
+          } else if (companies_length == 3) {
+            Companies.add(company_id);
+            Companies.add(data["data"]['company_id_2'].toString());
+            Companies.add(data["data"]['company_id_3'].toString());
+          }
+          Navigator.of(context, rootNavigator: true).pop();
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 200,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "الرجاء اختر رقم الشركة",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 35, left: 35),
+                      child: ListView.builder(
+                        itemCount: Companies.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())),
+                                    );
+                                  },
+                                );
+                                await Future.delayed(
+                                    Duration(milliseconds: 300));
+                                await prefs.setInt('company_id',
+                                    int.parse(Companies[index].toString()));
+                                await prefs.setInt(
+                                    'salesman_id',
+                                    int.parse(index == 0
+                                        ? salesman_id
+                                        : index == 1
+                                            ? salesman_id2
+                                            : salesman_id3));
+                                var headers = {
+                                  'ContentType': 'application/json'
+                                };
+                                var url =
+                                    'https://aliexpress.ps/quds_laravel/api/customers/${Companies[index].toString()}/${index == 0 ? salesman_id : index == 1 ? salesman_id2 : salesman_id3}';
+                                var response = await http.get(Uri.parse(url),
+                                    headers: headers);
+                                var res =
+                                    jsonDecode(response.body)['customers'];
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        Customers(
+                                      CustomersArray: res,
+                                    ),
+                                  ),
+                                  (route) => false,
+                                );
+                                Fluttertoast.showToast(
+                                  msg: 'تم تسجيل الدخول بنجاح',
+                                );
+                              },
+                              child: Container(
+                                width: 150,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Color.fromRGBO(83, 89, 219, 1),
+                                    Color.fromRGBO(32, 39, 160, 0.6),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    Companies[index],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
       } else if (data['message'] == 'Invalid login details') {
         Navigator.of(context, rootNavigator: true).pop();
         showDialog(

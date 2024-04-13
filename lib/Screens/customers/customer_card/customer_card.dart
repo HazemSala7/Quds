@@ -5,12 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../customer_details/customer_details.dart';
 
 class CustomerCard extends StatefulWidget {
-  final name, phone, price_code, id;
+  final name, phone, price_code, id, balance;
   int index;
   CustomerCard(
       {Key? key,
       required this.id,
       required this.index,
+      required this.balance,
       this.name,
       this.price_code,
       this.phone})
@@ -31,6 +32,7 @@ class _CustomerCardState extends State<CustomerCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => CustomerDetails(
+                      balance: widget.balance,
                       id: widget.id,
                       name: widget.name,
                     )));

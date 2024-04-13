@@ -95,7 +95,9 @@ class _TotalCardState extends State<TotalCard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerDetails()));
+                              builder: (context) => CustomerDetails(
+                                    balance: widget.balance,
+                                  )));
                     },
                     child: Container(
                       decoration: BoxDecoration(

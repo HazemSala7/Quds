@@ -14,7 +14,6 @@ void main() async {
 Locale locale = Locale("ar", "AE");
 
 bool cur = false;
-String scanBarcode = '';
 
 class Quds extends StatefulWidget {
   const Quds({Key? key}) : super(key: key);

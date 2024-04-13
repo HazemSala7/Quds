@@ -19,8 +19,9 @@ import '../add_product/add_product.dart';
 import 'customer_details_card/customer_details_card.dart';
 
 class CustomerDetails extends StatefulWidget {
-  final id, name;
-  const CustomerDetails({Key? key, this.id, this.name}) : super(key: key);
+  final id, name, balance;
+  const CustomerDetails({Key? key, this.id, required this.balance, this.name})
+      : super(key: key);
 
   @override
   State<CustomerDetails> createState() => _CustomerDetailsState();
@@ -28,6 +29,7 @@ class CustomerDetails extends StatefulWidget {
 
 class _CustomerDetailsState extends State<CustomerDetails> {
   @override
+  String scanBarcode = '';
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   TextEditingController idController = TextEditingController();
   var Price_Code;
@@ -57,8 +59,6 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     } on PlatformException {
       barcodeScanRes = '';
     }
-    print("barcodeScanRes");
-    print(barcodeScanRes);
     return barcodeScanRes;
   }
 
@@ -114,13 +114,9 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     String? code_price = prefs.getString('price_code');
     var url =
         'http://aliexpress.ps/quds_laravel/api/get_specefic_product/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id}/${code_price}';
-    print("url");
-    print(url);
-
     var response = await http.get(Uri.parse(url));
     try {
       var res = jsonDecode(response.body)["products"][0];
-
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.push(
           context,
@@ -129,6 +125,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                     packingNumber: "",
                     packingPrice: "",
                     id: res["id"],
+                    desc: res["description"] ?? "",
                     productColors: [],
                     name: res["p_name"],
                     customer_id: widget.name.toString(),
@@ -161,52 +158,59 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   }
 
   search_bar() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    var url =
-        'http://aliexpress.ps/quds_laravel/api/search_products_barcode/${company_id.toString()}/${scanBarcode.toString()}';
-    var response = await http.get(Uri.parse(url));
-    var res = jsonDecode(response.body)["prodcuts"][0];
-    if (res.length == 0) {
-      Navigator.of(context, rootNavigator: true).pop();
-      Fluttertoast.showToast(msg: "لديك خطأ ما");
-    } else {
-      var price = "0";
-      var prices = res['product'];
-      pr = await setPriceBarcode(scanBarcode.toString());
-
-      if (pr.toString() == "0") {
-        if (prices.length == 0) {
-          // return static price
-          price = "0";
-        } else if (prices.length == 1) {
-          price = prices[0]["price"];
-        } else {
-          var _price = prices.firstWhere((e) => e["price_code"] == Price_Code,
-              orElse: () => "5");
-
-          price = _price == "5" ? "0" : _price["price"];
-        }
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? company_id = prefs.getInt('company_id');
+      var url =
+          'http://aliexpress.ps/quds_laravel/api/search_products_barcode/${company_id.toString()}/${scanBarcode.toString()}';
+      var response = await http.get(Uri.parse(url));
+      var res = jsonDecode(response.body)["prodcuts"][0];
+      if (res.length == 0) {
+        Navigator.of(context, rootNavigator: true).pop();
+        Fluttertoast.showToast(msg: "لديك خطأ ما");
       } else {
-        price = pr;
+        var price = "0";
+        var prices = res['product'];
+        pr = await setPriceBarcode(scanBarcode.toString());
+
+        if (pr.toString() == "0") {
+          if (prices.length == 0) {
+            // return static price
+            price = "0";
+          } else if (prices.length == 1) {
+            price = prices[0]["price"];
+          } else {
+            var _price = prices.firstWhere((e) => e["price_code"] == Price_Code,
+                orElse: () => "5");
+
+            price = _price == "5" ? "0" : _price["price"];
+          }
+        } else {
+          price = pr;
+        }
+        Navigator.of(context, rootNavigator: true).pop();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddProduct(
+                      packingNumber: "",
+                      packingPrice: "",
+                      id: res["id"].toString(),
+                      desc: res["description"] ?? "",
+                      productColors: [],
+                      image: res["images"],
+                      name: res["p_name"],
+                      customer_id: widget.name.toString(),
+                      price: price,
+                      qty: res["quantity"].toString(),
+                    )));
+        setState(() {
+          scanBarcode = "111";
+        });
       }
-      Navigator.of(context, rootNavigator: true).pop();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AddProduct(
-                    packingNumber: "",
-                    packingPrice: "",
-                    id: res["id"],
-                    productColors: [],
-                    name: res["p_name"],
-                    customer_id: widget.name.toString(),
-                    price: price,
-                    qty: res["quantity"],
-                  )));
-      setState(() {
-        scanBarcode = "111";
-      });
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: "الرجاء اعادة المحاولة");
     }
   }
 
@@ -444,6 +448,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CatchReceipt(
+                                                  balance: widget.balance,
                                                   name: widget.name.toString(),
                                                   id: widget.id,
                                                 )));

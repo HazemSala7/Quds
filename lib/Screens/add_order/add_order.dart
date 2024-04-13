@@ -548,7 +548,9 @@ class _AddOrderState extends State<AddOrder> {
       request.fields['notes[$i]'] = notesArray[i].toString();
     }
     request.fields['f_date'] = actualDate.toString();
-    request.fields['f_value'] = valueafterController.text;
+    request.fields['f_value'] = valueafterController.text == ""
+        ? valueController.text
+        : valueafterController.text;
     request.fields['customer_id'] = widget.id.toString();
     request.fields['company_id'] = company_id.toString();
     request.fields['salesman_id'] = salesman_id.toString();

@@ -14,8 +14,9 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../Services/Drawer/drawer.dart';
 
 class CatchReceipt extends StatefulWidget {
-  final id, name;
-  const CatchReceipt({Key? key, this.id, this.name}) : super(key: key);
+  final id, name, balance;
+  const CatchReceipt({Key? key, this.id, required this.balance, this.name})
+      : super(key: key);
 
   @override
   State<CatchReceipt> createState() => _CatchReceiptState();
@@ -25,9 +26,9 @@ class _CatchReceiptState extends State<CatchReceipt> {
   @override
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   initval() {
-    print(widget.name.toString());
     setState(() {
       nameController.text = widget.name.toString();
+      balanceController.text = widget.balance.toString();
     });
   }
 
@@ -53,41 +54,101 @@ class _CatchReceiptState extends State<CatchReceipt> {
             child: Container(
               child: Column(
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, right: 15, left: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "أسم الزبون",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      child: TextField(
-                        controller: nameController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xff34568B), width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2.0, color: Color(0xffD6D3D3)),
-                          ),
-                          hintText: "أسم الزبون",
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, right: 15, left: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "أسم الزبون",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 15, left: 15, top: 5),
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                child: TextField(
+                                  controller: nameController,
+                                  obscureText: false,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xff34568B), width: 2.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 2.0, color: Color(0xffD6D3D3)),
+                                    ),
+                                    hintText: "أسم الزبون",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, right: 15, left: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "رصيد الزبون",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 15, left: 15, top: 5),
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                child: TextField(
+                                  controller: balanceController,
+                                  obscureText: false,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xff34568B), width: 2.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 2.0, color: Color(0xffD6D3D3)),
+                                    ),
+                                    hintText: "رصيد الزبون",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding:
@@ -1058,6 +1119,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
   TextEditingController TOTAL = TextEditingController();
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController balanceController = TextEditingController();
   TextEditingController CashController = TextEditingController();
   TextEditingController DiscountController = TextEditingController();
   TextEditingController ChksController = TextEditingController();

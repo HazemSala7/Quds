@@ -51,6 +51,7 @@ class _CustomersState extends State<Customers> {
                       });
                     } else {
                       setState(() {
+                        filteredCustomers = widget.CustomersArray;
                         filteredCustomers = filteredCustomers
                             .where((customer) =>
                                 customer['c_name']
@@ -163,6 +164,7 @@ class _CustomersState extends State<Customers> {
                   index: index,
                   id: filteredCustomers[index]['id'] ?? 0,
                   name: filteredCustomers[index]['c_name'] ?? "",
+                  balance: filteredCustomers[index]['c_balance'].toString(),
                   price_code: filteredCustomers[index]['price_code'] ?? "",
                   phone: filteredCustomers[index]['phone1'] ?? " - ",
                 );

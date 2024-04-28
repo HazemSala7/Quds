@@ -12,9 +12,11 @@ import '../../Services/Drawer/drawer.dart';
 
 class Customers extends StatefulWidget {
   List CustomersArray;
+  var companiesArray;
   Customers({
     Key? key,
     required this.CustomersArray,
+    this.companiesArray,
   }) : super(key: key);
 
   @override

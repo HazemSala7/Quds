@@ -26,15 +26,24 @@ class ProductView extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
+                padding: const EdgeInsets.only(top: 20, right: 20),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey),
+                    child: Center(
+                        child: Icon(
                       Icons.arrow_back_rounded,
                       color: Colors.white,
                     )),
+                  ),
+                ),
               )
             ],
           ),

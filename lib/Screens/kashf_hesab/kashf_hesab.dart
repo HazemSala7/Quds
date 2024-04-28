@@ -352,7 +352,7 @@ class _KashfHesabState extends State<KashfHesab> {
     );
   }
 
-  pdfPrinterA4(bool withproduct) async {
+  Future<void> pdfPrinterA4(bool withproduct) async {
     var arabicFont =
         pw.Font.ttf(await rootBundle.load("assets/fonts/Hacen_Tunisia.ttf"));
     List<pw.Widget> widgets = [];
@@ -472,135 +472,174 @@ class _KashfHesabState extends State<KashfHesab> {
       ),
     );
     widgets.add(firstpadding);
-    final listview = pw.ListView.builder(
-      itemCount: listPDFAll.length,
-      itemBuilder: (context, index) {
-        customersBalances.clear();
-        for (var customer in listPDFAll) {
-          customersBalances.add(customer['money_amount'].toString());
-        }
-        return listPDFAll[index]["action_type"] != "مبيعات"
-            ? firstrowPDF(index, true)
-            : pw.Column(children: [
-                firstrowPDF(index, true),
-                withproduct
-                    ? pw.Column(
-                        children: [
-                          pw.Padding(
-                            padding: const pw.EdgeInsets.only(top: 15),
-                            child: pw.Container(
-                              height: 40,
-                              width: double.infinity,
-                              child: pw.Padding(
-                                padding: const pw.EdgeInsets.only(
-                                  right: 10,
-                                  left: 10,
-                                ),
-                                child: pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceAround,
-                                  children: [
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text(
-                                              "المجموع الكلي",
-                                            )),
+
+    final total_mnh = 0; // You need to define these variables
+    final total_lah = 0; // You need to define these variables
+    final LastBalanceValue = 0; // You need to define these variables
+
+    final itemsPerPage = 20;
+
+    for (int i = 0; i < listPDFAll.length; i++) {
+      List<pw.Widget> currentPageWidgets = [];
+      customersBalances.clear();
+      for (var customer in listPDFAll) {
+        customersBalances.add(customer['money_amount'].toString());
+      }
+
+      currentPageWidgets.add(listPDFAll[i]["action_type"] != "مبيعات"
+          ? firstrowPDF(i, true)
+          : pw.Column(children: [
+              firstrowPDF(i, true),
+              withproduct
+                  ? pw.Column(
+                      children: [
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.only(top: 15),
+                          child: pw.Container(
+                            height: 40,
+                            width: double.infinity,
+                            child: pw.Padding(
+                              padding: const pw.EdgeInsets.only(
+                                right: 10,
+                                left: 10,
+                              ),
+                              child: pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceAround,
+                                children: [
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
+                                            "المجموع الكلي",
                                           )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text(
-                                              "السعر",
-                                            )),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
+                                            "السعر",
                                           )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text(
-                                              "الكمية",
-                                            )),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
+                                            "الكمية",
                                           )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 2,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text(
-                                              "أسم الصنف",
-                                            )),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 2,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
+                                            "أسم الصنف",
                                           )),
-                                    ),
-                                    pw.Directionality(
-                                      textDirection: pw.TextDirection.rtl,
-                                      child: pw.Expanded(
-                                          flex: 1,
-                                          child: pw.Container(
-                                            child: pw.Center(
-                                                child: pw.Text(
-                                              "رقم الصنف",
-                                            )),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
+                                            "رقم الصنف",
                                           )),
-                                    ),
-                                  ],
-                                ),
+                                        )),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          listPDFAll[index]["action"].length == 0
-                              ? pw.Text(
-                                  "لا يوجد منتجات",
-                                )
-                              : pw.Padding(
-                                  padding: const pw.EdgeInsets.only(bottom: 15),
-                                  child: pw.ListView.builder(
-                                    itemCount:
-                                        listPDFAll[index]["action"].length > 15
-                                            ? 15
-                                            : listPDFAll[index]["action"]
-                                                .length,
-                                    itemBuilder: (context, i) {
-                                      return order_card(
-                                        fat8cm: false,
-                                        product_name: listPDFAll[index]
-                                                ["action"][i]['product_name'] ??
-                                            "-",
-                                        product_id: listPDFAll[index]["action"]
-                                                [i]['product_id'] ??
-                                            "-",
-                                        qty: listPDFAll[index]["action"][i]
-                                                ['p_quantity'] ??
-                                            "-",
-                                        price: listPDFAll[index]["action"][i]
-                                                ['p_price'] ??
-                                            "-",
-                                        total: listPDFAll[index]["action"][i]
-                                                ['total'] ??
-                                            "-",
-                                      );
-                                    },
-                                  ),
-                                )
-                        ],
-                      )
-                    : pw.Container()
-              ]);
-      },
-    );
-    widgets.add(listview);
+                        ),
+                        listPDFAll[i]["action"].length == 0
+                            ? pw.Text(
+                                "لا يوجد منتجات",
+                              )
+                            : pw.Padding(
+                                padding: const pw.EdgeInsets.only(bottom: 15),
+                                child: pw.ListView.builder(
+                                  itemCount: listPDFAll[i]["action"].length >
+                                          itemsPerPage
+                                      ? itemsPerPage
+                                      : listPDFAll[i]["action"].length,
+                                  itemBuilder: (context, j) {
+                                    return order_card(
+                                      fat8cm: false,
+                                      product_name: listPDFAll[i]["action"][j]
+                                              ['product_name'] ??
+                                          "-",
+                                      product_id: listPDFAll[i]["action"][j]
+                                              ['product_id'] ??
+                                          "-",
+                                      qty: listPDFAll[i]["action"][j]
+                                              ['p_quantity'] ??
+                                          "-",
+                                      price: listPDFAll[i]["action"][j]
+                                              ['p_price'] ??
+                                          "-",
+                                      total: listPDFAll[i]["action"][j]
+                                              ['total'] ??
+                                          "-",
+                                    );
+                                  },
+                                ),
+                              )
+                      ],
+                    )
+                  : pw.Container()
+            ]));
+
+      widgets.addAll(currentPageWidgets);
+
+      if (listPDFAll[i]["action"].length > itemsPerPage) {
+        int remainingItems = listPDFAll[i]["action"].length - itemsPerPage;
+        for (int k = 0; k < remainingItems; k += itemsPerPage) {
+          currentPageWidgets = [];
+          currentPageWidgets.add(
+            pw.ListView.builder(
+              itemCount: (k + itemsPerPage) < listPDFAll[i]["action"].length
+                  ? itemsPerPage
+                  : listPDFAll[i]["action"].length - k - itemsPerPage,
+              itemBuilder: (context, j) {
+                int index = j + k + itemsPerPage;
+                if (index < listPDFAll[i]["action"].length) {
+                  return order_card(
+                    fat8cm: false,
+                    product_name:
+                        listPDFAll[i]["action"][index]['product_name'] ?? "-",
+                    product_id:
+                        listPDFAll[i]["action"][index]['product_id'] ?? "-",
+                    qty: listPDFAll[i]["action"][index]['p_quantity'] ?? "-",
+                    price: listPDFAll[i]["action"][index]['p_price'] ?? "-",
+                    total: listPDFAll[i]["action"][index]['total'] ?? "-",
+                  );
+                } else {
+                  return pw.Container();
+                }
+              },
+            ),
+          );
+          widgets.addAll(currentPageWidgets);
+        }
+      }
+    }
+
     final totals = pw.Column(
       children: [
         pw.SizedBox(
@@ -722,6 +761,11 @@ class _KashfHesabState extends State<KashfHesab> {
       setState(() {
         end_date.text = formattedDate; //set output date to TextField value.
       });
+      if (end_date.text != "") {
+        filterStatments();
+      } else {
+        _firstLoad();
+      }
     } else {
       // print("Date is not selected");
     }
@@ -1246,11 +1290,25 @@ class _KashfHesabState extends State<KashfHesab> {
     var url =
         'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}';
     var response = await http.get(Uri.parse(url), headers: headers);
-    setState(() {
-      listPDF = json.decode(response.body)["statments"]["data"];
-      listPDFAll = json.decode(response.body)["statments"]["data"];
-      _isFirstLoadRunning = false;
-    });
+    try {
+      setState(() {
+        listPDF = json.decode(response.body)["statments"]["data"];
+        listPDFAll = json.decode(response.body)["statments"]["data"];
+        _isFirstLoadRunning = false;
+      });
+    } catch (e) {
+      setState(() {
+        var responseData = json.decode(response.body);
+        if (responseData.containsKey("statments")) {
+          listPDF = responseData["statments"]["data"];
+          listPDFAll = responseData["statments"]["data"];
+        } else if (responseData.containsKey("statement")) {
+          listPDF = [responseData["statement"]];
+          listPDFAll = [responseData["statement"]];
+        }
+        _isFirstLoadRunning = false;
+      });
+    }
   }
 
   var LastBalanceValue;

@@ -110,11 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String token = data["data"]['access_token'] ?? "";
         int id = data["data"]['id'] ?? 0;
-        int companies_length = data["data"]['companies_length'] ?? 1;
+        int companies_length =
+            int.parse(data["data"]['companies_length'].toString());
         String company_id = data["data"]['company_id'] ?? "0";
         String salesman_id = data["data"]['salesman_id'] ?? "0";
-        String salesman_id2 = data["data"]['salesman_id_2'].toString();
-        String salesman_id3 = data["data"]['salesman_id_3'].toString();
+        String salesman_id2 = data["data"]['salesman_id_2'] ?? "0";
+        String salesman_id3 = data["data"]['salesman_id_3'] ?? "0";
         String just = data["data"]['just'] ?? "no";
         if (just == "no") {
           setState(() {
@@ -127,6 +128,15 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         await prefs.setString('access_token', token);
         await prefs.setInt('id', id);
+        if (salesman_id != null && salesman_id != "") {
+          await prefs.setInt('salesman_id1', int.parse(salesman_id));
+        }
+        if (salesman_id2 != null && salesman_id2 != "") {
+          await prefs.setInt('salesman_id2', int.parse(salesman_id2));
+        }
+        if (salesman_id3 != null && salesman_id3 != "") {
+          await prefs.setInt('salesman_id3', int.parse(salesman_id3));
+        }
 
         await prefs.setString('password', passwordController.text);
         await prefs.setString('just', just);
@@ -155,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
             msg: 'تم تسجيل الدخول بنجاح',
           );
         } else {
-          var Companies = [];
+          List<String> Companies = [];
           if (companies_length == 2) {
             Companies.add(company_id);
             Companies.add(data["data"]['company_id_2'].toString());
@@ -216,6 +226,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Duration(milliseconds: 300));
                                 await prefs.setInt('company_id',
                                     int.parse(Companies[index].toString()));
+                                await prefs.setStringList(
+                                    'companiesList', Companies);
                                 await prefs.setInt(
                                     'salesman_id',
                                     int.parse(index == 0
@@ -239,6 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     builder: (BuildContext context) =>
                                         Customers(
                                       CustomersArray: res,
+                                      companiesArray: Companies,
                                     ),
                                   ),
                                   (route) => false,

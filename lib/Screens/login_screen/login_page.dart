@@ -46,7 +46,19 @@ class _LoginScreenState extends State<LoginScreen> {
   loginFunction() async {
     if (idController.text == "98" && passwordController.text == "yagh2255") {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminScreen()));
+          context,
+          MaterialPageRoute(
+              builder: (context) => AdminScreen(
+                    admin: true,
+                  )));
+    } else if (idController.text == "100" &&
+        passwordController.text == "123456789") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AdminScreen(
+                    admin: false,
+                  )));
     } else if (idController.text == '' || passwordController.text == '') {
       Navigator.of(context, rootNavigator: true).pop();
       showDialog(
@@ -106,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       var data = jsonDecode(response.body.toString());
 
-      if (data['status'] == 'true') {
+      if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String token = data["data"]['access_token'] ?? "";
         int id = data["data"]['id'] ?? 0;
@@ -303,9 +315,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(
-                    'حسنا',
-                    style: TextStyle(color: Color(0xff34568B)),
+                  child: Container(
+                    width: 80,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(colors: [
+                          Color.fromRGBO(83, 89, 219, 1),
+                          Color.fromRGBO(32, 39, 160, 0.6),
+                        ])),
+                    child: Center(
+                      child: Text(
+                        'حسنا',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -314,7 +338,37 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         Navigator.of(context, rootNavigator: true).pop();
-        print('sdfsd');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text('الرجاء التأكد من البيانات المدخله'),
+              actions: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    width: 80,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(colors: [
+                          Color.fromRGBO(83, 89, 219, 1),
+                          Color.fromRGBO(32, 39, 160, 0.6),
+                        ])),
+                    child: Center(
+                      child: Text(
+                        'حسنا',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       }
     }
   }

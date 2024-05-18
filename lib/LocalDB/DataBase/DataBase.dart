@@ -7,7 +7,7 @@ import '../Models/CartModel.dart';
 
 class CartDatabaseHelper {
   static final CartDatabaseHelper _instance = CartDatabaseHelper._internal();
-  static final int dbVersion = 2;
+  static final int dbVersion = 3;
 
   factory CartDatabaseHelper() => _instance;
 

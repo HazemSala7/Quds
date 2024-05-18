@@ -1,17 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Server/server.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter_application_1/Server/server.dart';
+
 import '../../Services/Drawer/drawer.dart';
 import '../login_screen/login_page.dart';
 import '../settings/settings_card/setting_Card.dart';
 
 class AdminScreen extends StatefulWidget {
-  const AdminScreen({Key? key}) : super(key: key);
+  bool admin;
+  AdminScreen({
+    Key? key,
+    required this.admin,
+  }) : super(key: key);
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -565,6 +572,7 @@ class _AdminScreenState extends State<AdminScreen> {
             'salesman_ids_length':
                 requestDataSalesMaxIDs["salesman_ids_length"],
             'salesman_id': salesmanIDController.text,
+            'active': widget.admin ? "yes" : "no",
           },
           headers: headers);
 
@@ -644,6 +652,7 @@ class _AdminScreenState extends State<AdminScreen> {
             'salesman_ids_length':
                 requestDataSalesMaxIDs["salesman_ids_length"],
             'salesman_id': salesmanIDController.text,
+            'active': widget.admin ? "yes" : "no",
           },
           headers: headers);
 

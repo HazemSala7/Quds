@@ -472,20 +472,13 @@ class _KashfHesabState extends State<KashfHesab> {
       ),
     );
     widgets.add(firstpadding);
-
-    final total_mnh = 0; // You need to define these variables
-    final total_lah = 0; // You need to define these variables
-    final LastBalanceValue = 0; // You need to define these variables
-
     final itemsPerPage = 20;
-
     for (int i = 0; i < listPDFAll.length; i++) {
       List<pw.Widget> currentPageWidgets = [];
       customersBalances.clear();
       for (var customer in listPDFAll) {
         customersBalances.add(customer['money_amount'].toString());
       }
-
       currentPageWidgets.add(listPDFAll[i]["action_type"] != "مبيعات"
           ? firstrowPDF(i, true)
           : pw.Column(children: [
@@ -604,42 +597,8 @@ class _KashfHesabState extends State<KashfHesab> {
                     )
                   : pw.Container()
             ]));
-
       widgets.addAll(currentPageWidgets);
-
-      if (listPDFAll[i]["action"].length > itemsPerPage) {
-        int remainingItems = listPDFAll[i]["action"].length - itemsPerPage;
-        for (int k = 0; k < remainingItems; k += itemsPerPage) {
-          currentPageWidgets = [];
-          currentPageWidgets.add(
-            pw.ListView.builder(
-              itemCount: (k + itemsPerPage) < listPDFAll[i]["action"].length
-                  ? itemsPerPage
-                  : listPDFAll[i]["action"].length - k - itemsPerPage,
-              itemBuilder: (context, j) {
-                int index = j + k + itemsPerPage;
-                if (index < listPDFAll[i]["action"].length) {
-                  return order_card(
-                    fat8cm: false,
-                    product_name:
-                        listPDFAll[i]["action"][index]['product_name'] ?? "-",
-                    product_id:
-                        listPDFAll[i]["action"][index]['product_id'] ?? "-",
-                    qty: listPDFAll[i]["action"][index]['p_quantity'] ?? "-",
-                    price: listPDFAll[i]["action"][index]['p_price'] ?? "-",
-                    total: listPDFAll[i]["action"][index]['total'] ?? "-",
-                  );
-                } else {
-                  return pw.Container();
-                }
-              },
-            ),
-          );
-          widgets.addAll(currentPageWidgets);
-        }
-      }
     }
-
     final totals = pw.Column(
       children: [
         pw.SizedBox(
@@ -1439,6 +1398,10 @@ class _KashfHesabState extends State<KashfHesab> {
                         );
                       },
                     );
+                    print("8cm");
+                    print(total_lah);
+                    print(total_mnh);
+                    print(LastBalanceValue);
                     pdfPrinter8CM(withPro!);
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -1476,6 +1439,10 @@ class _KashfHesabState extends State<KashfHesab> {
                         );
                       },
                     );
+                    print("a4");
+                    print(total_lah);
+                    print(total_mnh);
+                    print(LastBalanceValue);
                     pdfPrinterA4(withPro!);
                     Navigator.pop(context);
                     Navigator.pop(context);

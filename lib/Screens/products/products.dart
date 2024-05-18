@@ -250,8 +250,7 @@ class _ProductsState extends State<Products> {
     try {
       var url =
           'https://aliexpress.ps/quds_laravel/api/search_products/${idController.text}/${company_id.toString()}/${salesman_id.toString()}/${widget.id.toString()}/${code_price}';
-      print("url");
-      print(url);
+
       var response = await http.get(Uri.parse(url));
       var res = jsonDecode(response.body)["products"];
       setState(() {

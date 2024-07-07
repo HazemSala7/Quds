@@ -32,6 +32,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   String scanBarcode = '';
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   TextEditingController idController = TextEditingController();
+  TextEditingController badrcodeController = TextEditingController();
   var Price_Code;
   initiatePrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -145,11 +146,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   }
 
   searchBarcode() async {
-    // var barcode = await barcodeScan();
     var barcode = qr_barcode ? await barcodeScan() : await qrScan();
-    // while (barcode.isNotEmpty) {
-    //   barcode = await barcodeScan();
-    // }
     setState(() {
       scanBarcode = barcode.toString();
     });
@@ -229,6 +226,9 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     searchBarcode();
   }
 
+  FocusNode n = new FocusNode();
+  var focusNode = FocusNode();
+
   Widget build(BuildContext context) {
     return Container(
       color: Main_Color,
@@ -295,6 +295,105 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                   );
                                 },
                               );
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Color.fromRGBO(83, 89, 219, 1),
+                                    Color.fromRGBO(32, 39, 160, 0.6),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: Text("بحث",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    )),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: JUST,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(right: 20, left: 20, top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: RawKeyboardListener(
+                              focusNode: focusNode,
+                              onKey: (event) async {
+                                if (event
+                                    .isKeyPressed(LogicalKeyboardKey.enter)) {
+                                  setState(() {
+                                    scanBarcode = badrcodeController.text;
+                                  });
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator())),
+                                      );
+                                    },
+                                  );
+                                  search_bar();
+                                }
+                              },
+                              child: TextField(
+                                controller: badrcodeController,
+                                textInputAction: TextInputAction.done,
+                                textAlign: TextAlign.center,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  hintText: 'بحث عن باركود الصنف',
+                                  hintStyle: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Main_Color, width: 2.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 2.0, color: Color(0xffD6D3D3)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                scanBarcode = badrcodeController.text;
+                              });
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: SizedBox(
+                                        height: 100,
+                                        width: 100,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator())),
+                                  );
+                                },
+                              );
+                              search_bar();
                             },
                             child: Container(
                               width: 100,

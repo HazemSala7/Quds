@@ -78,7 +78,18 @@ class _ShowOrderState extends State<ShowOrder> {
                         itemCount: cartItems.length,
                         itemBuilder: (context, index) {
                           CartItem item = cartItems[index];
-                          double total = item.price * item.quantity;
+
+                          double total = 0.0;
+                          if (item.discount == 0.0) {
+                            total = item.price * item.quantity;
+                          } else {
+                            total = double.parse(item.quantity.toString()) *
+                                double.parse(item.price.toString()) *
+                                (1 -
+                                    (double.parse(item.discount.toString()) /
+                                        100));
+                          }
+
                           return OrderCard(
                             ponus_one: item.ponus1,
                             color: item.color,
@@ -125,7 +136,15 @@ class _ShowOrderState extends State<ShowOrder> {
   double calculateTotal(List<CartItem> cartItems) {
     double total = 0;
     for (CartItem item in cartItems) {
-      total += item.price * item.quantity;
+      double subTotal = 0.0;
+      if (item.discount == 0.0) {
+        subTotal = item.price * item.quantity;
+      } else {
+        subTotal = double.parse(item.quantity.toString()) *
+            double.parse(item.price.toString()) *
+            (1 - (double.parse(item.discount.toString()) / 100));
+      }
+      total += subTotal;
     }
     return total;
   }

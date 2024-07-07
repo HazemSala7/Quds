@@ -678,23 +678,18 @@ class _KashfHesabState extends State<KashfHesab> {
     DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
+        firstDate: DateTime(2000),
         lastDate: DateTime(2101));
-
     if (pickedDate != null) {
-      // print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      // print(
-      //     formattedDate); //formatted date output using intl package =>  2021-03-16
-      //you can implement different kind of Date Format here according to your requirement
-
       setState(() {
-        start_date.text = formattedDate; //set output date to TextField value.
+        start_date.text = formattedDate;
       });
       if (start_date.text != "") {
-        filterStatments();
+        _pageFilter = 1;
+        filterStatmentsFirstCall();
       } else {
+        _page = 1;
         _firstLoad();
       }
     } else {
@@ -706,22 +701,16 @@ class _KashfHesabState extends State<KashfHesab> {
     DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
+        firstDate: DateTime(2000),
         lastDate: DateTime(2101));
 
     if (pickedDate != null) {
-      // print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      // print(
-      //     formattedDate); //formatted date output using intl package =>  2021-03-16
-      //you can implement different kind of Date Format here according to your requirement
-
       setState(() {
-        end_date.text = formattedDate; //set output date to TextField value.
+        end_date.text = formattedDate;
       });
       if (end_date.text != "") {
-        filterStatments();
+        filterStatmentsFirstCall();
       } else {
         _firstLoad();
       }
@@ -1220,6 +1209,7 @@ class _KashfHesabState extends State<KashfHesab> {
 
   // At the beginning, we fetch the first 20 posts
   int _page = 1;
+  int _pageFilter = 1;
   // you can change this value to fetch more or less posts per page (10, 15, 5, etc)
   final int _limit = 20;
 
@@ -1232,7 +1222,7 @@ class _KashfHesabState extends State<KashfHesab> {
   // Used to display loading indicators when _loadMore function is running
   bool _isLoadMoreRunning = false;
 
-  filterStatments() async {
+  filterStatmentsFirstCall() async {
     setState(() {
       _isFirstLoadRunning = true;
       listPDF = [];
@@ -1247,7 +1237,9 @@ class _KashfHesabState extends State<KashfHesab> {
       'ContentType': 'application/json'
     };
     var url =
-        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}';
+        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_pageFilter';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     try {
       setState(() {
@@ -1266,6 +1258,46 @@ class _KashfHesabState extends State<KashfHesab> {
           listPDFAll = [responseData["statement"]];
         }
         _isFirstLoadRunning = false;
+      });
+    }
+  }
+
+  filterStatmentsSecondCall() async {
+    print("10");
+    setState(() {
+      _isFirstLoadRunning = true;
+      listPDF = [];
+      listPDFAll = [];
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    int? company_id = prefs.getInt('company_id');
+    int? salesman_id = prefs.getInt('salesman_id');
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'ContentType': 'application/json'
+    };
+    _pageFilter += 1;
+    var url =
+        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_pageFilter';
+    print("url");
+    print(url);
+    var response = await http.get(Uri.parse(url), headers: headers);
+    final List fetchedPosts = json.decode(response.body)["statments"]["data"];
+    if (fetchedPosts.isNotEmpty) {
+      // Filter out duplicates based on unique identifiers
+      final uniqueFetchedPosts = fetchedPosts
+          .where((newPost) => !listPDF
+              .any((existingPost) => newPost['id'] == existingPost['id']))
+          .toList();
+
+      setState(() {
+        listPDF.addAll(uniqueFetchedPosts);
+      });
+    } else {
+      Fluttertoast.showToast(msg: "نهاية الكشف");
+      Timer(Duration(milliseconds: 300), () {
+        Fluttertoast.cancel();
       });
     }
   }
@@ -1398,10 +1430,6 @@ class _KashfHesabState extends State<KashfHesab> {
                         );
                       },
                     );
-                    print("8cm");
-                    print(total_lah);
-                    print(total_mnh);
-                    print(LastBalanceValue);
                     pdfPrinter8CM(withPro!);
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -1439,10 +1467,6 @@ class _KashfHesabState extends State<KashfHesab> {
                         );
                       },
                     );
-                    print("a4");
-                    print(total_lah);
-                    print(total_mnh);
-                    print(LastBalanceValue);
                     pdfPrinterA4(withPro!);
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -1502,6 +1526,7 @@ class _KashfHesabState extends State<KashfHesab> {
   // This function will be triggered whenver the user scroll
   // to near the bottom of the list view
   void _loadMore() async {
+    print("1");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
     int? salesman_id = prefs.getInt('salesman_id');
@@ -1550,12 +1575,16 @@ class _KashfHesabState extends State<KashfHesab> {
     }
   }
 
-  // The controller for the ListView
   ScrollController? _controller;
+  // ScrollController? _controllerFilterStatments;
 
   @override
   void dispose() {
+    print("1");
+    print("start_date.text");
+    print(start_date.text);
     _controller?.removeListener(_loadMore);
+
     super.dispose();
   }
 

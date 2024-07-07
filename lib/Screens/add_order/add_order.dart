@@ -514,7 +514,7 @@ class _AddOrderState extends State<AddOrder> {
       qtyArray.add(parsedData[i]["quantity"]);
       ponus1Array.add(parsedData[i]["ponus1"]);
       ponus2Array.add(0);
-      discountArray.add(0);
+      discountArray.add(parsedData[i]["discount"]);
       totalArray.add(0);
       notesArray.add(parsedData[i]["notes"]);
     }

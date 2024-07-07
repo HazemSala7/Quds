@@ -27,16 +27,26 @@ class DrawerMain extends StatefulWidget {
 class _DrawerMainState extends State<DrawerMain> {
   @override
   bool moreComanies = false;
+  bool showMoneyMovments = false;
   setConrollers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<String>? _companies = await prefs.getStringList("companiesList");
+    List<String>? _companies =
+        await prefs.getStringList("companiesList") ?? [""];
+    int? salesmanID = await prefs.getInt("salesman_id");
+    if (salesmanID.toString() == "999") {
+      showMoneyMovments = true;
+    } else {
+      showMoneyMovments = false;
+    }
     if (_companies!.length == 1) {
       moreComanies = false;
     } else {
       moreComanies = true;
     }
     setState(() {});
+    print("showMoneyMovments");
+    print(showMoneyMovments);
   }
 
   @override
@@ -79,17 +89,28 @@ class _DrawerMainState extends State<DrawerMain> {
                   width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
             ),
           ),
-          DrawerCard(
-              navi: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MoneyMovement()));
-              },
-              name: "مجمل الحركات",
-              myicon: Icon(Icons.move_up)),
-          Padding(
-            padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
-            child: Container(
-                width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
+          Visibility(
+            visible: showMoneyMovments,
+            child: Column(
+              children: [
+                DrawerCard(
+                    navi: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MoneyMovement()));
+                    },
+                    name: "مجمل الحركات",
+                    myicon: Icon(Icons.move_up)),
+                Padding(
+                  padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
+                  child: Container(
+                      width: double.infinity,
+                      height: 2,
+                      color: Color(0xffC6C5C5)),
+                ),
+              ],
+            ),
           ),
           Visibility(
             visible: JUST,

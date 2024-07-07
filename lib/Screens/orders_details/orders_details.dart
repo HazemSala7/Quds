@@ -130,6 +130,14 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                       scrollDirection: Axis.vertical,
                       itemCount: Customers.length,
                       itemBuilder: (BuildContext context, int index) {
+                        var discount =
+                            double.parse(Customers[index]['discount'] ?? 0.0);
+                        var init_total = double.parse(
+                                Customers[index]['p_quantity'].toString()) *
+                            double.parse(
+                                Customers[index]['p_price'].toString()) *
+                            (1 - (discount / 100));
+
                         if (Customers[index]['product'] == null) {
                           return order_card(
                             // product_id: Customers[index]['product_id'] ?? "-",
@@ -140,7 +148,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                             product_id: Customers[index]['product_id'] ?? "-",
                             qty: Customers[index]['p_quantity'] ?? "-",
                             price: Customers[index]['p_price'] ?? "-",
-                            total: Customers[index]['total'] ?? "-",
+                            total: init_total.toString(),
                           );
                         } else {
                           return order_card(
@@ -152,7 +160,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                             qty: Customers[index]['p_quantity'] ?? "-",
                             price: Customers[index]['p_price'] ?? "-",
                             color_name: Customers[index]['color_name'] ?? "-",
-                            total: Customers[index]['total'] ?? "-",
+                            total: init_total.toString(),
                           );
                         }
                       },

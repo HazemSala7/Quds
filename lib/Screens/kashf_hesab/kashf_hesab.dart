@@ -1263,41 +1263,47 @@ class _KashfHesabState extends State<KashfHesab> {
   }
 
   filterStatmentsSecondCall() async {
-    print("10");
-    setState(() {
-      _isFirstLoadRunning = true;
-      listPDF = [];
-      listPDFAll = [];
-    });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'ContentType': 'application/json'
-    };
-    _pageFilter += 1;
-    var url =
-        'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_pageFilter';
-    print("url");
-    print(url);
-    var response = await http.get(Uri.parse(url), headers: headers);
-    final List fetchedPosts = json.decode(response.body)["statments"]["data"];
-    if (fetchedPosts.isNotEmpty) {
-      // Filter out duplicates based on unique identifiers
-      final uniqueFetchedPosts = fetchedPosts
-          .where((newPost) => !listPDF
-              .any((existingPost) => newPost['id'] == existingPost['id']))
-          .toList();
-
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller!.position.extentAfter < 300) {
+      print("10");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('access_token');
+      int? company_id = prefs.getInt('company_id');
+      int? salesman_id = prefs.getInt('salesman_id');
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'ContentType': 'application/json'
+      };
       setState(() {
-        listPDF.addAll(uniqueFetchedPosts);
+        _isLoadMoreRunning = true;
       });
-    } else {
-      Fluttertoast.showToast(msg: "نهاية الكشف");
-      Timer(Duration(milliseconds: 300), () {
-        Fluttertoast.cancel();
+      _pageFilter += 1;
+      var url =
+          'https://aliexpress.ps/quds_laravel/api/filter_statments/$company_id/$salesman_id/${widget.customer_id.toString()}/${start_date.text}/${end_date.text}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_pageFilter';
+      print("url");
+      print(url);
+      var response = await http.get(Uri.parse(url), headers: headers);
+      final List fetchedPosts = json.decode(response.body)["statments"]["data"];
+      if (fetchedPosts.isNotEmpty) {
+        // Filter out duplicates based on unique identifiers
+        final uniqueFetchedPosts = fetchedPosts
+            .where((newPost) => !listPDF
+                .any((existingPost) => newPost['id'] == existingPost['id']))
+            .toList();
+
+        setState(() {
+          listPDF.addAll(uniqueFetchedPosts);
+        });
+      } else {
+        Fluttertoast.showToast(msg: "نهاية الكشف");
+        Timer(Duration(milliseconds: 300), () {
+          Fluttertoast.cancel();
+        });
+      }
+      setState(() {
+        _isLoadMoreRunning = false;
       });
     }
   }
@@ -1526,52 +1532,57 @@ class _KashfHesabState extends State<KashfHesab> {
   // This function will be triggered whenver the user scroll
   // to near the bottom of the list view
   void _loadMore() async {
-    print("1");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? company_id = prefs.getInt('company_id');
-    int? salesman_id = prefs.getInt('salesman_id');
-    String? code_price = prefs.getString('price_code');
-    if (_hasNextPage == true &&
-        _isFirstLoadRunning == false &&
-        _isLoadMoreRunning == false &&
-        _controller!.position.extentAfter < 300) {
-      setState(() {
-        _isLoadMoreRunning = true; // Display a progress indicator at the bottom
-      });
-      _page += 1; // Increase _page by 1
+    if (start_date.text != "") {
+      filterStatmentsSecondCall();
+    } else {
+      print("1");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? company_id = prefs.getInt('company_id');
+      int? salesman_id = prefs.getInt('salesman_id');
+      String? code_price = prefs.getString('price_code');
+      if (_hasNextPage == true &&
+          _isFirstLoadRunning == false &&
+          _isLoadMoreRunning == false &&
+          _controller!.position.extentAfter < 300) {
+        setState(() {
+          _isLoadMoreRunning =
+              true; // Display a progress indicator at the bottom
+        });
+        _page += 1; // Increase _page by 1
 
-      try {
-        var url =
-            "https://aliexpress.ps/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
+        try {
+          var url =
+              "https://aliexpress.ps/quds_laravel/api/statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
 
-        final res = await http.get(Uri.parse(url));
+          final res = await http.get(Uri.parse(url));
 
-        final List fetchedPosts = json.decode(res.body)["statments"]["data"];
-        if (fetchedPosts.isNotEmpty) {
-          // Filter out duplicates based on unique identifiers
-          final uniqueFetchedPosts = fetchedPosts
-              .where((newPost) => !listPDF
-                  .any((existingPost) => newPost['id'] == existingPost['id']))
-              .toList();
+          final List fetchedPosts = json.decode(res.body)["statments"]["data"];
+          if (fetchedPosts.isNotEmpty) {
+            // Filter out duplicates based on unique identifiers
+            final uniqueFetchedPosts = fetchedPosts
+                .where((newPost) => !listPDF
+                    .any((existingPost) => newPost['id'] == existingPost['id']))
+                .toList();
 
-          setState(() {
-            listPDF.addAll(uniqueFetchedPosts);
-          });
-        } else {
-          Fluttertoast.showToast(msg: "نهاية الكشف");
-          Timer(Duration(milliseconds: 300), () {
-            Fluttertoast.cancel();
-          });
+            setState(() {
+              listPDF.addAll(uniqueFetchedPosts);
+            });
+          } else {
+            Fluttertoast.showToast(msg: "نهاية الكشف");
+            Timer(Duration(milliseconds: 300), () {
+              Fluttertoast.cancel();
+            });
+          }
+        } catch (err) {
+          if (kDebugMode) {
+            print('Something went wrong!');
+          }
         }
-      } catch (err) {
-        if (kDebugMode) {
-          print('Something went wrong!');
-        }
+
+        setState(() {
+          _isLoadMoreRunning = false;
+        });
       }
-
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
     }
   }
 
@@ -1580,9 +1591,6 @@ class _KashfHesabState extends State<KashfHesab> {
 
   @override
   void dispose() {
-    print("1");
-    print("start_date.text");
-    print(start_date.text);
     _controller?.removeListener(_loadMore);
 
     super.dispose();

@@ -34,11 +34,14 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   TextEditingController idController = TextEditingController();
   TextEditingController badrcodeController = TextEditingController();
   var Price_Code;
+  var roleID;
   initiatePrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? code_price = prefs.getString('price_code');
+    String? _roleID = prefs.getString('role_id');
     setState(() {
       Price_Code = code_price;
+      roleID = _roleID.toString();
     });
   }
 
@@ -186,6 +189,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           price = pr;
         }
         Navigator.of(context, rootNavigator: true).pop();
+
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -202,7 +206,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                       qty: res["quantity"].toString(),
                     )));
         setState(() {
-          scanBarcode = "111";
+          badrcodeController.text = "";
         });
       }
     } catch (e) {
@@ -249,7 +253,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Visibility(
-                    visible: JUST,
+                    visible: roleID.toString() == "3" ? false : true,
                     child: Padding(
                       padding:
                           const EdgeInsets.only(right: 20, left: 20, top: 5),
@@ -319,7 +323,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                     ),
                   ),
                   Visibility(
-                    visible: JUST,
+                    visible: roleID.toString() == "3" ? false : true,
                     child: Padding(
                       padding:
                           const EdgeInsets.only(right: 20, left: 20, top: 15),
@@ -417,97 +421,100 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                  Visibility(
+                    visible: roleID.toString() == "3" ? false : true,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 20, left: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Visibility(
-                              visible: JUST,
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    qr_barcode = true;
-                                  });
-                                  dontgo
-                                      ? Navigator.of(context,
-                                              rootNavigator: true)
-                                          .pop()
-                                      : lastStep();
-                                  // setState(() {
-                                  //   _scanBarcode = "";
-                                  // });
-                                },
-                                child: Container(
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(
-                                      "بحث عن طريق الباركود",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: Colors.white),
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20, left: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Visibility(
+                                visible: JUST,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      qr_barcode = true;
+                                    });
+                                    dontgo
+                                        ? Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop()
+                                        : lastStep();
+                                    // setState(() {
+                                    //   _scanBarcode = "";
+                                    // });
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        "بحث عن طريق الباركود",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                            color: Colors.white),
+                                      ),
                                     ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: LinearGradient(colors: [
-                                      Color.fromRGBO(83, 89, 219, 1),
-                                      Color.fromRGBO(32, 39, 160, 0.6),
-                                    ]),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(colors: [
+                                        Color.fromRGBO(83, 89, 219, 1),
+                                        Color.fromRGBO(32, 39, 160, 0.6),
+                                      ]),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Visibility(
-                              visible: JUST,
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    qr_barcode = false;
-                                  });
-                                  dontgo
-                                      ? Navigator.of(context,
-                                              rootNavigator: true)
-                                          .pop()
-                                      : lastStep();
-                                  // setState(() {
-                                  //   _scanBarcode = "";
-                                  // });
-                                },
-                                child: Container(
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(
-                                      "بحث عن طريق QR",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: Colors.white),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Visibility(
+                                visible: JUST,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      qr_barcode = false;
+                                    });
+                                    dontgo
+                                        ? Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop()
+                                        : lastStep();
+                                    // setState(() {
+                                    //   _scanBarcode = "";
+                                    // });
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        "بحث عن طريق QR",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                            color: Colors.white),
+                                      ),
                                     ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: LinearGradient(colors: [
-                                      Color.fromRGBO(83, 89, 219, 1),
-                                      Color.fromRGBO(32, 39, 160, 0.6),
-                                    ]),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(colors: [
+                                        Color.fromRGBO(83, 89, 219, 1),
+                                        Color.fromRGBO(32, 39, 160, 0.6),
+                                      ]),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -522,7 +529,8 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Visibility(
-                                visible: JUST,
+                                visible:
+                                    roleID.toString() == "3" ? false : true,
                                 child: CustomerDetailsCard(
                                   name: "طلبية",
                                   my_icon: Icons.request_page,
@@ -538,7 +546,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 ),
                               ),
                               Visibility(
-                                visible: JUST,
+                                visible: roleID.toString() == "3" ||
+                                        roleID.toString() == "4"
+                                    ? false
+                                    : true,
                                 child: CustomerDetailsCard(
                                   name: "سند قبض",
                                   my_icon: Icons.money,
@@ -560,7 +571,10 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Visibility(
-                                visible: JUST,
+                                visible: roleID.toString() == "3" ||
+                                        roleID.toString() == "4"
+                                    ? false
+                                    : true,
                                 child: CustomerDetailsCard(
                                   name: "سند صرف",
                                   my_icon: Icons.money,
@@ -575,18 +589,22 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                   },
                                 ),
                               ),
-                              CustomerDetailsCard(
-                                name: "كشف حساب",
-                                my_icon: Icons.account_balance,
-                                navi: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => KashfHesab(
-                                              name: widget.name.toString(),
-                                              customer_id:
-                                                  widget.id.toString())));
-                                },
+                              Visibility(
+                                visible:
+                                    roleID.toString() == "4" ? false : true,
+                                child: CustomerDetailsCard(
+                                  name: "كشف حساب",
+                                  my_icon: Icons.account_balance,
+                                  navi: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => KashfHesab(
+                                                name: widget.name.toString(),
+                                                customer_id:
+                                                    widget.id.toString())));
+                                  },
+                                ),
                               ),
                             ],
                           ),

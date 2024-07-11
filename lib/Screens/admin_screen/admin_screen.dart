@@ -377,48 +377,31 @@ class _AdminScreenState extends State<AdminScreen> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Column(
                     children: [
-                      // SettingsCard(
-                      //   status: orders,
-                      //   Status: () async {
-                      //     setState(() {
-                      //       orders = !orders;
-                      //     });
-                      //   },
-                      //   name: "اظهار الطلبيات",
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 10),
-                      //   child: Container(
-                      //     width: double.infinity,
-                      //     height: 1,
-                      //     color: Colors.grey,
-                      //   ),
-                      // ),
-                      // SettingsCard(
-                      //   status: orders,
-                      //   Status: () async {
-                      //     setState(() {
-                      //       orders = !orders;
-                      //     });
-                      //   },
-                      //   name: "اظهار سندات القبض",
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 10),
-                      //   child: Container(
-                      //     width: double.infinity,
-                      //     height: 1,
-                      //     color: Colors.grey,
-                      //   ),
-                      // ),
+                      SettingsCard(
+                        status: kashf,
+                        Status: () {
+                          setState(() {
+                            kashf = !kashf;
+                          });
+                        },
+                        name: "فقط كشف حساب",
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Container(
+                          width: double.infinity,
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
                       SettingsCard(
                         status: orders,
-                        Status: () {
+                        Status: () async {
                           setState(() {
                             orders = !orders;
                           });
                         },
-                        name: "فقط كشف حساب",
+                        name: "فقط طلبيات",
                       ),
                     ],
                   ),
@@ -461,6 +444,7 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 
+  bool kashf = false;
   bool orders = false;
   TextEditingController passwordController = TextEditingController();
   TextEditingController repasswordController = TextEditingController();
@@ -562,7 +546,12 @@ class _AdminScreenState extends State<AdminScreen> {
             'password': passwordController.text,
             'device_id': deviceId.toString(),
             'name': nameController.text,
-            'just': orders ? "yes" : "no",
+            'just': kashf ? "yes" : "no",
+            'role_id': kashf
+                ? "3"
+                : orders
+                    ? "4"
+                    : "2",
             'company_id': companyIDController.text,
             'company_id_2': companyID2Controller.text,
             'company_id_3': companyID3Controller.text,
@@ -643,6 +632,11 @@ class _AdminScreenState extends State<AdminScreen> {
             'device_id': deviceId.toString(),
             'name': nameController.text,
             'just': orders ? "yes" : "no",
+            'role_id': kashf
+                ? "3"
+                : orders
+                    ? "4"
+                    : "2",
             'company_id': companyIDController.text,
             'company_id_2': companyID2Controller.text,
             'company_id_3': companyID3Controller.text,

@@ -28,9 +28,10 @@ class _DrawerMainState extends State<DrawerMain> {
   @override
   bool moreComanies = false;
   bool showMoneyMovments = false;
+  var roleID;
   setConrollers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    String? _roleID = prefs.getString('role_id');
     List<String>? _companies =
         await prefs.getStringList("companiesList") ?? [""];
     int? salesmanID = await prefs.getInt("salesman_id");
@@ -44,6 +45,9 @@ class _DrawerMainState extends State<DrawerMain> {
     } else {
       moreComanies = true;
     }
+
+    roleID = _roleID.toString();
+
     setState(() {});
     print("showMoneyMovments");
     print(showMoneyMovments);
@@ -72,17 +76,20 @@ class _DrawerMainState extends State<DrawerMain> {
               ),
             ],
           ),
-          DrawerCard(
-              navi: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TotalReceivables()));
-              },
-              name: "مجمل الذمم",
-              myicon: Icon(Icons.money)),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "4" ? false : true,
+            child: DrawerCard(
+                navi: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TotalReceivables()));
+                },
+                name: "مجمل الذمم",
+                myicon: Icon(Icons.money)),
+          ),
+          Visibility(
+            visible: roleID.toString() == "4" ? false : true,
             child: Padding(
               padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
               child: Container(
@@ -90,7 +97,7 @@ class _DrawerMainState extends State<DrawerMain> {
             ),
           ),
           Visibility(
-            visible: showMoneyMovments,
+            visible: roleID.toString() == "4" ? false : showMoneyMovments,
             child: Column(
               children: [
                 DrawerCard(
@@ -113,7 +120,7 @@ class _DrawerMainState extends State<DrawerMain> {
             ),
           ),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "4" ? false : showMoneyMovments,
             child: DrawerCard(
                 navi: () {
                   Navigator.push(context,
@@ -122,13 +129,18 @@ class _DrawerMainState extends State<DrawerMain> {
                 name: "سندات القبض",
                 myicon: Icon(Icons.receipt)),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
-            child: Container(
-                width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
+          Visibility(
+            visible: roleID.toString() == "4" ? false : showMoneyMovments,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
+              child: Container(
+                  width: double.infinity, height: 2, color: Color(0xffC6C5C5)),
+            ),
           ),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "3" || roleID.toString() == "4"
+                ? false
+                : true,
             child: DrawerCard(
                 navi: () {
                   Navigator.push(
@@ -138,7 +150,9 @@ class _DrawerMainState extends State<DrawerMain> {
                 myicon: Icon(Icons.receipt)),
           ),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "3" || roleID.toString() == "4"
+                ? false
+                : true,
             child: Padding(
               padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
               child: Container(
@@ -146,7 +160,7 @@ class _DrawerMainState extends State<DrawerMain> {
             ),
           ),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "3" ? false : true,
             child: DrawerCard(
                 navi: () {
                   Navigator.push(context,
@@ -156,7 +170,7 @@ class _DrawerMainState extends State<DrawerMain> {
                 myicon: Icon(Icons.request_quote_sharp)),
           ),
           Visibility(
-            visible: JUST,
+            visible: roleID.toString() == "3" ? false : true,
             child: Padding(
               padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
               child: Container(

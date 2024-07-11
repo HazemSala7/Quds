@@ -128,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String salesman_id = data["data"]['salesman_id'] ?? "0";
         String salesman_id2 = data["data"]['salesman_id_2'] ?? "0";
         String salesman_id3 = data["data"]['salesman_id_3'] ?? "0";
+        String roleID = data["data"]['role_id'] ?? "0";
         String just = data["data"]['just'] ?? "no";
         if (just == "no") {
           setState(() {
@@ -139,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         }
         await prefs.setString('access_token', token);
+        await prefs.setString('role_id', roleID);
         await prefs.setInt('id', id);
         if (salesman_id != null && salesman_id != "") {
           await prefs.setInt('salesman_id1', int.parse(salesman_id));

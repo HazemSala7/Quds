@@ -120,7 +120,9 @@ class _DrawerMainState extends State<DrawerMain> {
             ),
           ),
           Visibility(
-            visible: roleID.toString() == "4" ? false : showMoneyMovments,
+            visible: roleID.toString() == "3" || roleID.toString() == "4"
+                ? false
+                : true,
             child: DrawerCard(
                 navi: () {
                   Navigator.push(context,
@@ -130,7 +132,9 @@ class _DrawerMainState extends State<DrawerMain> {
                 myicon: Icon(Icons.receipt)),
           ),
           Visibility(
-            visible: roleID.toString() == "4" ? false : showMoneyMovments,
+            visible: roleID.toString() == "3" || roleID.toString() == "4"
+                ? false
+                : true,
             child: Padding(
               padding: const EdgeInsets.only(right: 35, left: 35, top: 10),
               child: Container(

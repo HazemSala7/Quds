@@ -1407,10 +1407,13 @@ class _KashfHesabState extends State<KashfHesab> {
           for (int i = 0; i < array_lah.length; i++) {
             total_lah = total_lah + double.parse(array_lah[i].toString());
           }
-          var lastBalance =
+          var lastBalanceASC =
               listPDFAll.isNotEmpty ? listPDFAll.last['balance'] : null;
+          var lastBalanceDESC =
+              listPDFAll.isNotEmpty ? listPDFAll.first['balance'] : null;
 
-          LastBalanceValue = lastBalance;
+          LastBalanceValue =
+              order_kashf_from_new_to_old ? lastBalanceDESC : lastBalanceASC;
         });
       }
 

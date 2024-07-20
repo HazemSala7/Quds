@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_application_1/Screens/customers/customers.dart';
+import 'package:flutter_application_1/Screens/maintenance_page/maintenance_page.dart';
+import 'package:flutter_application_1/Server/functions/functions.dart';
 import 'package:flutter_application_1/Server/server.dart';
 import 'package:flutter_application_1/Services/AppBar/appbar.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -119,191 +122,197 @@ class _LoginScreenState extends State<LoginScreen> {
       var data = jsonDecode(response.body.toString());
 
       if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        String token = data["data"]['access_token'] ?? "";
-        int id = data["data"]['id'] ?? 0;
-        int companies_length =
-            int.parse(data["data"]['companies_length'].toString());
-        String company_id = data["data"]['company_id'] ?? "0";
-        String salesman_id = data["data"]['salesman_id'] ?? "0";
-        String salesman_id2 = data["data"]['salesman_id_2'] ?? "0";
-        String salesman_id3 = data["data"]['salesman_id_3'] ?? "0";
-        String roleID = data["data"]['role_id'] ?? "0";
-        String just = data["data"]['just'] ?? "no";
-        if (just == "no") {
-          setState(() {
-            JUST = true;
-          });
-        } else {
-          setState(() {
-            JUST = false;
-          });
-        }
-        await prefs.setString('access_token', token);
-        await prefs.setString('role_id', roleID);
-        await prefs.setInt('id', id);
-        if (salesman_id != null && salesman_id != "") {
-          await prefs.setInt('salesman_id1', int.parse(salesman_id));
-        }
-        if (salesman_id2 != null && salesman_id2 != "") {
-          await prefs.setInt('salesman_id2', int.parse(salesman_id2));
-        }
-        if (salesman_id3 != null && salesman_id3 != "") {
-          await prefs.setInt('salesman_id3', int.parse(salesman_id3));
-        }
-
-        await prefs.setString('password', passwordController.text);
-        await prefs.setString('just', just);
-        await prefs.setBool('login', true);
-
-        if (companies_length == 1) {
-          await prefs.setInt('company_id', int.parse(company_id.toString()));
-          await prefs.setInt('salesman_id', int.parse(salesman_id.toString()));
-          var headers = {'ContentType': 'application/json'};
-          var url =
-              'https://aliexpress.ps/quds_laravel/api/customers/$company_id/$salesman_id';
-          var response = await http.get(Uri.parse(url), headers: headers);
-          var res = jsonDecode(response.body)['customers'];
-          Navigator.of(context, rootNavigator: true).pop();
-
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => Customers(
-                CustomersArray: res,
-              ),
-            ),
-            (route) => false,
-          );
-          Fluttertoast.showToast(
-            msg: 'تم تسجيل الدخول بنجاح',
-          );
-        } else {
-          List<String> Companies = [];
-          if (companies_length == 2) {
-            Companies.add(company_id);
-            Companies.add(data["data"]['company_id_2'].toString());
-          } else if (companies_length == 3) {
-            Companies.add(company_id);
-            Companies.add(data["data"]['company_id_2'].toString());
-            Companies.add(data["data"]['company_id_3'].toString());
+        if (data["status"] == "true") {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String token = data["data"]['access_token'] ?? "";
+          int id = data["data"]['id'] ?? 0;
+          int companies_length =
+              int.parse(data["data"]['companies_length'].toString());
+          String company_id = data["data"]['company_id'] ?? "0";
+          String salesman_id = data["data"]['salesman_id'] ?? "0";
+          String salesman_id2 = data["data"]['salesman_id_2'] ?? "0";
+          String salesman_id3 = data["data"]['salesman_id_3'] ?? "0";
+          String roleID = data["data"]['role_id'] ?? "0";
+          String just = data["data"]['just'] ?? "no";
+          await prefs.setString('user_name', idController.text);
+          await prefs.setString('password', passwordController.text);
+          await prefs.setString('just', just);
+          await prefs.setBool('login', true);
+          if (just == "no") {
+            setState(() {
+              JUST = true;
+            });
+          } else {
+            setState(() {
+              JUST = false;
+            });
           }
-          Navigator.of(context, rootNavigator: true).pop();
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                height: 200,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "الرجاء اختر رقم الشركة",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 35, left: 35),
-                      child: ListView.builder(
-                        itemCount: Companies.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: SizedBox(
-                                          height: 100,
-                                          width: 100,
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator())),
-                                    );
-                                  },
-                                );
-                                await Future.delayed(
-                                    Duration(milliseconds: 300));
-                                await prefs.setInt('company_id',
-                                    int.parse(Companies[index].toString()));
-                                await prefs.setStringList(
-                                    'companiesList', Companies);
-                                await prefs.setInt(
-                                    'salesman_id',
-                                    int.parse(index == 0
-                                        ? salesman_id
-                                        : index == 1
-                                            ? salesman_id2
-                                            : salesman_id3));
-                                var headers = {
-                                  'ContentType': 'application/json'
-                                };
-                                var url =
-                                    'https://aliexpress.ps/quds_laravel/api/customers/${Companies[index].toString()}/${index == 0 ? salesman_id : index == 1 ? salesman_id2 : salesman_id3}';
-                                var response = await http.get(Uri.parse(url),
-                                    headers: headers);
-                                var res =
-                                    jsonDecode(response.body)['customers'];
+          await prefs.setString('access_token', token);
+          await prefs.setString('role_id', roleID);
+          await prefs.setInt('id', id);
+          if (salesman_id != null && salesman_id != "") {
+            await prefs.setInt('salesman_id1', int.parse(salesman_id));
+          }
+          if (salesman_id2 != null && salesman_id2 != "") {
+            await prefs.setInt('salesman_id2', int.parse(salesman_id2));
+          }
+          if (salesman_id3 != null && salesman_id3 != "") {
+            await prefs.setInt('salesman_id3', int.parse(salesman_id3));
+          }
 
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        Customers(
-                                      CustomersArray: res,
-                                      companiesArray: Companies,
+          if (companies_length == 1) {
+            await prefs.setInt('company_id', int.parse(company_id.toString()));
+            await prefs.setInt(
+                'salesman_id', int.parse(salesman_id.toString()));
+            var headers = {'ContentType': 'application/json'};
+            var url =
+                'https://aliexpress.ps/quds_laravel/api/customers/$company_id/$salesman_id';
+            var response = await http.get(Uri.parse(url), headers: headers);
+            var res = jsonDecode(response.body)['customers'];
+            Navigator.of(context, rootNavigator: true).pop();
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => Customers(
+                  CustomersArray: res,
+                ),
+              ),
+              (route) => false,
+            );
+            Fluttertoast.showToast(
+              msg: 'تم تسجيل الدخول بنجاح',
+            );
+          } else {
+            List<String> Companies = [];
+            if (companies_length == 2) {
+              Companies.add(company_id);
+              Companies.add(data["data"]['company_id_2'].toString());
+            } else if (companies_length == 3) {
+              Companies.add(company_id);
+              Companies.add(data["data"]['company_id_2'].toString());
+              Companies.add(data["data"]['company_id_3'].toString());
+            }
+            Navigator.of(context, rootNavigator: true).pop();
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  height: 200,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "الرجاء اختر رقم الشركة",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 35, left: 35),
+                        child: ListView.builder(
+                          itemCount: Companies.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator())),
+                                      );
+                                    },
+                                  );
+                                  await Future.delayed(
+                                      Duration(milliseconds: 300));
+                                  await prefs.setInt('company_id',
+                                      int.parse(Companies[index].toString()));
+                                  await prefs.setStringList(
+                                      'companiesList', Companies);
+                                  await prefs.setInt(
+                                      'salesman_id',
+                                      int.parse(index == 0
+                                          ? salesman_id
+                                          : index == 1
+                                              ? salesman_id2
+                                              : salesman_id3));
+                                  var headers = {
+                                    'ContentType': 'application/json'
+                                  };
+                                  var url =
+                                      'https://aliexpress.ps/quds_laravel/api/customers/${Companies[index].toString()}/${index == 0 ? salesman_id : index == 1 ? salesman_id2 : salesman_id3}';
+                                  var response = await http.get(Uri.parse(url),
+                                      headers: headers);
+                                  var res =
+                                      jsonDecode(response.body)['customers'];
+
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Customers(
+                                        CustomersArray: res,
+                                        companiesArray: Companies,
+                                      ),
                                     ),
+                                    (route) => false,
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: 'تم تسجيل الدخول بنجاح',
+                                  );
+                                },
+                                child: Container(
+                                  width: 150,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(83, 89, 219, 1),
+                                      Color.fromRGBO(32, 39, 160, 0.6),
+                                    ]),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  (route) => false,
-                                );
-                                Fluttertoast.showToast(
-                                  msg: 'تم تسجيل الدخول بنجاح',
-                                );
-                              },
-                              child: Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Color.fromRGBO(83, 89, 219, 1),
-                                    Color.fromRGBO(32, 39, 160, 0.6),
-                                  ]),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    Companies[index],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 18),
+                                  child: Center(
+                                    child: Text(
+                                      Companies[index],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 18),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        } else {
+          Navigator.pop(context);
+          NavigatorFunction(context, MaintenancePage());
         }
       } else if (data['message'] == 'Invalid login details') {
         Navigator.of(context, rootNavigator: true).pop();
@@ -371,6 +380,99 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           },
         );
+      }
+    }
+  }
+
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _canCheckBiometrics = false;
+  bool _isAuthenticating = false;
+  String _authorized = 'Not Authorized';
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometrics();
+  }
+
+  Future<void> _checkBiometrics() async {
+    bool canCheckBiometrics;
+    try {
+      canCheckBiometrics = await auth.canCheckBiometrics;
+    } catch (e) {
+      canCheckBiometrics = false;
+    }
+    setState(() {
+      _canCheckBiometrics = canCheckBiometrics;
+    });
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+        localizedReason: 'Scan your fingerprint to authenticate',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          useErrorDialogs: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Authenticating';
+      });
+    } catch (e) {
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Error - ${e}';
+        print("e");
+        print(e);
+      });
+      return;
+    }
+    setState(() {
+      _authorized = authenticated ? 'Authorized' : 'Not Authorized';
+    });
+    if (authenticated) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool? login = await prefs.getBool('login') ?? false;
+      String? id = prefs.getString('user_name');
+      if (login) {
+        String? id = prefs.getString('user_name');
+        String? password = prefs.getString('password');
+        setState(() {
+          idController.text = id.toString();
+          passwordController.text = password.toString();
+        });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Center(child: CircularProgressIndicator())),
+            );
+          },
+        );
+        loginFunction();
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Center(child: CircularProgressIndicator())),
+            );
+          },
+        );
+        loginFunction();
       }
     }
   }
@@ -512,43 +614,83 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 30,
                           ),
+                          // Text('Biometric authentication: $_authorized'),
+                          // SizedBox(height: 20),
+                          // _isAuthenticating
+                          //     ? CircularProgressIndicator()
+                          //     : ElevatedButton(
+                          //         onPressed: _authenticate,
+                          //         child: Text('Authenticate'),
+                          //       ),
                           FadeInUp(
                               duration: Duration(milliseconds: 1900),
-                              child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: SizedBox(
-                                            height: 100,
-                                            width: 100,
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator())),
-                                      );
-                                    },
-                                  );
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: SizedBox(
+                                                  height: 100,
+                                                  width: 100,
+                                                  child: Center(
+                                                      child:
+                                                          CircularProgressIndicator())),
+                                            );
+                                          },
+                                        );
 
-                                  loginFunction();
-                                },
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(colors: [
-                                        Color.fromRGBO(83, 89, 219, 1),
-                                        Color.fromRGBO(32, 39, 160, 0.6),
-                                      ])),
-                                  child: Center(
-                                    child: Text(
-                                      "تسجيل الدخول",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                        loginFunction();
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            gradient: LinearGradient(colors: [
+                                              Color.fromRGBO(83, 89, 219, 1),
+                                              Color.fromRGBO(32, 39, 160, 0.6),
+                                            ])),
+                                        child: Center(
+                                          child: Text(
+                                            "تسجيل الدخول",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                      child: InkWell(
+                                    onTap: _authenticate,
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: LinearGradient(colors: [
+                                            Color.fromRGBO(83, 89, 219, 1),
+                                            Color.fromRGBO(32, 39, 160, 0.6),
+                                          ])),
+                                      child: Center(
+                                          child: Image.asset(
+                                        "assets/images/biometric.png",
+                                        height: 40,
+                                        width: 40,
+                                        color: Colors.white,
+                                      )),
+                                    ),
+                                  ))
+                                ],
                               )),
                           SizedBox(
                             height: 70,

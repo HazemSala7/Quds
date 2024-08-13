@@ -23,7 +23,8 @@ class _AppBarBackState extends State<AppBarBack> {
       ),
       title: Text(
         widget.title,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),
       ),
       elevation: 0,
       centerTitle: true,

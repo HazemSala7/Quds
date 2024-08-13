@@ -21,7 +21,8 @@ class _AppBarMainState extends State<AppBarMain> {
       ),
       title: Text(
         'برنامج القدس للمحاسبة',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),
       ),
       elevation: 0,
       centerTitle: true,

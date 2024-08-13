@@ -7,6 +7,7 @@ import 'package:flutter_application_1/Server/functions/functions.dart';
 import 'package:flutter_application_1/Server/server.dart';
 import 'package:flutter_application_1/Services/AppBar/appbar.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

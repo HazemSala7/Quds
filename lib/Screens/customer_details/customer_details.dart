@@ -6,8 +6,7 @@ import 'package:flutter_application_1/Screens/add_sarf/add_sarf.dart';
 import 'package:flutter_application_1/Screens/catch_receipt/catch_receipt.dart';
 import 'package:flutter_application_1/Screens/categories/categories.dart';
 import 'package:flutter_application_1/Screens/kashf_hesab/kashf_hesab.dart';
-import 'package:flutter_application_1/Screens/sarf/sarf.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/Services/qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +54,15 @@ class _CustomerDetailsState extends State<CustomerDetails> {
 
   bool qr_barcode = false;
   barcodeScan() async {
+    // final scannedBarcode = await Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => BarcodeScannerScreen(),
+    //   ),
+    // );
+    // if (scannedBarcode != null) {
+    //   return scannedBarcode;
+    // }
     String barcodeScanRes = "";
 
     try {

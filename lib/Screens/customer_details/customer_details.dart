@@ -54,24 +54,25 @@ class _CustomerDetailsState extends State<CustomerDetails> {
 
   bool qr_barcode = false;
   barcodeScan() async {
-    // final scannedBarcode = await Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => BarcodeScannerScreen(),
-    //   ),
-    // );
-    // if (scannedBarcode != null) {
-    //   return scannedBarcode;
-    // }
-    String barcodeScanRes = "";
+    final scannedBarcode = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BarcodeScannerScreen(),
+      ),
+    );
 
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-    } on PlatformException {
-      barcodeScanRes = '';
+    if (scannedBarcode != null) {
+      return scannedBarcode;
     }
-    return barcodeScanRes;
+    // String barcodeScanRes = "";
+
+    // try {
+    //   barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+    //       '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+    // } on PlatformException {
+    //   barcodeScanRes = '';
+    // }
+    // return barcodeScanRes;
   }
 
   qrScan() async {
@@ -152,7 +153,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   }
 
   dont() {
-    Navigator.of(context, rootNavigator: true).pop();
+    // Navigator.of(context, rootNavigator: true).pop();
     Fluttertoast.showToast(msg: "لديك خطأ ما");
   }
 
@@ -461,49 +462,6 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                     child: Center(
                                       child: Text(
                                         "بحث عن طريق الباركود",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(colors: [
-                                        Color.fromRGBO(83, 89, 219, 1),
-                                        Color.fromRGBO(32, 39, 160, 0.6),
-                                      ]),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Visibility(
-                                visible: JUST,
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      qr_barcode = false;
-                                    });
-                                    dontgo
-                                        ? Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop()
-                                        : lastStep();
-                                    // setState(() {
-                                    //   _scanBarcode = "";
-                                    // });
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(
-                                        "بحث عن طريق QR",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,

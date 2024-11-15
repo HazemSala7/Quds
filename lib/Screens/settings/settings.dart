@@ -17,6 +17,8 @@ class _SettingsState extends State<Settings> {
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   TextEditingController idController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  bool moreComanies = false;
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +29,13 @@ class _SettingsState extends State<Settings> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? store_id_order = prefs.getString('store_id');
     String? store_name = prefs.getString('store_name');
+    List<String>? _companies =
+        await prefs.getStringList("companiesList") ?? [""];
+    if (_companies!.length == 1) {
+      moreComanies = false;
+    } else {
+      moreComanies = true;
+    }
     if (store_id_order.toString() == "null") {
       idController.text = "1";
       await prefs.setString('store_id', idController.text);

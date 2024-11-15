@@ -297,6 +297,8 @@ class _OrdersState extends State<Orders> {
     };
     var url =
         'https://aliexpress.ps/quds_laravel/api/orders/$company_id/$salesman_id';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;
@@ -313,6 +315,8 @@ class _OrdersState extends State<Orders> {
     };
     var url =
         'https://aliexpress.ps/quds_laravel/api/filter_orders/$company_id/$salesman_id?start_date=${start_date.text}&end_date=${end_date.text}';
+    print("url22");
+    print(url);
     var response = await http.get(Uri.parse(url), headers: headers);
     var res = jsonDecode(response.body);
     return res;

@@ -134,7 +134,7 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
-  Widget category({String name = "", int id = 0}) {
+  Widget category({String name = "", String id = ""}) {
     return InkWell(
       onTap: () {
         // Navigator.push(
@@ -176,6 +176,8 @@ class _CategoriesState extends State<Categories> {
     int? company_id = prefs.getInt('company_id');
     var url =
         'https://aliexpress.ps/quds_laravel/api/categories/${company_id.toString()}';
+    print("url");
+    print(url);
     var response = await http.get(Uri.parse(url));
     var res = jsonDecode(response.body);
     return res;

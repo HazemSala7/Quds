@@ -165,7 +165,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                     ],
                   ),
-                  height: 40,
+                  height: 45,
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -175,8 +175,8 @@ class _ProductCardState extends State<ProductCard> {
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(
-                              widget.name.length > 20
-                                  ? widget.name.substring(0, 20) + '...'
+                              widget.name.length > 40
+                                  ? widget.name.substring(0, 40) + '...'
                                   : widget.name,
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.bold),

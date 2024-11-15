@@ -213,6 +213,17 @@ class _KashfHesabState extends State<KashfHesab> {
                                         flex: 1,
                                         child: pw.Container(
                                           child: pw.Center(
+                                              child: pw.Text("بونص",
+                                                  style: pw.TextStyle(
+                                                      fontSize: 4))),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
                                               child: pw.Text("الكمية",
                                                   style: pw.TextStyle(
                                                       fontSize: 4))),
@@ -267,6 +278,9 @@ class _KashfHesabState extends State<KashfHesab> {
                                             "-",
                                         qty: listPDFAll[index]["action"][i]
                                                 ['p_quantity'] ??
+                                            "-",
+                                        ponus: listPDFAll[index]["action"][i]
+                                                ['bonus1'] ??
                                             "-",
                                         price: listPDFAll[index]["action"][i]
                                                 ['p_price'] ??
@@ -529,6 +543,17 @@ class _KashfHesabState extends State<KashfHesab> {
                                         child: pw.Container(
                                           child: pw.Center(
                                               child: pw.Text(
+                                            "بونص",
+                                          )),
+                                        )),
+                                  ),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.rtl,
+                                    child: pw.Expanded(
+                                        flex: 1,
+                                        child: pw.Container(
+                                          child: pw.Center(
+                                              child: pw.Text(
                                             "الكمية",
                                           )),
                                         )),
@@ -582,6 +607,9 @@ class _KashfHesabState extends State<KashfHesab> {
                                           "-",
                                       qty: listPDFAll[i]["action"][j]
                                               ['p_quantity'] ??
+                                          "-",
+                                      ponus: listPDFAll[i]["action"][j]
+                                              ['bonus1'] ??
                                           "-",
                                       price: listPDFAll[i]["action"][j]
                                               ['p_price'] ??
@@ -1353,7 +1381,6 @@ class _KashfHesabState extends State<KashfHesab> {
       if (start_date.text == "" || end_date.text == "") {
         var url =
             "https://aliexpress.ps/quds_laravel/api/all_statments/${company_id.toString()}/${widget.customer_id.toString()}/${order_kashf_from_new_to_old ? "desc" : "asc"}?page=$_page";
-
         final res = await http.get(Uri.parse(url));
         setState(() {
           listPDFAll = json.decode(res.body)["statments"];
@@ -1605,6 +1632,7 @@ class _KashfHesabState extends State<KashfHesab> {
       bool fat8cm = false,
       String name = "",
       String qty = "",
+      String ponus = "",
       String price = "",
       String total = ""}) {
     return pw.Container(
@@ -1639,6 +1667,16 @@ class _KashfHesabState extends State<KashfHesab> {
                   )),
             ),
 
+            pw.Directionality(
+              textDirection: pw.TextDirection.rtl,
+              child: pw.Expanded(
+                  flex: 1,
+                  child: pw.Container(
+                    child: pw.Center(
+                        child: pw.Text(ponus,
+                            style: pw.TextStyle(fontSize: fat8cm ? 4 : 8))),
+                  )),
+            ),
             pw.Directionality(
               textDirection: pw.TextDirection.rtl,
               child: pw.Expanded(

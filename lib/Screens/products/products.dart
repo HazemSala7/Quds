@@ -33,11 +33,8 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
-    // filterProducts();
-
     _firstLoad();
     _controller = ScrollController()..addListener(_loadMore);
-    // getProducts();
   }
 
   var final_product = [];
@@ -89,7 +86,6 @@ class _ProductsState extends State<Products> {
                                 crossAxisCount: 2,
                               ),
                               controller: _controller,
-                              // ignore: unnecessary_null_comparison
                               itemCount: _posts != null ? _posts.length : 0,
                               itemBuilder: (_, int index) {
                                 return ProductCard(
@@ -235,9 +231,7 @@ class _ProductsState extends State<Products> {
   }
 
   var PRODUCTS = [];
-
   List prices = [];
-
   searchProducts() async {
     _posts.clear();
     setState(() {
@@ -266,24 +260,12 @@ class _ProductsState extends State<Products> {
     }
   }
 
-  // At the beginning, we fetch the first 20 posts
   int _page = 1;
-  // you can change this value to fetch more or less posts per page (10, 15, 5, etc)
   final int _limit = 20;
-
-  // There is next page or not
   bool _hasNextPage = true;
-
-  // Used to display loading indicators when _firstLoad function is running
   bool _isFirstLoadRunning = false;
-
-  // Used to display loading indicators when _loadMore function is running
   bool _isLoadMoreRunning = false;
-
-  // This holds the posts fetched from the server
   List _posts = [];
-
-  // This function will be called when the app launches (see the initState function)
   void _firstLoad() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? company_id = prefs.getInt('company_id');
